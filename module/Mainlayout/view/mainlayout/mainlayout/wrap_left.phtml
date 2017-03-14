@@ -1,0 +1,22 @@
+<!-- wrap_left -->
+<div class="wrap_left" id="frmTitle" name="fmTitle">
+    <!-- Logo -->
+    <div id="Logo"><span>Beta 1.0</span>
+        <h1 title="人单合一">人单合一</h1></div>
+    <!-- /Logo -->
+
+    <!-- menu_list -->
+    <script>
+        $(function () {
+            $(".menu_list dd");
+            $(".menu_list dt").click(function () {
+                $(this).toggleClass("open").next().slideToggle("fast");
+            });
+        });
+    </script>
+    <div class="menu_list">
+       <?= $this->menu_list ?>
+    </div>
+    <!-- /menu_list -->
+</div>
+<!-- /wrap_left -->

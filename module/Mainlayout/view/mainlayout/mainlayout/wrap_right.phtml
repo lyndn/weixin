@@ -1,0 +1,81 @@
+<!-- wrap_right -->
+<div class="wrap_right">
+    <header>
+        <!-- Header -->
+        <div id="Header">
+            <div class="user">
+                <div>
+                    <p>欢迎登录，<?= $this->sysLoginUsername ?></p>
+                    <a href="#"><span>8</span><img src="<?= $this->basePath('images/mainlayout/common/ico02.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico03.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico04.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico05.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico06.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico07.gif') ?>" width="20" height="20" alt=""></a>
+                </div>
+                <div class="search_box"><input name="" type="image" src="<?= $this->basePath('images/mainlayout/common/btn_search.gif') ?>"><input name="" type="text" class="box" placeholder="Search..."></div>
+            </div>
+
+            <nav>
+                <div id="Navi">
+                    <div class="btn_menu"><img src="<?= $this->basePath('images/mainlayout/common/btn_menu.gif') ?>" width="45" height="30" alt="主页管理"></div>
+                        <?= $this->Navi ?>
+                </div>
+            </nav>
+        </div>
+        <!-- /Header -->
+    </header>
+
+
+    <!-- Contents -->
+    <div id="Contents">
+        <script type="text/javascript">
+            $(function () {
+                $(".select").each(function () {
+                    var s = $(this);
+                    var z = parseInt(s.css("z-index"));
+                    var dt = $(this).children("dt");
+                    var dd = $(this).children("dd");
+                    var _show = function () {
+                        dd.slideDown(200);
+                        dt.addClass("cur");
+                        s.css("z-index", z + 1);
+                    };
+                    var _hide = function () {
+                        dd.slideUp(200);
+                        dt.removeClass("cur");
+                        s.css("z-index", z);
+                    };
+                    dt.click(function () {
+                        dd.is(":hidden") ? _show() : _hide();
+                    });
+                    dd.find("a").click(function () {
+                        dt.html($(this).html());
+                        _hide();
+                    });
+                    $("body").click(function (i) {
+                        !$(i.target).parents(".select").first().is(s) ? _hide() : "";
+                    });
+                })
+            })
+        </script>
+
+        <!-- Content -->
+        <?= $this->cnt ?>
+        <!-- /Content -->
+
+        <!-- PageNum -->
+        <?= $this->pageNum ?>
+        <!-- /PageNum -->
+
+    </div>
+    <!-- /Contents -->
+
+    <!-- /footer -->
+    <footer>
+        <?= $this->footer ?>
+    </footer>
+    <!-- /footer -->
+
+</div>
+<!-- /wrap_right -->
