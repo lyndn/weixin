@@ -10,8 +10,6 @@ namespace Mainlayout\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-
-
 class MainlayoutController extends AbstractActionController
 {
     private $_tplPath;
@@ -34,7 +32,7 @@ class MainlayoutController extends AbstractActionController
      * @param bool $contentFileName 'your_page'
      * @return ViewModel
      */
-    public function contentMacroAction($contentTemplatePath=false,$loginName=false,$contentFileName=false)
+    public function contentMacro($contentTemplatePath=false,$loginName=false,$contentFileName=false)
     {
         return $this->_init();
     }
@@ -43,7 +41,7 @@ class MainlayoutController extends AbstractActionController
      * page macro use
      * @return ViewModel
      */
-    public function pageMacroAction()
+    public function pageMacro()
     {
         $page = new ViewModel();
         $page->setTemplate($this->_tplPath.'/pageNum');

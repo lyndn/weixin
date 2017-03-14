@@ -15,4 +15,5 @@ return [
     'Zend\Db',
     'Zend\Validator',
     'MainLayout',
+    'Userpower',
 ];
