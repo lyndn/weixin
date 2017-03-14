@@ -7,9 +7,6 @@
 
 namespace Mainlayout\Controller;
 
-use Illuminate\Contracts\View\View;
-use Mainlayout\Module;
-use spec\Prophecy\Doubler\ClassPatch\MagicalApiInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -37,7 +34,7 @@ class MainlayoutController extends AbstractActionController
      * @param bool $contentFileName 'your_page'
      * @return ViewModel
      */
-    public function contentMacro($contentTemplatePath=false,$loginName=false,$contentFileName=false)
+    public function contentMacroAction($contentTemplatePath=false,$loginName=false,$contentFileName=false)
     {
         return $this->_init();
     }
@@ -46,7 +43,7 @@ class MainlayoutController extends AbstractActionController
      * page macro use
      * @return ViewModel
      */
-    public function pageMacro()
+    public function pageMacroAction()
     {
         $page = new ViewModel();
         $page->setTemplate($this->_tplPath.'/pageNum');
