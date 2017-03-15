@@ -11,6 +11,7 @@ use Zend\Json\Server\Smd\Service;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 
+
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -44,19 +45,18 @@ return [
     'service_manager' => [
         'aliases' => [
             Model\PostRepositoryInterface::class => Model\PostRepository::class,
+            Model\AuthInterface::class => Model\Auth::class,
         ],
         'factories' => [
             Model\PostRepository::class => InvokableFactory::class,
+            Model\Auth::class => InvokableFactory::class,
         ],
     ],
 
     'controllers' => [
         'factories' => [
             Controller\MainlayoutController::class => Factory\MainlayoutControllerFactory::class,
-
-            //Controller\MainlayoutController::class => InvokableFactory::class,
         ],
-
     ],
 
     'view_manager' => [

@@ -13,6 +13,10 @@ use Zend\View\Model\ViewModel;
 
 use Mainlayout\Model\PostRepositoryInterface;
 
+use Mainlayout\Model\AuthInterface;
+
+
+
 class MainlayoutController extends AbstractActionController
 {
     private $_tplPath;
@@ -36,11 +40,11 @@ class MainlayoutController extends AbstractActionController
      * @var PostRepositoryInterface
      */
     private $postRepository;
-
-    public function __construct(PostRepositoryInterface $postRepository)
+    private $auth;
+    public function __construct(PostRepositoryInterface $postRepository,AuthInterface $auth)
     {
         $this->postRepository = $postRepository;
-        var_dump($this->postRepository);
+        $this->auth = $auth;
         $this->_tplPath = 'Mainlayout/Mainlayout';
     }
 
@@ -129,6 +133,10 @@ class MainlayoutController extends AbstractActionController
      */
     public function indexAction()
     {
+
+        echo $this->auth->onLogin();die;
+
+
         return $this->_init();
     }
 

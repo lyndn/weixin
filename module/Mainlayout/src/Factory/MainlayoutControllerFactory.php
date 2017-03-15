@@ -13,10 +13,14 @@
 // In module/YourModule/src/Controller/YourControllerFactory.php:
 namespace Mainlayout\Factory;
 
+use Interop\Container\ContainerInterface;
 
 use Mainlayout\Model\PostRepositoryInterface;
-use Interop\Container\ContainerInterface;
+
+use Mainlayout\Model\AuthInterface;
+
 use Zend\ServiceManager\Factory\FactoryInterface;
+
 use Mainlayout\Controller\MainlayoutController;
 
 
@@ -56,9 +60,14 @@ class MainlayoutControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $controllerPluginManager = $container;
+
         $serviceManager = $controllerPluginManager->get('ServiceManager');
+
         $server   = $serviceManager->get(PostRepositoryInterface::class);
-        return new MainlayoutController($server);
+
+        $auth = $serviceManager->get(AuthInterface::class);
+
+        return new MainlayoutController($server,$auth);
     }
 
 
