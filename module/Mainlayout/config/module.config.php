@@ -8,10 +8,9 @@
 namespace Mainlayout;
 
 use Zend\Json\Server\Smd\Service;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-
-
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -39,23 +38,33 @@ return [
                     ],
                 ],
             ],
+            'auth' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/auth[/:action]',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+
         ],
     ],
 
     'service_manager' => [
         'aliases' => [
-            Model\PostRepositoryInterface::class => Model\PostRepository::class,
-            Model\AuthInterface::class => Model\Auth::class,
+            Model\AuthInterface::class => Model\AuthRepository::class,
         ],
         'factories' => [
-            Model\PostRepository::class => InvokableFactory::class,
-            Model\Auth::class => InvokableFactory::class,
+            Model\AuthRepository::class => InvokableFactory::class,
         ],
     ],
 
     'controllers' => [
         'factories' => [
-            Controller\MainlayoutController::class => Factory\MainlayoutControllerFactory::class,
+            Controller\MainlayoutController::class => InvokableFactory::class,
+            Controller\AuthController::class => Factory\AuthControllerFactory::class,
         ],
     ],
 

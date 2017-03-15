@@ -6,15 +6,8 @@
  */
 
 namespace Mainlayout\Controller;
-
-
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
-use Mainlayout\Model\PostRepositoryInterface;
-
-use Mainlayout\Model\AuthInterface;
-
 
 
 class MainlayoutController extends AbstractActionController
@@ -24,39 +17,25 @@ class MainlayoutController extends AbstractActionController
     public $contentTemplatePath;
     public $contentFileName;
 
-    public $form;
     /**
      * MainlayoutController constructor.
      */
-
-//    public function __construct(loginForm $form)
-//    {
-//        $this->form = $form;
-//        $this->_tplPath = 'Mainlayout/Mainlayout';
-//    }
-
-
-    /**
-     * @var PostRepositoryInterface
-     */
     private $postRepository;
     private $auth;
-    public function __construct(PostRepositoryInterface $postRepository,AuthInterface $auth)
+
+    public function __construct()
     {
-        $this->postRepository = $postRepository;
-        $this->auth = $auth;
         $this->_tplPath = 'Mainlayout/Mainlayout';
     }
 
-
     /**
      * content macro use
-     * @param bool $contentTemplatePath   '{namespace name}/{module name}/action name}
+     * @param bool $contentTemplatePath '{namespace name}/{module name}/action name}
      * @param bool $loginName
      * @param bool $contentFileName 'your_page'
      * @return ViewModel
      */
-    public function contentMacro($contentTemplatePath=false,$loginName=false,$contentFileName=false)
+    public function contentMacro($contentTemplatePath = false, $loginName = false, $contentFileName = false)
     {
         return $this->_init();
     }
@@ -68,11 +47,10 @@ class MainlayoutController extends AbstractActionController
     public function pageMacro()
     {
         $page = new ViewModel();
-        $page->setTemplate($this->_tplPath.'/pageNum');
+        $page->setTemplate($this->_tplPath . '/pageNum');
         $page->setTerminal(true);
         return $page;
     }
-
 
     /**
      * init
@@ -81,9 +59,9 @@ class MainlayoutController extends AbstractActionController
      * @param bool $contentFileName
      * @return ViewModel
      */
-    private function _init($contentTemplatePath=false,$loginName=false,$contentFileName=false)
+    private function _init($contentTemplatePath = false, $loginName = false, $contentFileName = false)
     {
-        list($this->contentTemplatePath,$this->loginName,$this->contentFileName) = [$contentTemplatePath,$loginName,$contentFileName];
+        list($this->contentTemplatePath, $this->loginName, $this->contentFileName) = [$contentTemplatePath, $loginName, $contentFileName];
 
         $view = new ViewModel();
 
@@ -91,36 +69,36 @@ class MainlayoutController extends AbstractActionController
         $view->setTemplate('Mainlayout/index/index');
 
         $picBoxView = new ViewModel();
-        $picBoxView->setTemplate($this->_tplPath.'/picBox');
+        $picBoxView->setTemplate($this->_tplPath . '/picBox');
 
         $wrap_left = new ViewModel();
-        $wrap_left->setTemplate($this->_tplPath.'/wrap_left');
+        $wrap_left->setTemplate($this->_tplPath . '/wrap_left');
 
         $wrap_right = new ViewModel();
-        $wrap_right->setTemplate($this->_tplPath.'/wrap_right');
+        $wrap_right->setTemplate($this->_tplPath . '/wrap_right');
 
         $menu_list = new ViewModel();
-        $menu_list->setTemplate($this->_tplPath.'/menu_list');
-        $wrap_left->addChild($menu_list,'menu_list');
+        $menu_list->setTemplate($this->_tplPath . '/menu_list');
+        $wrap_left->addChild($menu_list, 'menu_list');
 
         $navi = new ViewModel();
-        $navi->setTemplate($this->_tplPath.'/navi');
+        $navi->setTemplate($this->_tplPath . '/navi');
 
-        $sysLoginUsername = new ViewModel(['loginName'=>$this->loginName]);
-        $sysLoginUsername->setTemplate($this->_tplPath.'/sysLoginUsername');
+        $sysLoginUsername = new ViewModel(['loginName' => $this->loginName]);
+        $sysLoginUsername->setTemplate($this->_tplPath . '/sysLoginUsername');
 
         $this->content = new ViewModel();
         $tplPath = $this->contentTemplatePath ? $this->contentTemplatePath : $this->_tplPath;
-        $filePath = !empty($this->contentFileName) ? '/'.$this->contentFileName : '/cnt';
-        $this->content->setTemplate($tplPath.$filePath);
+        $filePath = !empty($this->contentFileName) ? '/' . $this->contentFileName : '/cnt';
+        $this->content->setTemplate($tplPath . $filePath);
 
         $foooter = new ViewModel();
-        $foooter->setTemplate($this->_tplPath.'/footer');
+        $foooter->setTemplate($this->_tplPath . '/footer');
 
-        $wrap_right->addChild($navi,'Navi')
-            ->addChild($sysLoginUsername,'sysLoginUsername')
-            ->addChild($this->content,'cnt')
-            ->addChild($foooter,'footer');
+        $wrap_right->addChild($navi, 'Navi')
+            ->addChild($sysLoginUsername, 'sysLoginUsername')
+            ->addChild($this->content, 'cnt')
+            ->addChild($foooter, 'footer');
 
         $view->addChild($picBoxView, 'picBox')
             ->addChild($wrap_left, 'wrap_left')
@@ -133,10 +111,6 @@ class MainlayoutController extends AbstractActionController
      */
     public function indexAction()
     {
-
-        echo $this->auth->onLogin();die;
-
-
         return $this->_init();
     }
 
@@ -146,7 +120,7 @@ class MainlayoutController extends AbstractActionController
      */
     public function testAction()
     {
-        return $this->_init('Mainlayout/Mainlayout','admasasin','test');
+        return $this->_init('Mainlayout/Mainlayout', 'admasasin', 'test');
     }
 
     /**
@@ -154,14 +128,7 @@ class MainlayoutController extends AbstractActionController
      */
     public function homeAction()
     {
-        exit();
+        echo 'home';
+        exit;
     }
-
-    public function loginAction()
-    {
-        echo 1;die;
-    }
-
 }
-
-

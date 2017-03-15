@@ -15,20 +15,4 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-
-    public function getServiceConfig()
-    {
-        return [
-            'service_manager' => [
-                'aliases' => [
-                    Model\PostRepositoryInterface::class => Model\PostRepository::class,
-                    Model\AuthInterface::class => Model\Auth::class,
-                ],
-                'factories' => [
-                    Model\PostRepository::class => InvokableFactory::class,
-                    Model\Auth::class => InvokableFactory::class,
-                ],
-            ],
-        ];
-    }
 }

@@ -9,9 +9,7 @@
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
  */
-
 namespace Mainlayout\Form;
-
 use Zend\Form\Form;
 
 class loginForm extends Form
@@ -19,7 +17,7 @@ class loginForm extends Form
     public function __construct($name = null)
     {
         // We will ignore the name provided to the constructor
-        parent::__construct('login');
+        parent::__construct('auth');
 
         $this->add([
             'name' => 'id',
@@ -29,21 +27,21 @@ class loginForm extends Form
             'name' => 'title',
             'type' => 'text',
             'options' => [
-                'label' => 'Title',
+                'label' => '用户名',
             ],
         ]);
         $this->add([
             'name' => 'artist',
             'type' => 'text',
             'options' => [
-                'label' => 'Artist',
+                'label' => '密码',
             ],
         ]);
         $this->add([
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [
-                'value' => 'Go',
+                'value' => '阿斯顿',
                 'id'    => 'submitbutton',
             ],
         ]);
