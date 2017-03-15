@@ -7,8 +7,11 @@
 
 namespace Mainlayout\Controller;
 
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+
+use Mainlayout\Model\PostRepositoryInterface;
 
 class MainlayoutController extends AbstractActionController
 {
@@ -17,13 +20,30 @@ class MainlayoutController extends AbstractActionController
     public $contentTemplatePath;
     public $contentFileName;
 
+    public $form;
     /**
      * MainlayoutController constructor.
      */
-    public function __construct()
+
+//    public function __construct(loginForm $form)
+//    {
+//        $this->form = $form;
+//        $this->_tplPath = 'Mainlayout/Mainlayout';
+//    }
+
+
+    /**
+     * @var PostRepositoryInterface
+     */
+    private $postRepository;
+
+    public function __construct(PostRepositoryInterface $postRepository)
     {
+        $this->postRepository = $postRepository;
+        var_dump($this->postRepository);
         $this->_tplPath = 'Mainlayout/Mainlayout';
     }
+
 
     /**
      * content macro use
@@ -48,6 +68,7 @@ class MainlayoutController extends AbstractActionController
         $page->setTerminal(true);
         return $page;
     }
+
 
     /**
      * init
@@ -126,6 +147,11 @@ class MainlayoutController extends AbstractActionController
     public function homeAction()
     {
         exit();
+    }
+
+    public function loginAction()
+    {
+        echo 1;die;
     }
 
 }

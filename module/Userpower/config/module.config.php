@@ -29,7 +29,6 @@ return [
     'controllers' => [
         'factories' => [
             Controller\UserpowerController::class => InvokableFactory::class,
-
         ],
     ],
     'view_manager' => [

@@ -5,13 +5,17 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace MainLayout;
+namespace Mainlayout;
 
+use Zend\Json\Server\Smd\Service;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
+
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
+    // Add this section:
+
     'router' => [
         'routes' => [
             'home' => [
@@ -36,11 +40,25 @@ return [
             ],
         ],
     ],
-    'controllers' => [
+
+    'service_manager' => [
+        'aliases' => [
+            Model\PostRepositoryInterface::class => Model\PostRepository::class,
+        ],
         'factories' => [
-            Controller\MainlayoutController::class => InvokableFactory::class,
+            Model\PostRepository::class => InvokableFactory::class,
         ],
     ],
+
+    'controllers' => [
+        'factories' => [
+            Controller\MainlayoutController::class => Factory\MainlayoutControllerFactory::class,
+
+            //Controller\MainlayoutController::class => InvokableFactory::class,
+        ],
+
+    ],
+
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,

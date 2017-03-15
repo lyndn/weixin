@@ -7,6 +7,8 @@
 
 namespace Userpower;
 
+use Zend\ServiceManager\Factory\InvokableFactory;
+
 class Module
 {
     const VERSION = '3.0.3-dev';
@@ -16,17 +18,5 @@ class Module
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    // Add this method:
-    public function getControllerConfig()
-    {
-        return [
-            'factories' => [
-                Controller\UserpowerController::class => function($container) {
-                    return new Controller\UserpowerController(
-                        $container->get(Controller\MainlayoutController::class)
-                    );
-                },
-            ],
-        ];
-    }
+
 }

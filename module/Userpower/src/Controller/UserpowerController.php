@@ -10,14 +10,16 @@ namespace Userpower\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-use Mainlayout\Controller\MainlayoutController;
+
+
+
 
 class UserpowerController extends AbstractActionController
 {
     public $v;
-    function __construct(MainlayoutController $k)
+    function __construct()
     {
-        $this->v = $k;
+
     }
 
     /**
@@ -25,8 +27,9 @@ class UserpowerController extends AbstractActionController
      */
     public function indexAction()
     {
-        echo 1;die;
+
     }
+
 
 }
 

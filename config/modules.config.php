@@ -14,6 +14,6 @@ return [
     'Zend\Router',
     'Zend\Db',
     'Zend\Validator',
-    'MainLayout',
+    'Mainlayout',
     'Userpower',
 ];

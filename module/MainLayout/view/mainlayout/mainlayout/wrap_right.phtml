@@ -25,8 +25,24 @@
         </div>
         <!-- /Header -->
     </header>
+    <script type="text/javascript">
+        function reinitIframe() {
+            var iframe = document.getElementById("frame");
+            try {
+                var bHeight = iframe.contentWindow.document.body.scrollHeight;
 
+                var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
 
+                var height = Math.max(bHeight, dHeight);
+
+                iframe.height = height;
+
+            } catch (ex) {}
+
+        }
+        window.setInterval("reinitIframe()", 200);
+    </script>
+    <iframe src="about:blank" name="right" id="frame" scrolling="no" frameborder="0" style="overflow: auto; margin: auto; width: 80%;">
     <!-- Contents -->
     <div id="Contents">
         <script type="text/javascript">
@@ -70,7 +86,7 @@
 
     </div>
     <!-- /Contents -->
-
+    </iframe>
     <!-- /footer -->
     <footer>
         <?= $this->footer ?>

@@ -90,7 +90,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MainLayout\\": "module/MainLayout/src/",
+            "Mainlayout\\": "module/Mainlayout/src/",
             "Userpower\\": "module/Userpower/src/"
         }
     }
