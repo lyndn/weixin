@@ -43,6 +43,7 @@ class AuthController extends AbstractActionController
         }
         $auth = new Auth();
         $form->setInputFilter($auth->getInputFilter());
+        $form->setData($request->getPost());
         if (!$form->isValid()) {
             $view = new ViewModel(['form' => $form]);
             $view->setTerminal(true);
