@@ -11,11 +11,15 @@
  */
 
 namespace Mainlayout\Factory;
-
-use Mainlayout\Controller\AuthController;
-use Mainlayout\Model\AuthInterface;
+//
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\Db\Adapter\Adapter;
+
+//
+use Mainlayout\Controller\AuthController;
+use Mainlayout\Model\AuthInterface;
+use Mainlayout\Model\AuthTable;
 
 
 class AuthControllerFactory implements FactoryInterface
@@ -30,8 +34,10 @@ class AuthControllerFactory implements FactoryInterface
     {
         $controllerPluginManager = $container;
         $serviceManager = $controllerPluginManager->get('ServiceManager');
+        $adapter = $serviceManager->get(Adapter::class);
         $auth = $serviceManager->get(AuthInterface::class);
-        return new AuthController($auth);
+        $authTable = $serviceManager->get(AuthTable::class);
+        return new AuthController($auth,$authTable,$adapter);
     }
 
 }

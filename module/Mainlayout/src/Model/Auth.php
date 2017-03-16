@@ -25,10 +25,21 @@ use Zend\Validator\StringLength;
 
 class Auth implements InputFilterAwareInterface
 {
+    public $id;
+    public $username;
+    public $passwd;
+    public $real_name;
 
     // Add this property:
     private $inputFilter;
 
+    public function exchangeArray(array $data)
+    {
+        $this->id     = !empty($data['id']) ? $data['id'] : null;
+        $this->username = !empty($data['username']) ? $data['username'] : null;
+        $this->passwd  = !empty($data['passwd']) ? $data['passwd'] : null;
+        $this->real_name  = !empty($data['real_name']) ? $data['real_name'] : null;
+    }
 
     /* Add the following methods: */
 
@@ -57,7 +68,7 @@ class Auth implements InputFilterAwareInterface
         ]);
 
         $inputFilter->add([
-            'name' => 'artist',
+            'name' => 'username',
             'required' => true,
             'filters' => [
                 ['name' => StripTags::class],
@@ -76,7 +87,7 @@ class Auth implements InputFilterAwareInterface
         ]);
 
         $inputFilter->add([
-            'name' => 'title',
+            'name' => 'passwd',
             'required' => true,
             'filters' => [
                 ['name' => StripTags::class],

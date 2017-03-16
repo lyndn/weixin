@@ -22,9 +22,11 @@ class MainlayoutController extends AbstractActionController
      */
     private $postRepository;
     private $auth;
+    public $user;
 
     public function __construct()
     {
+        $this->user = $this->checkLoginGetUserInfo();
         $this->_tplPath = 'Mainlayout/Mainlayout';
     }
 
@@ -107,20 +109,29 @@ class MainlayoutController extends AbstractActionController
     }
 
     /**
+     * check user is on login
+     * @return mixed|null
+     */
+    public function checkLoginGetUserInfo()
+    {
+        $user = null;
+        $auth = new \Zend\Authentication\AuthenticationService();   //获取实例化Zend\AuthenticationService对象
+        if ($auth->hasIdentity())    //判断是否登陆，是，则记录登陆信息
+        {
+            $user = $auth->getIdentity();
+        }
+        return $user;
+    }
+
+    /**
      * index
      */
     public function indexAction()
     {
+        if(!isset($this->user->adminName)){
+            return $this->redirect()->toRoute('auth');
+        }
         return $this->_init();
-    }
-
-    /**
-     * test
-     * @return ViewModel
-     */
-    public function testAction()
-    {
-        return $this->_init('Mainlayout/Mainlayout', 'admasasin', 'test');
     }
 
     /**

@@ -9,41 +9,59 @@
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
  */
+ 
+
 namespace Mainlayout\Form;
 use Zend\Form\Form;
 
-class loginForm extends Form
+class LoginForm extends Form
 {
     public function __construct($name = null)
     {
-        // We will ignore the name provided to the constructor
         parent::__construct('auth');
+        $this->loginForm();
+    }
 
+    /**
+     * This login Form
+     */
+    public function loginForm()
+    {
         $this->add([
             'name' => 'id',
             'type' => 'hidden',
         ]);
         $this->add([
-            'name' => 'title',
+            'name' => 'username',
             'type' => 'text',
-            'options' => [
-                'label' => '用户名',
+            'attributes' => [
+                'class' => 'txt_input txt_input2',
             ],
         ]);
         $this->add([
-            'name' => 'artist',
+            'name' => 'passwd',
             'type' => 'text',
-            'options' => [
-                'label' => '密码',
+            'attributes' => [
+                'class' => 'txt_input',
             ],
+        ]);
+        $this->add([
+            'name' => 'isSavePwd',
+            'type' => 'checkbox',
+            'attributes' => [
+                'id' => 'save_me',
+            ]
         ]);
         $this->add([
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [
-                'value' => '阿斯顿',
-                'id'    => 'submitbutton',
+                'value' => '登录',
+                'id'    => 'button',
+                'class' => 'sub_button',
+                'style' => 'opacity: 0.7',
             ],
         ]);
     }
+
 }

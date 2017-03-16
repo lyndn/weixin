@@ -15,7 +15,7 @@ return [
     // ...
     'db' => array(
         'driver' => 'Pdo',
-        'dsn' => 'mysql:dbname=ycBlog;host=127.0.0.1',
+        'dsn' => 'mysql:dbname=wechat;host=127.0.0.1',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\'',
             PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => TRUE,
