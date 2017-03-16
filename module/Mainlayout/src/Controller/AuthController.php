@@ -20,7 +20,6 @@ use Mainlayout\Form\LoginForm;
 use Mainlayout\Model\Auth;
 use Mainlayout\Model\AuthTable;
 
-
 class AuthController extends AbstractActionController
 {
     public $auth;

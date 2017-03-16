@@ -22,7 +22,6 @@ class AuthRepository implements AuthInterface
     {
         // TODO: Implement checkLogin() method.
     }
-
     public function viewLoginForm()
     {
         // TODO: Implement loginForm() method.

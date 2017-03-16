@@ -9,10 +9,8 @@
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
  */
-
 namespace Mainlayout\Model;
 
-// Add the following import statements:
 use DomainException;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
@@ -22,17 +20,17 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\Validator\StringLength;
 
-
 class Auth implements InputFilterAwareInterface
 {
     public $id;
     public $username;
     public $passwd;
     public $real_name;
-
-    // Add this property:
     private $inputFilter;
 
+    /**
+     * @param array $data
+     */
     public function exchangeArray(array $data)
     {
         $this->id     = !empty($data['id']) ? $data['id'] : null;
@@ -41,8 +39,9 @@ class Auth implements InputFilterAwareInterface
         $this->real_name  = !empty($data['real_name']) ? $data['real_name'] : null;
     }
 
-    /* Add the following methods: */
-
+    /**
+     * @param InputFilterInterface $inputFilter
+     */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new DomainException(sprintf(
@@ -51,6 +50,9 @@ class Auth implements InputFilterAwareInterface
         ));
     }
 
+    /**
+     * @return InputFilter
+     */
     public function getInputFilter()
     {
         if ($this->inputFilter) {
@@ -104,7 +106,6 @@ class Auth implements InputFilterAwareInterface
                 ],
             ],
         ]);
-
         $this->inputFilter = $inputFilter;
         return $this->inputFilter;
     }

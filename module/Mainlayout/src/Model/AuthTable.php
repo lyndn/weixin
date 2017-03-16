@@ -9,7 +9,6 @@
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
  */
-
 namespace Mainlayout\Model;
 
 use RuntimeException;
@@ -19,16 +18,27 @@ class AuthTable
 {
     private $tableGateway;
 
+    /**
+     * AuthTable constructor.
+     * @param TableGatewayInterface $tableGateway
+     */
     public function __construct(TableGatewayInterface $tableGateway)
     {
         $this->tableGateway = $tableGateway;
     }
 
+    /**
+     * @return mixed
+     */
     public function fetchAll()
     {
         return $this->tableGateway->select();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getAuth($id)
     {
         $id = (int) $id;
@@ -44,6 +54,9 @@ class AuthTable
         return $row;
     }
 
+    /**
+     * @param Auth $auth
+     */
     public function saveAuth(Auth $auth)
     {
         $data = [
@@ -68,6 +81,9 @@ class AuthTable
         $this->tableGateway->update($data, ['id' => $id]);
     }
 
+    /**
+     * @param $id
+     */
     public function deleteAlbum($id)
     {
         $this->tableGateway->delete(['id' => (int) $id]);

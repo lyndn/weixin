@@ -8,15 +8,12 @@
 namespace Mainlayout\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
-
 class MainlayoutController extends AbstractActionController
 {
     private $_tplPath;
     public $loginName;
     public $contentTemplatePath;
     public $contentFileName;
-
     /**
      * MainlayoutController constructor.
      */

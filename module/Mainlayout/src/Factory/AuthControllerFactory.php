@@ -11,12 +11,9 @@
  */
 
 namespace Mainlayout\Factory;
-//
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Db\Adapter\Adapter;
-
-//
 use Mainlayout\Controller\AuthController;
 use Mainlayout\Model\AuthInterface;
 use Mainlayout\Model\AuthTable;
