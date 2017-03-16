@@ -43,9 +43,10 @@ class AuthController extends AbstractActionController
         }
         $auth = new Auth();
         $form->setInputFilter($auth->getInputFilter());
-        $form->setData($request->getPost());
-        if (! $form->isValid()) {
-            return ['form' => $form];
+        if (!$form->isValid()) {
+            $view = new ViewModel(['form' => $form]);
+            $view->setTerminal(true);
+            return $view;
         }
         $data = $form->getData();
         $authAdapter = new AuthAdapter(
@@ -55,12 +56,9 @@ class AuthController extends AbstractActionController
             'passwd',
             "MD5(CONCAT('staticSalt', ?, password_salt))"
         );
-        $authAdapter
-            ->setIdentity($data['username'])
+        $authAdapter->setIdentity($data['username'])
             ->setCredential($data['passwd']);
         $result = $authAdapter->authenticate();
-        $username = $form->getValue('username');
-        $password = $form->getValue('passwd');
         if (!$result->isValid()) {
             switch($result->getCode())
             {
@@ -75,16 +73,16 @@ class AuthController extends AbstractActionController
                     break;
             }
             return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
-                'action' => 'auth']);
+                'action' => 'index']);
         } else {
             $auth = new \Zend\Authentication\AuthenticationService();
-            $auth->getStorage()->write((object)array('adminName' => $username,
-                'password' => $password,
+            $auth->getStorage()->write((object)[
+                'adminName' => $data['username'],
+                'password' => $data['passwd'],
                 'role' => ''
-            ));
+            ]);
             return $this->redirect()->toRoute('admin', ['controller' => 'MainlayoutController',
                 'action' => 'index']);
         }
-        return $this->redirect()->toRoute('admin');
     }
 }
