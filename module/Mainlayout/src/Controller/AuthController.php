@@ -76,19 +76,11 @@ class AuthController extends AbstractActionController
                 'action' => 'index']);
         } else {
             $auth = new \Zend\Authentication\AuthenticationService();
-<<<<<<< HEAD
-            $auth->getStorage()->write((object)[
-                'adminName' => $data['username'],
-                'password' => $data['passwd'],
-                'role' => ''
-            ]);
-=======
             $auth->getStorage()->write((object)array(
                 'adminName' => $data['username'],
                 'password' => $data['passwd'],
                 'role' => '1'
             ));
->>>>>>> master
             return $this->redirect()->toRoute('admin', ['controller' => 'MainlayoutController',
                 'action' => 'index']);
         }
