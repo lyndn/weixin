@@ -10,15 +10,11 @@
  * @link      yanchao563@yahoo.com
  */
 namespace Mainlayout\Controller;
-
-//
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 use Zend\Authentication\Result;
-
-//
 use Mainlayout\Model\AuthInterface;
 use Mainlayout\Form\LoginForm;
 use Mainlayout\Model\Auth;
@@ -41,25 +37,18 @@ class AuthController extends AbstractActionController
     {
         $form = new LoginForm();
         $request = $this->getRequest();
-
-        //echo md5('staticSalt'.'program'.'ftoul.com');die;
-
         if (! $request->isPost()) {
             $view = new ViewModel(['form' => $form]);
             $view->setTerminal(true);
             return $view;
         }
-
-
         $auth = new Auth();
         $form->setInputFilter($auth->getInputFilter());
         $form->setData($request->getPost());
         if (! $form->isValid()) {
             return ['form' => $form];
         }
-
         $data = $form->getData();
-        // Configure the instance with constructor parameters:
         $authAdapter = new AuthAdapter(
             $this->adapter,
             'users',
@@ -67,29 +56,13 @@ class AuthController extends AbstractActionController
             'passwd',
             "MD5(CONCAT('staticSalt', ?, password_salt))"
         );
-
-
-        // Or configure the instance with setter methods:
-//        $authAdapter = new AuthAdapter($dbAdapter);
-//
-//        $authAdapter
-//            ->setTableName('users')
-//            ->setIdentityColumn('username')
-//            ->setCredentialColumn('password');
-
-        // Set the input credential values (e.g., from a login form):
         $authAdapter
             ->setIdentity($data['username'])
             ->setCredential($data['passwd']);
-
-        // Perform the authentication query, saving the result
         $result = $authAdapter->authenticate();
-
-
         $username = $form->getValue('username');
         $password = $form->getValue('passwd');
         if (!$result->isValid()) {
-            // 虽然这里我显示了错误信息，但这里面我还不知道如何在VIEW里显示
             switch($result->getCode())
             {
                 case Result::FAILURE_IDENTITY_NOT_FOUND:
@@ -102,92 +75,17 @@ class AuthController extends AbstractActionController
                     $errorMessage = "登录时发生错误!";
                     break;
             }
-            // 停留在注册页，就是这里，需改将参数回传
             return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
                 'action' => 'auth']);
         } else {
-            // storing in the session
             $auth = new \Zend\Authentication\AuthenticationService();
             $auth->getStorage()->write((object)array('adminName' => $username,
                 'password' => $password,
-                'role' => ''              //这里可保存role值，后面的Acl会用到，role值可存在database文件或.ini文件中
+                'role' => ''
             ));
             return $this->redirect()->toRoute('admin', ['controller' => 'MainlayoutController',
                 'action' => 'index']);
         }
-
-
-
-        // Print the identity:
-        // echo $result->getIdentity() . "\n\n";
-
-        // Print the result row:
-        //var_dump($authAdapter->getResultRowObject());
-
-
-        /* Output:
-        my_username
-
-        Array
-        (
-            [id] => 1
-            [username] => my_username
-            [password] => my_password
-            [real_name] => My Real Name
-        )
-        */
-
-        // Specify the columns to return:
-
-//        $columnsToReturn = [
-//            'id',
-//            'username',
-//            'real_name',
-//        ];
-//        print_r($authAdapter->getResultRowObject($columnsToReturn));
-
-        /* Output:
-
-        Array
-        (
-           [id] => 1
-           [username] => my_username
-           [real_name] => My Real Name
-        )
-        */
-
-// Or specify the columns to omit; when using this approach,
-// pass a null value as the first argument to getResultRowObject():
-
-//        $columnsToOmit = ['password'];
-//        print_r($authAdapter->getResultRowObject(null, $columnsToOmit);
-
-        /* Output:
-
-        Array
-        (
-           [id] => 1
-           [username] => my_username
-           [real_name] => My Real Name
-        )
-        */
-
-
-
-
-        die;
-
-
-        var_dump($data);
-
-       // $auth->exchangeArray($form->getData());
-       // $this->table->saveAlbum($album);
         return $this->redirect()->toRoute('admin');
     }
-
-    public function loginAction()
-    {
-        return $this->indexAction();
-    }
-
 }
