@@ -104,13 +104,13 @@ class AuthController extends AbstractActionController
             }
             // 停留在注册页，就是这里，需改将参数回传
             return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
-                'action' => 'auth']);
+                'action' => 'index']);
         } else {
             // storing in the session
             $auth = new \Zend\Authentication\AuthenticationService();
-            $auth->getStorage()->write((object)array('adminName' => $username,
-                'password' => $password,
-                'role' => ''              //这里可保存role值，后面的Acl会用到，role值可存在database文件或.ini文件中
+            $auth->getStorage()->write((object)array('adminName' => $data['username'],
+                'password' => $data['passwd'],
+                'role' => '1'              //这里可保存role值，后面的Acl会用到，role值可存在database文件或.ini文件中
             ));
             return $this->redirect()->toRoute('admin', ['controller' => 'MainlayoutController',
                 'action' => 'index']);
