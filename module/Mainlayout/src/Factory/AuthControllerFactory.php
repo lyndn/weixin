@@ -34,7 +34,8 @@ class AuthControllerFactory implements FactoryInterface
         $adapter = $serviceManager->get(Adapter::class);
         $auth = $serviceManager->get(AuthInterface::class);
         $authTable = $serviceManager->get(AuthTable::class);
-        return new AuthController($auth,$authTable,$adapter);
+
+        return new AuthController($auth,$authTable,$adapter,$container);
     }
 
 }
