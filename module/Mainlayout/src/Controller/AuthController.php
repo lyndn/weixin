@@ -109,7 +109,4 @@ class AuthController extends AbstractActionController
             'action' => 'index']);
     }
 
-
-
-
 }
