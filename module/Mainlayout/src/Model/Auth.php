@@ -36,7 +36,8 @@ class Auth implements InputFilterAwareInterface
         $this->id     = !empty($data['id']) ? $data['id'] : null;
         $this->username = !empty($data['username']) ? $data['username'] : null;
         $this->passwd  = !empty($data['passwd']) ? $data['passwd'] : null;
-        $this->real_name  = !empty($data['real_name']) ? $data['real_name'] : null;
+        $this->realname  = !empty($data['realname']) ? $data['realname'] : null;
+        $this->password_salt  = !empty($data['password_salt']) ? $data['password_salt'] : null;
     }
 
     /**
@@ -61,13 +62,6 @@ class Auth implements InputFilterAwareInterface
 
         $inputFilter = new InputFilter();
 
-        $inputFilter->add([
-            'name' => 'id',
-            'required' => true,
-            'filters' => [
-                ['name' => ToInt::class],
-            ],
-        ]);
 
         $inputFilter->add([
             'name' => 'username',
