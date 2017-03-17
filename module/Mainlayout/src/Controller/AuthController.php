@@ -20,6 +20,7 @@ use Mainlayout\Form\LoginForm;
 use Mainlayout\Model\Auth;
 use Mainlayout\Model\AuthTable;
 use Interop\Container\ContainerInterface;
+use Zend\Debug\Debug;
 
 class AuthController extends AbstractActionController
 {
