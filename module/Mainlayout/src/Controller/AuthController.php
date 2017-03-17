@@ -19,17 +19,21 @@ use Mainlayout\Model\AuthInterface;
 use Mainlayout\Form\LoginForm;
 use Mainlayout\Model\Auth;
 use Mainlayout\Model\AuthTable;
+use Interop\Container\ContainerInterface;
+use Zend\Debug\Debug;
 
 class AuthController extends AbstractActionController
 {
     public $auth;
     public $authTable;
     public $adapter;
-    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter)
+    public $serviceManager;
+    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager)
     {
         $this->auth = $auth;
         $this->authTable = $authTable;
         $this->adapter = $adapter;
+        $this->serviceManager = $serviceManager->get('ServiceManager')->getServiceLocator();
     }
 
     public function indexAction()
@@ -64,17 +68,22 @@ class AuthController extends AbstractActionController
             switch($result->getCode())
             {
                 case Result::FAILURE_IDENTITY_NOT_FOUND:
-                    $errorMessage = "没有该用户";
+                    /** do stuff for nonexistent identity **/
+                    $js = 'alert("没有这个用户！");history.go(-1);';
+                    return $this->serviceManager->get('ViewHelperManager')
+                        ->get('inlineScript')->appendScript($js);
                     break;
+
                 case Result::FAILURE_CREDENTIAL_INVALID:
-                    $errorMessage = "密码错误!";
+                    /** do stuff for invalid credential **/
+                    $js = 'alert("密码错误");history.go(-1);';
+                    return $this->serviceManager->get('ViewHelperManager')
+                        ->get('inlineScript')->appendScript($js);
                     break;
                 default:
-                    $errorMessage = "登录时发生错误!";
+                    /** do stuff for other failure **/
                     break;
             }
-            return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
-                'action' => 'index']);
         } else {
             $auth = new \Zend\Authentication\AuthenticationService();
             $auth->getStorage()->write((object)array(
@@ -86,4 +95,21 @@ class AuthController extends AbstractActionController
                 'action' => 'index']);
         }
     }
+
+
+    /**
+     * clear session user
+     */
+    public function clearAction()
+    {
+        $user = null;
+        $auth = new \Zend\Authentication\AuthenticationService();
+        $auth->clearIdentity();
+        return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
+            'action' => 'index']);
+    }
+
+
+
+
 }
