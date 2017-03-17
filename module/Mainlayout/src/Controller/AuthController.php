@@ -65,13 +65,21 @@ class AuthController extends AbstractActionController
             switch($result->getCode())
             {
                 case Result::FAILURE_IDENTITY_NOT_FOUND:
-                    $errorMessage = "没有该用户";
+                    /** do stuff for nonexistent identity **/
+                    $msg = 'not fount username';
+
                     break;
+
                 case Result::FAILURE_CREDENTIAL_INVALID:
-                    $errorMessage = "密码错误!";
+                    /** do stuff for invalid credential **/
                     break;
+
+                case Result::SUCCESS:
+                    /** do stuff for successful authentication **/
+                    break;
+
                 default:
-                    $errorMessage = "登录时发生错误!";
+                    /** do stuff for other failure **/
                     break;
             }
             return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
