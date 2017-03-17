@@ -68,7 +68,9 @@ class AuthController extends AbstractActionController
             {
                 case Result::FAILURE_IDENTITY_NOT_FOUND:
                     /** do stuff for nonexistent identity **/
-                    $msg = 'this not is username';
+                    $js = 'alert("没有这个用户！");history.go(-1);';
+                    return $this->serviceManager->get('ViewHelperManager')
+                        ->get('inlineScript')->appendScript($js);
                     break;
 
                 case Result::FAILURE_CREDENTIAL_INVALID:
@@ -105,6 +107,7 @@ class AuthController extends AbstractActionController
         return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
             'action' => 'index']);
     }
+
 
 
 
