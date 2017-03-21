@@ -6,14 +6,19 @@
  */
 
 namespace Mainlayout\Controller;
+use Zend\Debug\Debug;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Mainlayout\Model\MyRole;
+
+
 class MainlayoutController extends AbstractActionController
 {
     private $_tplPath;
     public $loginName;
     public $contentTemplatePath;
     public $contentFileName;
+    public $myrole;
     /**
      * MainlayoutController constructor.
      */
@@ -21,10 +26,11 @@ class MainlayoutController extends AbstractActionController
     private $auth;
     public $user;
 
-    public function __construct()
+    public function __construct(MyRole $myRole)
     {
         $this->user = $this->checkLoginGetUserInfo();
         $this->_tplPath = 'Mainlayout/Mainlayout';
+        $this->myrole = $myRole;
     }
 
     /**
@@ -125,6 +131,7 @@ class MainlayoutController extends AbstractActionController
      */
     public function indexAction()
     {
+        $this->myrole->isGranted('mainlayout.mainlayout.index');
         if(!isset($this->user->adminName)){
             return $this->redirect()->toRoute('auth');
         }

@@ -11,20 +11,14 @@
  */
 
 namespace Mainlayout\Model;
-
+use Zend\View\Model\ViewModel;
 class AuthRepository implements AuthInterface
 {
-    public function onLogin()
-    {
-        // TODO: Implement onLogin() method.
-    }
-    public function checkLogin()
-    {
-        // TODO: Implement checkLogin() method.
-    }
-    public function viewLoginForm()
+    public function viewLoginForm($form = null)
     {
         // TODO: Implement loginForm() method.
-
+        $view = new ViewModel(['form' => $form]);
+        $view->setTerminal(true);
+        return $view;
     }
 }

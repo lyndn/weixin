@@ -10,6 +10,7 @@
  * @link      yanchao563@yahoo.com
  */
 namespace Mainlayout\Controller;
+use Mainlayout\Model\MyRole;
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -20,6 +21,7 @@ use Mainlayout\Form\LoginForm;
 use Mainlayout\Model\Auth;
 use Mainlayout\Model\AuthTable;
 use Interop\Container\ContainerInterface;
+
 use Zend\Debug\Debug;
 
 class AuthController extends AbstractActionController
@@ -28,8 +30,10 @@ class AuthController extends AbstractActionController
     public $authTable;
     public $adapter;
     public $serviceManager;
-    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager)
+    public $myrole;
+    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole)
     {
+        $this->myrole = $myRole;
         $this->auth = $auth;
         $this->authTable = $authTable;
         $this->adapter = $adapter;
@@ -41,10 +45,9 @@ class AuthController extends AbstractActionController
         $form = new LoginForm();
         $request = $this->getRequest();
         if (! $request->isPost()) {
-            $view = new ViewModel(['form' => $form]);
-            $view->setTerminal(true);
-            return $view;
+            return $this->auth->viewLoginForm($form);
         }
+
         $auth = new Auth();
         $form->setInputFilter($auth->getInputFilter());
         $form->setData($request->getPost());
@@ -85,16 +88,27 @@ class AuthController extends AbstractActionController
             }
         } else {
             $auth = new \Zend\Authentication\AuthenticationService();
+            $row = $this->authTable->getAuth($data['username']);
+
             $auth->getStorage()->write((object)array(
+                'userid' => $row->id,
                 'adminName' => $data['username'],
                 'password' => $data['passwd'],
-                'role' => '1'
+                'role' => $row->role
             ));
             return $this->redirect()->toRoute('admin', ['controller' => 'MainlayoutController',
                 'action' => 'index']);
         }
     }
 
+
+    public function settingAction()
+    {
+        $obj = $this->myrole->isGranted('mainlayout.auth.setting');
+        if(is_object($obj)){
+            return $obj;
+        }
+    }
 
     /**
      * clear session user
@@ -107,8 +121,5 @@ class AuthController extends AbstractActionController
         return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
             'action' => 'index']);
     }
-
-
-
-
+    
 }

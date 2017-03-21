@@ -2,9 +2,9 @@
 /**
  *
  * PHP Version ～7.1
- * @package   LazyControllerFactory.php
+ * @package   MainlayoutControllerFactory.php
  * @author    yanchao <yanchao563@yahoo.com>
- * @time      2017/03/15 13:21
+ * @time      2017/03/21 15:05
  * @copyright 2017
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
@@ -15,11 +15,10 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Db\Adapter\Adapter;
 use Mainlayout\Controller\AuthController;
-use Mainlayout\Model\AuthInterface;
-use Mainlayout\Model\AuthTable;
 use Mainlayout\Model\MyRole;
 
-class AuthControllerFactory implements FactoryInterface
+
+class MainlayoutControllerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
@@ -32,10 +31,7 @@ class AuthControllerFactory implements FactoryInterface
         $controllerPluginManager = $container;
         $serviceManager = $controllerPluginManager->get('ServiceManager');
         $adapter = $serviceManager->get(Adapter::class);
-        $auth = $serviceManager->get(AuthInterface::class);
-        $authTable = $serviceManager->get(AuthTable::class);
         $myrole = $serviceManager->get(MyRole::class);
-        return new AuthController($auth,$authTable,$adapter,$container,$myrole);
+        return new MainlayoutController($myrole);
     }
-
 }

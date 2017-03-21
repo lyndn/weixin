@@ -36,18 +36,17 @@ class AuthTable
     }
 
     /**
-     * @param $id
+     * @param $username
      * @return mixed
      */
-    public function getAuth($id)
+    public function getAuth($username)
     {
-        $id = (int) $id;
-        $rowset = $this->tableGateway->select(['id' => $id]);
+        $rowset = $this->tableGateway->select(['username' => $username]);
         $row = $rowset->current();
         if (! $row) {
             throw new RuntimeException(sprintf(
                 'Could not find row with identifier %d',
-                $id
+                $username
             ));
         }
 

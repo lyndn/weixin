@@ -28,10 +28,6 @@ class LoginForm extends Form
     public function loginForm()
     {
         $this->add([
-            'name' => 'id',
-            'type' => 'hidden',
-        ]);
-        $this->add([
             'name' => 'username',
             'type' => 'text',
             'attributes' => [

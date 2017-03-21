@@ -10,6 +10,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 class Module implements ConfigProviderInterface
 {
@@ -29,28 +30,42 @@ class Module implements ConfigProviderInterface
                     $tableGateway = $container->get(Model\AuthTableGateway::class);
                     return new Model\AuthTable($tableGateway);
                 },
+
+                Model\MyRole::class => function($container) {
+                    $tableGateway = $container->get(Model\PowergroupTableGateway::class);
+                    return new Model\MyRole($tableGateway,$container);
+                },
+
+                Model\PowergroupTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Powergroup());
+                    return new TableGateway('powergroup', $dbAdapter, null, $resultSetPrototype);
+                },
+
                 Model\AuthTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Auth());
-                    return new TableGateway('auth', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
                 },
+
             ],
         ];
     }
 
     // Add this method:
-//    public function getControllerConfig()
-//    {
-//        return [
-//            'factories' => [
-//                Controller\AuthController::class => function($container) {
-//                    return new Controller\AlbumController(
-//                        $container->get(Model\AuthTable::class)
-//                    );
-//                },
-//            ],
-//        ];
-//    }
+    public function getControllerConfig()
+    {
+        return [
+            'factories' => [
+                Controller\MainlayoutController::class => function($container) {
+                    return new Controller\MainlayoutController(
+                        $container->get(Model\MyRole::class)
+                    );
+                },
+            ],
+        ];
+    }
 
 }
