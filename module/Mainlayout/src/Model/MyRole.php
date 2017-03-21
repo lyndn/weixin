@@ -36,16 +36,21 @@ class MyRole extends AbstractRole
     {
         $this->serviceManager = $serviceManager->get('ServiceManager')->getServiceLocator();
         $this->tableGateway = $tableGateway;
-        $auth = new \Zend\Authentication\AuthenticationService();
-
-        $this->group = $auth->getIdentity()->role;
+        $this->group = $this->getGroup();
         $this->rbac = new Rbac();
         if(isset($this->group)){
             $this->role = new Role($this->group);
         }
         $this->setRole();
     }
-
+    public function getGroup()
+    {
+        $auth = new \Zend\Authentication\AuthenticationService();
+        if($auth->getIdentity()){
+            return $auth->getIdentity()->role;
+        }
+        return null;
+    }
     /**
      * @return null
      */

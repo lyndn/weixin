@@ -31,12 +31,13 @@ class AuthController extends AbstractActionController
     public $adapter;
     public $serviceManager;
     public $myrole;
-    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager)
+    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole)
     {
         $this->auth = $auth;
         $this->authTable = $authTable;
         $this->adapter = $adapter;
         $this->serviceManager = $serviceManager->get('ServiceManager')->getServiceLocator();
+        $this->myrole = $myRole;
     }
 
     public function indexAction()
@@ -101,13 +102,14 @@ class AuthController extends AbstractActionController
     }
 
 
-//    public function settingAction()
-//    {
-//        $obj = $this->myrole->isGranted('mainlayout.auth.setting');
-//        if(is_object($obj)){
-//            return $obj;
-//        }
-//    }
+    public function settingAction()
+    {
+        $obj = $this->myrole->isGranted('mainlayout.auth.setting');
+        if(is_object($obj)){
+            return $obj;
+        }
+        echo 1;die;
+    }
 
     /**
      * clear session user

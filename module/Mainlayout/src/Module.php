@@ -31,17 +31,17 @@ class Module implements ConfigProviderInterface
                     return new Model\AuthTable($tableGateway);
                 },
 
-//                Model\MyRole::class => function($container) {
-//                    $tableGateway = $container->get(Model\PowergroupTableGateway::class);
-//                    return new Model\MyRole($tableGateway,$container);
-//                },
-//
-//                Model\PowergroupTableGateway::class => function ($container) {
-//                    $dbAdapter = $container->get(AdapterInterface::class);
-//                    $resultSetPrototype = new ResultSet();
-//                    $resultSetPrototype->setArrayObjectPrototype(new Model\Powergroup());
-//                    return new TableGateway('powergroup', $dbAdapter, null, $resultSetPrototype);
-//                },
+                Model\MyRole::class => function($container) {
+                    $tableGateway = $container->get(Model\PowergroupTableGateway::class);
+                    return new Model\MyRole($tableGateway,$container);
+                },
+
+                Model\PowergroupTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Powergroup());
+                    return new TableGateway('powergroup', $dbAdapter, null, $resultSetPrototype);
+                },
 
                 Model\AuthTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -55,17 +55,17 @@ class Module implements ConfigProviderInterface
     }
 
 //    Add this method:
-//    public function getControllerConfig()
-//    {
-//        return [
-//            'factories' => [
-//                Controller\MainlayoutController::class => function($container) {
-//                    return new Controller\MainlayoutController(
-//                        $container->get(Model\MyRole::class)
-//                    );
-//                },
-//            ],
-//        ];
-//    }
+    public function getControllerConfig()
+    {
+        return [
+            'factories' => [
+                Controller\MainlayoutController::class => function($container) {
+                    return new Controller\MainlayoutController(
+                        $container->get(Model\MyRole::class)
+                    );
+                },
+            ],
+        ];
+    }
 
 }
