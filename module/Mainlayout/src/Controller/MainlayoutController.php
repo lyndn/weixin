@@ -26,11 +26,17 @@ class MainlayoutController extends AbstractActionController
     private $auth;
     public $user;
 
-    public function __construct(MyRole $myRole)
+//    public function __construct(MyRole $myRole)
+//    {
+//        $this->user = $this->checkLoginGetUserInfo();
+//        $this->_tplPath = 'Mainlayout/Mainlayout';
+//        $this->myrole = $myRole;
+//    }
+
+    public function __construct()
     {
         $this->user = $this->checkLoginGetUserInfo();
         $this->_tplPath = 'Mainlayout/Mainlayout';
-        $this->myrole = $myRole;
     }
 
     /**
@@ -131,7 +137,7 @@ class MainlayoutController extends AbstractActionController
      */
     public function indexAction()
     {
-        $this->myrole->isGranted('mainlayout.mainlayout.index');
+//        $this->myrole->isGranted('mainlayout.mainlayout.index');
         if(!isset($this->user->adminName)){
             return $this->redirect()->toRoute('auth');
         }

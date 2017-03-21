@@ -62,6 +62,7 @@ return [
 
     'controllers' => [
         'factories' => [
+            Controller\MainlayoutController::class => InvokableFactory::class,
             Controller\AuthController::class => Factory\AuthControllerFactory::class,
         ],
     ],

@@ -37,6 +37,7 @@ class MyRole extends AbstractRole
         $this->serviceManager = $serviceManager->get('ServiceManager')->getServiceLocator();
         $this->tableGateway = $tableGateway;
         $auth = new \Zend\Authentication\AuthenticationService();
+
         $this->group = $auth->getIdentity()->role;
         $this->rbac = new Rbac();
         if(isset($this->group)){
@@ -91,7 +92,7 @@ class MyRole extends AbstractRole
      */
     public function isGranted($code = null)
     {
-        if(!$this->rbac->isGranted($this->role,$code))
+        if($this->role && !$this->rbac->isGranted($this->role,$code))
         {
             return $this->serviceManager->get('ViewHelperManager')
                 ->get('inlineScript')->appendScript('alert("您没有这个权限！");history.go(-1);');

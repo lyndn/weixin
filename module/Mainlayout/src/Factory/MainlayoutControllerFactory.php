@@ -31,7 +31,6 @@ class MainlayoutControllerFactory implements FactoryInterface
         $controllerPluginManager = $container;
         $serviceManager = $controllerPluginManager->get('ServiceManager');
         $adapter = $serviceManager->get(Adapter::class);
-        $myrole = $serviceManager->get(MyRole::class);
-        return new MainlayoutController($myrole);
+        return new MainlayoutController();
     }
 }
