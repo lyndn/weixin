@@ -1,0 +1,98 @@
+<?= $this->headLink()->prependStylesheet($this->basePath('css/wechat/style.css')) ?>
+<div class="content">
+    <div class="usercontent">
+        <ul>
+
+            <li class="addli">
+                <a class="addwx" style="background-color:#7CBAE5" title="添加公众号" href="/wechat/add">绑定公众号</a>
+            </li>
+
+            <li>
+                <a onclick="addFuwu()" title="绑定服务窗" class="goldbuy" href="#" style="background-color:#79CBE5">绑定服务窗</a>
+            </li>
+
+            <li class="addli">
+                <a class="addbiz" title="添加企业号" onclick="addbiz()" href="#" style="background-color:#66D2C6">添加企业号</a>
+            </li>
+
+            <li>
+                <a href="index.php?g=User&amp;m=Alipay&amp;a=index" class="gold" title="查看资金" style="background-color:#60D295">
+                    <p><strong>账户余额：</strong>0</p>
+                    <p>点击充值</p>
+                </a>
+            </li>
+
+            <li>
+                <a href="###">
+                    <div class="qqqun" style="background-color:#4CC15D">
+                        <div class="qt">官方QQ号</div>
+                        <div class="qt2">800083075</div>
+                    </div>
+                </a>
+            </li>
+
+
+            <script type="text/javascript">
+                function addbiz(){
+                    location.href="/index.php?g=User&m=Index&a=add&biz=1";  }
+
+                function addFuwu(){
+                    alert('您不可以使用服务窗功能，请联系您的网站管理员处理');
+                }
+
+                function addWeixin(){
+                    location.href="/index.php?g=User&m=Index&a=add";
+                }
+            </script>
+
+            <div class="clr"></div>
+        </ul>
+
+
+        <div class="clr"></div>
+    </div>
+    <div class="msgWrap">
+        <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+            <thead>
+            <tr>
+                <th>公众号名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr></tr>
+            <?php foreach ($this->paginator as $rows) : ?>
+            <tr>
+                <td>
+                    <?php echo $this->escapeHtml($rows->wxname);?>
+                </td>
+                <td class="norightborder">　
+                    <a href="<?php echo $this->url('wechat',['action'=>'edit','id'=>$rows->id])?>">编辑</a>
+                    <a href="javascript:drop_confirm('您确定要删除吗?', '<?=$this->url('wechat',['action'=>'delete','id'=>$rows->id])?>');">删除</a>
+                    <a href="/index.php?g=User&amp;m=Function&amp;a=welcome&amp;id=1&amp;token=znspul1489384614" class="btnGreens">功能管理</a>
+                </td>
+            </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+
+    </div>
+    <br>
+    <div class="cLine">
+        <div class="pageNavigator right">
+            <div class="pages">
+                <?= $this->paginationControl(
+                   // The paginator object:
+                    $this->paginator,
+                    // The scrolling style:
+                    'sliding',
+                    // The partial to use to render the control:
+                    'partial/paginator',
+                    // The route to link to when a user clicks a control link:
+                    ['route' => 'wechat']
+                ) ?>
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>

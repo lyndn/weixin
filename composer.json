@@ -71,7 +71,8 @@
         "zendframework/zend-view": "^2.8",
         "zendframework/zend-xml2json": "^3.0",
         "zendframework/zend-xmlrpc": "^2.6",
-        "zendframework/zendxml": "^1.0.2"
+        "zendframework/zendxml": "^1.0.2",
+        "overtrue/wechat": "~3.1"
     },
     "suggest": {
         "zendframework/zend-ldap": "zend-ldap component ^2.7.1, if you need LDAP features"
@@ -91,7 +92,8 @@
     "autoload": {
         "psr-4": {
             "Mainlayout\\": "module/Mainlayout/src/",
-            "Userpower\\": "module/Userpower/src/"
+            "Userpower\\": "module/Userpower/src/",
+            "Wechat\\":"module/Wechat/src"
         }
     }
 }

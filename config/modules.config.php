@@ -17,4 +17,5 @@ return [
     'Zend\Validator',
     'Mainlayout',
     'Userpower',
+    'Wechat'
 ];
