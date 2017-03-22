@@ -43,6 +43,9 @@ class Module implements ConfigProviderInterface
                         $container->get(\Mainlayout\Model\MyRole::class)
                     );
                 },
+                Controller\ServerController::class=>function(){
+                    return new Controller\ServerController();
+                }
             ],
         ];
     }

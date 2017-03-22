@@ -1,0 +1,41 @@
+
+<!-- MainForm -->
+<div id="MainForm">
+    <!-- btn_box -->
+    <div class="btn_box floatR ma_l20"><input name="" type="button" value="刷新" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
+    <!-- /btn_box -->
+    <!-- btn_box -->
+    <div class="btn_box floatR ma_l20 popup02"><input name="" type="button" value="添加角色" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
+    <!-- /btn_box -->
+    <div class="form_boxA">
+        <h2>角色列表</h2>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th>角色名</th>
+                <th>操作</th>
+            </tr>
+
+
+            <?php foreach ($this->roleData as $v){ ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($v->roletitle) ?></td>
+                <td><a href="/auth/setting?id=<?php echo $this->escapeHtml($v->roleid) ?>">设置权限</a> | <a href="/auth/delrole?id=<?php echo $this->escapeHtml($v->roleid) ?>">删除角色</a></td>
+            </tr>
+            <?php } ?>
+
+        </table>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="/js/mainlayout/popwin.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".popup02 input").on('click' , function(){
+            popWin.showWin("400","250","添加角色","/auth/role?do=addrole");
+        });
+    });
+</script>
+
+
+<!-- /MainForm -->

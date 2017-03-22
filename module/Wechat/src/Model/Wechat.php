@@ -74,7 +74,7 @@ class Wechat implements InputFilterAwareInterface
         $inputFilter = new InputFilter();
         $inputFilter->add([
             'name' => 'wxname',
-            'required' => true,
+            'required' => false,
             'filters' => [
                 ['name' => StripTags::class],
                 ['name' => StringTrim::class],
@@ -92,7 +92,7 @@ class Wechat implements InputFilterAwareInterface
         ]);
         $inputFilter->add([
             'name' => 'wxid',
-            'required' => true,
+            'required' => false,
             'filters' => [
                 ['name' => StripTags::class],
                 ['name' => StringTrim::class],
@@ -108,7 +108,44 @@ class Wechat implements InputFilterAwareInterface
                 ],
             ],
         ]);
+        $inputFilter->add([
+            'name'=>'typeid',
+            'required'=>false
+        ]);
+        $inputFilter->add([
+            'name'=>'EncodeType',
+            'required'=>false
+        ]);
         $this->inputFilter = $inputFilter;
         return $this->inputFilter;
+    }
+    // Add the following method:
+    public function getArrayCopy()
+    {
+        return [
+            'id'        => $this->id,
+            'wxname'    => $this->wxname,
+            'wxid'      => $this->wxid,
+            'weixin'    => $this->weixin,
+            'headerpic' => $this->headerpic,
+            'token'     => $this->token,
+            'typeid'    => $this->typeid,
+            'appid'     => $this->appid,
+            'appsecret' => $this->appsecret,
+            'qrcode'    => $this->qrcode,
+            'EncodeType'=> $this->EncodeType,
+            'AesEncodingKey'=>$this->AesEncodingKey
+        ];
+    }
+    //随机字符
+    public function create_noncestr($length=32)
+    {
+        $chars="abcdefghijklmnopqsrtuvwxyzABCDEFGHIJKLMNOPQSRTUVWXYZ0123456789";
+        $str='';
+        for($i=0;$i<$length;$i++)
+        {
+            $str.=substr($chars,mt_rand(0,strlen($chars)-1),1);
+        }
+        return $str;
     }
 }

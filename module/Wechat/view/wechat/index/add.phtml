@@ -21,7 +21,7 @@ $form->prepare();
                 <tbody>
                 <tr>
                     <th><span class="red">*</span>公众号原始id：</th>
-                    <td><?php echo $this->formRow($form->get('wxid'))?>　<span class="red">请认真填写，错了不能修改。</span>比如：gh_423dwjkeww3 <a href="/static/getoid.htm" target="_blank"><img src="/images/help.png" class="vm helpimg" title="帮助"></a></td>
+                    <td><?php echo $this->formRow($form->get('wxid'))?>　<span class="red"> 请认真填写，错了不能修改。</span>比如：gh_423dwjkeww3 <a href="/static/getoid.htm" target="_blank"><img src="/images/help.png" class="vm helpimg" title="帮助"></a></td>
                 </tr>
                 <tr>
                     <th><span class="red">*</span>微信号：</th>
@@ -33,7 +33,7 @@ $form->prepare();
                 </tr>
                 <tr>
                     <th><span class="red">*</span>AppSecret：</th>
-                    <td><?php echo $this->formRow($form->get('appsecret'))?> 用于自定义菜单等高级功能，必填 </td>
+                    <td><?php echo $this->formRow($form->get('appsecret'))?>　用于自定义菜单等高级功能，必填 </td>
                 </tr>
                 <tr>
                     <th><span class="red">*</span>二维码：</th>
@@ -49,16 +49,23 @@ $form->prepare();
                         <?php //echo $this->formRow($form->get('typeid'))
                         $typeselect=$form->get('typeid');
                         echo $this->formRow($typeselect);
-                        ?><br>
-                        认证服务号是指每年向微信官方交300元认证费的公众号 </td>
+                        ?>　认证服务号是指每年向微信官方交300元认证费的公众号 </td>
                 </tr>
                 <tr>
                     <th><span class="red">*</span>头像地址（url）:</th>
-                    <td><?php echo $this->formRow($form->get('headerpic'))?>请填写图片外链地址 <a onclick="alert('请填写以jpg,png,gif,bmp等后缀的图文')" target="_blank"><img src="./tpl/User/default/common/images/help.png" class="vm helpimg" title="帮助"></a></td>
+                    <td><?php echo $this->formRow($form->get('headerpic'))?>　请填写图片外链地址 <a onclick="alert('请填写以jpg,png,gif,bmp等后缀的图文')" target="_blank"><img src="/images/help.png" class="vm helpimg" title="帮助"></a></td>
+                </tr>
+                <tr>
+                    <th>消息加密方式</th>
+                    <td><?php echo $this->formRow($form->get('EncodeType'))?></td>
+                </tr>
+                <tr>
+                    <th>AesEncodingKey</th>
+                    <td><?php echo $this->formRow($form->get('AesEncodingKey'))?>　加密消息的AesEncodingKey，可为空系统自动生成</td>
                 </tr>
                 <tr>
                     <th><span class="red">*</span>TOKEN</th>
-                    <td><?php echo $this->formRow($form->get('token'))?><br>(填写你的公众号)例：weimicmsweixin,请勿填写文,或者其它特殊字符，此处token和腾讯平台必须一致!</td>
+                    <td><?php echo $this->formRow($form->get('token'))?>　(填写你的公众号)例：weimicmsweixin,请勿填写文,或者其它特殊字符，此处token和腾讯平台必须一致!</td>
                 </tr>
 
                 <tr>

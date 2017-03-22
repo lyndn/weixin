@@ -23,7 +23,7 @@ class WechatForm extends Form
         ]);
         $this->add([
             'name'=>'uid',
-            'type'=>'hidden'
+            'type'=>'text'
         ]);
         $this->add([
             'name' => 'wxname',
@@ -71,13 +71,13 @@ class WechatForm extends Form
         ]);
         $this->add([
             'name' => 'headerpic',
-            'type' => 'file',
+            'type' => 'text',
             'attributes'=>array(
                 'id'=>'headerpic',
                 'autofocus'=>true,
                 'placeholder'=>'图像',
                 'class'=>'px',
-                'size'=>25
+                'size'=>50
             )
         ]);
         $this->add([
@@ -123,7 +123,6 @@ class WechatForm extends Form
             'attributes'=>array(
                 'id'=>'token',
                 'autofocus'=>true,
-                'required'=>true,
                 'placeholder'=>'token',
                 'class'=>'px',
                 'size'=>25
@@ -138,32 +137,42 @@ class WechatForm extends Form
                     '1' => '认证订阅号',
                     '2' => '认证服务号',
                 ],
-            ]
+            ],
+            'attributes'=>array(
+                'class'=>'px'
+            )
         ]);
 
         $this->add([
-            'name' => 'EncodeType',
-            'type' => 'text',
+            'name'=>'EncodeType',
+            'type'=>Element\Select::class,
+            'options'=>[
+              'value_options'=>[
+                  '1'=>'明文模式',
+                  '2'=>'兼容模式',
+                  '3'=>'安全模式'
+              ],
+            ],
             'attributes'=>array(
-                'id'=>'EncodeType',
-                'autofocus'=>true,
-                'required'=>true,
-                'placeholder'=>'EncodeType',
                 'class'=>'px',
-                'size'=>25
             )
         ]);
+
         $this->add([
             'name' => 'AesEncodingKey',
             'type' => 'text',
             'attributes'=>array(
                 'id'=>'AesEncodingKey',
                 'autofocus'=>true,
-                'required'=>true,
-                'placeholder'=>'AesEncodingKey',
+                'placeholder'=>'为空，系统自动创建',
                 'class'=>'px',
-                'size'=>25
+                'size'=>50
             )
+        ]);
+
+        $this->add([
+            'name'=>'addtime',
+            'type'=>'text',
         ]);
 
         $this->add([

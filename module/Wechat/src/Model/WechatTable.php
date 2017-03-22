@@ -39,14 +39,18 @@ class WechatTable
             'qrcode'  => $form->qrcode,
             'typeid'  => $form->typeid,
             'token'  => $form->token,
-            'uid'   => $form->uid
+            'typename'=>$this->typename($form->typeid),
+            'EncodeType'=>$form->EncodeType,
+            'AesEncodingKey'=>$form->AesEncodingKey
         ];
 
         $id = (int) $form->id;
-
         if ($id === 0) {
-            $this->tableGateway->insert($data);
-            return;
+            //需补增
+            $serUrl='';
+            $data['addtime']=$form->addtime;
+            $data['uid']=$form->uid;
+            return $this->tableGateway->insert($data);
         }
 
         if (! $this->getWechat($id)) {
@@ -56,7 +60,7 @@ class WechatTable
             ));
         }
 
-        $this->tableGateway->update($data, ['id' => $id]);
+       return $this->tableGateway->update($data, ['id' => $id]);
     }
 
     //查看
@@ -76,7 +80,7 @@ class WechatTable
     //删除
     public function deleteWechat($id)
     {
-        $this->tableGateway->delete(['id' => (int) $id]);
+        return $this->tableGateway->delete(['id' => (int) $id]);
     }
 
     //数据分页
@@ -87,6 +91,7 @@ class WechatTable
         if($where){
             $select->where($where);
         }
+        $select->order("id desc");
         // Create a new result set based on the Album entity:
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new Wechat());
@@ -104,6 +109,7 @@ class WechatTable
         $paginator = new Paginator($paginatorAdapter);
         return $paginator;
     }
-
-
+    private function typename($id){
+        return $id==1?'认证订阅号':'认证服务号';
+    }
 }

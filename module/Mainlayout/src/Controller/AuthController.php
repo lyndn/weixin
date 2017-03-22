@@ -10,7 +10,10 @@
  * @link      yanchao563@yahoo.com
  */
 namespace Mainlayout\Controller;
+
 use Mainlayout\Model\MyRole;
+use Mainlayout\Model\Role;
+use Mainlayout\Model\RoleTable;
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -18,10 +21,10 @@ use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapte
 use Zend\Authentication\Result;
 use Mainlayout\Model\AuthInterface;
 use Mainlayout\Form\LoginForm;
+use Mainlayout\Form\AddRoleForm;
 use Mainlayout\Model\Auth;
 use Mainlayout\Model\AuthTable;
 use Interop\Container\ContainerInterface;
-
 use Zend\Debug\Debug;
 
 class AuthController extends AbstractActionController
@@ -31,13 +34,17 @@ class AuthController extends AbstractActionController
     public $adapter;
     public $serviceManager;
     public $myrole;
-    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole)
+    public $wechatTable;
+    public $roleTable;
+    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole,RoleTable $roleTable)
     {
         $this->auth = $auth;
         $this->authTable = $authTable;
         $this->adapter = $adapter;
         $this->serviceManager = $serviceManager->get('ServiceManager')->getServiceLocator();
         $this->myrole = $myRole;
+        $this->wechatTable = $serviceManager->get(\Wechat\Model\WechatTable::class);
+        $this->roleTable = $roleTable;
     }
 
     public function indexAction()
@@ -101,20 +108,64 @@ class AuthController extends AbstractActionController
         }
     }
 
-
-    public function settingAction()
+    /**
+     * 角色管理列表
+     * @return bool
+     */
+    public function roleAction()
     {
-        $obj = $this->myrole->isGranted('mainlayout.auth.setting');
+        $obj = $this->myrole->isGranted('mainlayout.auth.role');
         if(is_object($obj)){
             return $obj;
         }
-        echo 1;die;
+
+        $view = null;
+        $do = $this->getRequest()->getQuery('do');
+
+        //添加角色
+        if($do == 'addrole'){
+            $obj = $this->myrole->isGranted('mainlayout.auth.addrole');
+            if(is_object($obj)){
+                return $obj;
+            }
+            $selectCnt =  [];
+            $resultSet = $this->wechatTable->fetchAll();
+            foreach ($resultSet as $row){
+                $selectCnt[$row->id] = $row->wxname;
+            }
+            $form = new AddRoleForm($selectCnt);
+            $request = $this->getRequest();
+            if (! $request->isPost()) {
+                return $this->auth->viewAddRoleForm($form);
+            }
+
+            $role = new Role();
+            $form->setInputFilter($role->getInputFilter());
+            $form->setData($request->getPost());
+            if (! $form->isValid()) {
+                $view = new ViewModel(['form' => $form]);
+                $view->setTemplate('Mainlayout/auth/addrole');
+                return $view;
+            }
+
+            $data = $form->getData();
+            $role->exchangeArray($data);
+            $this->roleTable->saveRole($role);
+            return $this->serviceManager->get('ViewHelperManager')
+                ->get('inlineScript')->appendScript('alert("添加成功！");history.go(-1);');
+        }
+
+        $roleData = $this->roleTable->fetchAll();
+        return new ViewModel(['roleData'=>$roleData]);
     }
 
+
+
     /**
+     * 退出登录
      * clear session user
      */
-    public function clearAction()
+    public function logoutAction()
     {
         $user = null;
         $auth = new \Zend\Authentication\AuthenticationService();

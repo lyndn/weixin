@@ -1,0 +1,63 @@
+<!-- Popup -->
+<div id="Popup">
+
+    <?php
+    $form->setAttribute('action', '/auth/role?do=addrole');
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    ?>
+
+    <!-- SubPopup -->
+    <div id="SubPopup">
+        <script type="text/javascript">
+            $(function(){
+                $(".select").each(function(){
+                    var s=$(this);
+                    var z=parseInt(s.css("z-index"));
+                    var dt=$(this).children("dt");
+                    var dd=$(this).children("dd");
+                    var _show=function(){dd.slideDown(200);dt.addClass("cur");s.css("z-index",z+1);};
+                    var _hide=function(){dd.slideUp(200);dt.removeClass("cur");s.css("z-index",z);};
+                    dt.click(function(){dd.is(":hidden")?_show():_hide();});
+                    dd.find("a").click(function(){dt.html($(this).html());_hide();});
+                    $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hide():"";});})})
+        </script>
+        <div class="form_boxC">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>角色名 <span class="f_cB">*</span></th>
+                    <td><div class="txtbox floatL">
+                        <?php echo $this->formRow($form->get('roletitle')); ?>
+                        </div></td>
+                </tr>
+                </tr>
+
+                <tr>
+                    <th width="100">公众号<span class="f_cB">*</span></th>
+
+                    <td><!-- selectbox -->
+                        <?php echo $this->formRow($form->get('wechatid')); ?>
+                        <!-- /selectbox --></td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <!-- SubPopup -->
+
+    <div id="BtmBtn">
+        <div class="btn_boxB floatR mag_l20">
+            <?php echo $this->formRow($form->get('cancel')); ?>
+        </div>
+
+        <div class="btn_box floatR">
+            <?php echo $this->formRow($form->get('submit')); ?>
+        </div>
+    </div>
+    </form>
+
+</div>
+<!-- /Popup -->
+
+
+

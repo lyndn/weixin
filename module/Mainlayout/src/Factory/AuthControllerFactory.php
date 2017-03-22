@@ -18,6 +18,7 @@ use Mainlayout\Controller\AuthController;
 use Mainlayout\Model\AuthInterface;
 use Mainlayout\Model\AuthTable;
 use Mainlayout\Model\MyRole;
+use Mainlayout\Model\RoleTable;
 
 class AuthControllerFactory implements FactoryInterface
 {
@@ -35,7 +36,8 @@ class AuthControllerFactory implements FactoryInterface
         $auth = $serviceManager->get(AuthInterface::class);
         $authTable = $serviceManager->get(AuthTable::class);
         $myrole = $serviceManager->get(MyRole::class);
-        return new AuthController($auth,$authTable,$adapter,$container,$myrole);
+        $roleTable = $serviceManager->get(RoleTable::class);
+        return new AuthController($auth,$authTable,$adapter,$container,$myrole,$roleTable);
     }
 
 }

@@ -14,4 +14,5 @@ namespace Mainlayout\Model;
 interface AuthInterface
 {
     public function viewLoginForm();
+    public function viewAddRoleForm();
 }

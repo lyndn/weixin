@@ -90,7 +90,7 @@ class MainlayoutController extends AbstractActionController
         $navi = new ViewModel();
         $navi->setTemplate($this->_tplPath . '/navi');
 
-        $sysLoginUsername = new ViewModel(['loginName' => $this->loginName]);
+        $sysLoginUsername = new ViewModel(['loginName' => $this->loginName ? $this->loginName : $this->user->adminName]);
         $sysLoginUsername->setTemplate($this->_tplPath . '/sysLoginUsername');
 
         $this->content = new ViewModel();
