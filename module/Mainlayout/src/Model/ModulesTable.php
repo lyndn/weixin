@@ -14,7 +14,7 @@ namespace Mainlayout\Model;
 use RuntimeException;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
-class RoleTable
+class ModulesTable
 {
     private $tableGateway;
 
@@ -39,51 +39,27 @@ class RoleTable
      * @param $username
      * @return mixed
      */
-    public function getRole($roleid)
+    public function getRole($id)
     {
-        $rowset = $this->tableGateway->select(['username' => $roleid]);
+        $rowset = $this->tableGateway->select(['id' => $id]);
         $row = $rowset->current();
         if (! $row) {
             throw new RuntimeException(sprintf(
                 'Could not find row with identifier %d',
-                $roleid
+                $id
             ));
         }
         return $row;
     }
 
     /**
-     * @param Auth $auth
-     */
-    public function saveRole(Role $role)
-    {
-        $data = [
-            'roletitle' => $role->roletitle,
-            'wechatid'  => $role->wechatid
-        ];
-
-        $id = (int) $role->roleid;
-
-        if ($id === 0) {
-            $this->tableGateway->insert($data);
-            return;
-        }
-
-        if (! $this->getRole($id)) {
-            throw new RuntimeException(sprintf(
-                'Cannot update album with identifier %d; does not exist',
-                $id
-            ));
-        }
-
-        $this->tableGateway->update($data, ['id' => $id]);
-    }
-
-    /**
      * @param $id
      */
-    public function deleteRole($id)
+    public function deleteModule($where)
     {
-        $this->tableGateway->delete(['roleid' => (int) $id]);
+        $this->tableGateway->delete($where);
     }
+
+
+
 }

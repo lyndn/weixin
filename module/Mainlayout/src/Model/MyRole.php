@@ -101,8 +101,67 @@ class MyRole extends AbstractRole
         {
             return $this->serviceManager->get('ViewHelperManager')
                 ->get('inlineScript')->appendScript('alert("您没有这个权限！");history.go(-1);');
+        }else if(!$this->role){
+            return $this->serviceManager->get('ViewHelperManager')
+                ->get('inlineScript')->appendScript('alert("请登录！");history.go(-1);');
         }else{
             return true;
         }
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function fetchAll()
+    {
+        return $this->tableGateway->select();
+    }
+
+    /**
+     * @param $groupid
+     * @return mixed
+     */
+    public function getGroupPermission($groupid)
+    {
+        $resultSet = $this->tableGateway->select(['groupid' => $groupid]);
+        if (! $resultSet) {
+            throw new RuntimeException(sprintf(
+                'Could not find row with identifier %d',
+                $groupid
+            ));
+        }
+        return $resultSet;
+    }
+
+
+    /**
+     * @param $id
+     */
+    public function deleteGroupPermission($id)
+    {
+        $this->tableGateway->delete(['groupid' => (int) $id]);
+    }
+
+
+    /**
+     * @param $where
+     */
+    public function deleteGroupRole($where)
+    {
+        $this->tableGateway->delete($where);
+    }
+
+    /**
+     * @param $data
+     * @return null
+     */
+    public function setGroupRole($data)
+    {
+        foreach ($data['powerid'] as $value)
+        {
+            $this->tableGateway->insert(['groupid' => $data['groupid'], 'powerid' => $value]);
+        }
+        return null;
     }
 }

@@ -15,4 +15,5 @@ interface AuthInterface
 {
     public function viewLoginForm();
     public function viewAddRoleForm();
+    public function viewSetPermissionForm();
 }

@@ -11,6 +11,9 @@
  */
 namespace Mainlayout\Controller;
 
+use Mainlayout\Form\SetPermissionForm;
+use Mainlayout\Model\Modules;
+use Mainlayout\Model\ModulesTable;
 use Mainlayout\Model\MyRole;
 use Mainlayout\Model\Role;
 use Mainlayout\Model\RoleTable;
@@ -36,7 +39,8 @@ class AuthController extends AbstractActionController
     public $myrole;
     public $wechatTable;
     public $roleTable;
-    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole,RoleTable $roleTable)
+    public $moduleTable;
+    public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole,RoleTable $roleTable,ModulesTable $modulesTable)
     {
         $this->auth = $auth;
         $this->authTable = $authTable;
@@ -45,6 +49,7 @@ class AuthController extends AbstractActionController
         $this->myrole = $myRole;
         $this->wechatTable = $serviceManager->get(\Wechat\Model\WechatTable::class);
         $this->roleTable = $roleTable;
+        $this->moduleTable = $modulesTable;
     }
 
     public function indexAction()
@@ -109,7 +114,7 @@ class AuthController extends AbstractActionController
     }
 
     /**
-     * 角色管理列表
+     * 角色管理
      * @return bool
      */
     public function roleAction()
@@ -159,7 +164,80 @@ class AuthController extends AbstractActionController
         return new ViewModel(['roleData'=>$roleData]);
     }
 
+    /**
+     * 权限设置
+     */
+    public function settingAction()
+    {
+        $obj = $this->myrole->isGranted('mainlayout.auth.setting');
+        if(is_object($obj)){
+            return $obj;
+        }
 
+        $view = null;
+
+        $moduleResultSet = $this->moduleTable->fetchAll();
+        $mResult = [];
+        foreach ($moduleResultSet as $row)
+        {
+            $mResult[] = $row;
+        }
+
+
+        $roleid = $this->getRequest()->getQuery('id');
+        if(empty($roleid))
+        {
+            exit('缺少roleid参数');
+        }
+
+        $userPermissionResultSet = $this->myrole->getGroupPermission($roleid);
+        $form = new SetPermissionForm($mResult,$userPermissionResultSet);
+        $request = $this->getRequest();
+        if (! $request->isPost()) {
+            return $this->auth->viewSetPermissionForm($form,$mResult,$roleid);
+        }
+
+
+        $getData = $request->getPost();
+        $data = [];
+        foreach ($getData as $key=>$value)
+        {
+            if($value != '设置'){
+                $data[] = $key;
+            }
+        }
+
+        $this->myrole->deleteGroupRole(['groupid'=>$roleid]);
+        $this->myrole->setGroupRole(['groupid'=>$roleid,'powerid'=>$data]);
+        return $this->serviceManager->get('ViewHelperManager')
+            ->get('inlineScript')->appendScript('alert("设置成功！");history.go(-1);');
+
+    }
+
+    /*
+     * 删除角色
+     */
+
+    public function delroleAction()
+    {
+        $obj = $this->myrole->isGranted('mainlayout.auth.delrole');
+        if(is_object($obj)){
+            return $obj;
+        }
+
+        $roleid = $this->getRequest()->getQuery('id');
+
+        $row = $this->authTable->getAuthWhere(['role'=>$roleid]);
+        if(!empty($row)){
+            return $this->serviceManager->get('ViewHelperManager')
+                ->get('inlineScript')->appendScript('alert("删除失败，该角色下人仍又用户存在！");history.go(-1);');
+        }
+        $this->myrole->deleteGroupPermission($roleid);
+        $this->roleTable->deleteRole($roleid);
+        return $this->serviceManager->get('ViewHelperManager')
+            ->get('inlineScript')->appendScript('alert("删除成功！");history.go(-1);');
+
+    }
 
     /**
      * 退出登录

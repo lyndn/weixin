@@ -54,6 +54,17 @@ class AuthTable
     }
 
     /**
+     * @param $where
+     * @return mixed
+     */
+    public function getAuthWhere($where = null)
+    {
+        $rowset = $this->tableGateway->select($where);
+        $row = $rowset->current();
+        return $row;
+    }
+
+    /**
      * @param Auth $auth
      */
     public function saveAuth(Auth $auth)

@@ -30,4 +30,13 @@ class AuthRepository implements AuthInterface
         return $view;
     }
 
+    public function viewSetPermissionForm($form = null,$mResult = null,$roleid = null)
+    {
+        // TODO: Implement viewSetPermissionForm() method.
+        $view = new ViewModel(['form' => $form,'mResult' => $mResult,'id' => $roleid]);
+        $view->setTemplate('Mainlayout/auth/setpermission');
+        return $view;
+    }
+
+
 }

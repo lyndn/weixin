@@ -1,0 +1,23 @@
+<?php
+$form->setAttribute('action','/auth/setting?id='.$this->id);
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+
+<?php
+
+
+foreach ($this->mResult as $row) {
+    if (!empty($row->permission)) {
+        echo '<span style="font-size:16px;padding-left:10px;"' . $this->formRow($form->get($row->permission)) .'</span>';
+    }else{
+        echo '<div class="btn_box ma_l20" style="color: red;padding-top:20px;padding-bottom: 20px;text-align: center;"><h2>' . $row->modulename .'</h2></div>';
+    }
+}
+?>
+
+<div class="btn_box float_left ma_l20" style="padding-top:20px;text-align: center !important;">
+<?php echo $this->formRow($form->get('submit')); ?>
+</div>
+
+</form>

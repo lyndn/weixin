@@ -36,10 +36,16 @@ class Module implements ConfigProviderInterface
                     return new Model\RoleTable($tableGateway);
                 },
 
+                Model\ModulesTable::class => function($container) {
+                    $tableGateway = $container->get(Model\ModulesTableGateway::class);
+                    return new Model\ModulesTable($tableGateway);
+                },
+
                 Model\MyRole::class => function($container) {
                     $tableGateway = $container->get(Model\PowergroupTableGateway::class);
                     return new Model\MyRole($tableGateway,$container);
                 },
+
 
                 Model\PowergroupTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -60,6 +66,13 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Role());
                     return new TableGateway('role', $dbAdapter, null, $resultSetPrototype);
+                },
+
+                Model\ModulesTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Modules());
+                    return new TableGateway('module', $dbAdapter, null, $resultSetPrototype);
                 },
 
             ],
