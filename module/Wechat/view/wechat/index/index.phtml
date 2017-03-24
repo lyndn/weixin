@@ -27,7 +27,7 @@
                 <td class="norightborder">　
                     <a href="<?php echo $this->url('wechat',['action'=>'edit','id'=>$rows->id])?>">编辑</a>
                     <a href="<?=$this->url('wechat',['action'=>'delete','id'=>$rows->id])?>" onclick="return confirm('确定删除吗？');">删除</a>
-                    <a href="<?=$this->url('function',['action'=>'menu','id'=>$rows->id])?>" target="_blank" class="btnGreens">功能管理</a>
+                    <a href="<?=$this->url('function',['action'=>'index','id'=>$rows->id])?>" target="_blank" class="btnGreens">功能管理</a>
                 </td>
             </tr>
             <?php endforeach;?>

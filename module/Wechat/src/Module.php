@@ -65,7 +65,8 @@ class Module implements ConfigProviderInterface
                     return new Controller\FunctionController(
                         $container->get(Model\WxmenuTable::class),
                         $container->get(Model\WechatTable::class),
-                        $container->get(\Mainlayout\Model\MyRole::class)
+                        $container->get(\Mainlayout\Model\MyRole::class),
+                        $container
                     );
                 }
             ],

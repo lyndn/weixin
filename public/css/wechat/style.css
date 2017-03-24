@@ -1169,14 +1169,14 @@ TABLE.ListProduct .edit{
     flaot:right;
 }
 .deltw {
-    background:url(../images/img/xx.gif) no-repeat; width:20px; height:20px; display: block; overflow: hidden; text-indent: -999px;
+    background:url(../../images/wechat/xx.gif) no-repeat; width:20px; height:20px; display: block; overflow: hidden; text-indent: -999px;
 }
 .deltw:hover {
-    background:url(../images/img/xx_hover.gif) no-repeat;
+    background:url(../../images/wechat/xx_hover.gif) no-repeat;
 }
 /* ???????? */
 .board {
-    background: url("../images/img/bg_repno.gif") no-repeat scroll 0 0 transparent;
+    background: url("../../images/wechat/bg_repno.gif") no-repeat scroll 0 0 transparent;
     padding-left: 55px;
 }
 .cateimg { position:relative; float:left}

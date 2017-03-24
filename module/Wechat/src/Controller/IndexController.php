@@ -38,6 +38,7 @@ class IndexController extends AbstractActionController
         $where="uid=".$this->uid;
         $pageset=true;
         $paginator = $this->table->fetchAll($pageset,$where);
+
         if($pageset){
             $page = (int) $this->params()->fromQuery('page', 1);
             $page = ($page < 1) ? 1 : $page;

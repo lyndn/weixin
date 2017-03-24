@@ -22,99 +22,85 @@ class WxmenuTable
     {
         $this->tableGateway = $tableGateway;
     }
-    //获取数据
-    public function fetchAll($paginated = false,$where=null)
-    {
-        if ($paginated) {
-            return $this->fetchPaginatedResults($where);
-        }
-        return $this->tableGateway->select($where);
-    }
+    //获取菜单列表
+    public function getMenu($wxid=0,$parentid=0){
 
+        return $this->tableGateway->select(['wxid'=>$wxid,'parentId'=>$parentid]);
+    }
+    //获取两级菜单列表
+    public function getMenuRows($wxid=0){
+        $menu='';
+        $menu1=$this->getMenu($wxid);
+        foreach($menu1 as $k=>$v){
+            $menu->$k=$v;
+            $type=$v->type;
+            $menu->$k->type=$this->typename($type);
+            if($type==2){
+                $menu->$k->val=$v->url;
+            }
+            var_dump($menu->$k->val);
+            exit;
+            foreach($this->getMenu($wxid,$v->id) as $key=>$val){
+                $menu->$k->nav->$key=$val;
+                $menu->$k->nav->$key->type=$this->typename($val->type);
+                //$menu->$k->nav->$key->val=$this->field($val->type);
+            }
+        }
+        var_dump($menu);
+        exit;
+        return $menu;
+    }
     //保存数据
-    public function saveWechat(Wechat $form)
+    public function saveMenu(Wxmenu $form)
     {
-        $data = [
-            'wxname' => $form->wxname,
-            'wxid'  => $form->wxid,
-            'weixin'  => $form->weixin,
-            'appid'  => $form->appid,
-            'appsecret'  => $form->appsecret,
-            'headerpic'  => $form->headerpic,
-            'qrcode'  => $form->qrcode,
-            'typeid'  => $form->typeid,
-            'token'  => $form->token,
-            'typename'=>$this->typename($form->typeid),
-            'EncodeType'=>$form->EncodeType,
-            'AesEncodingKey'=>$form->AesEncodingKey
+        $data=[
+            'title'=>$form->title,
+            'wxid'=>$form->wxid,
+            'parentId'=>$form->parentId,
+            'is_show'=>$form->is_show,
+            'sort'=>$form->sort,
+            'url'=>$form->url,
+            'wxsys'=>$form->wxsys,
+            'content'=>$form->content,
+            'type'=>$form->type,
+            'tel'=>$form->tel,
+            'nav'=>$form->nav,
         ];
-
-        $id = (int) $form->id;
-        if ($id === 0) {
-            //需补增
-            $serUrl='';
-            $data['addtime']=$form->addtime;
-            $data['uid']=$form->uid;
-            return $this->tableGateway->insert($data);
+        $id=(int)$form->id;
+        if($id){
+           return $this->tableGateway->update($data,['id'=>$id]);
+        }else{
+           return $this->tableGateway->insert($data);
         }
-
-        if (! $this->getWechat($id)) {
-            throw new RuntimeException(sprintf(
-                'Cannot update album with identifier %d; does not exist',
-                $id
-            ));
-        }
-
-        return $this->tableGateway->update($data, ['id' => $id]);
     }
-
-    //查看
-    public function getWechat($id){
-        $id=(int)$id;
-        $query=$this->tableGateway->select(['id'=>$id]);
-        $row=$query->current();
-        if (! $row) {
-            throw new RuntimeException(sprintf(
-                'Could not find row with identifier %d',
-                $id
-            ));
-        }
-        return $row;
+    //判断数据已经有多少
+    public function countMenu($wxid,$parentId=0){
+        $select=new Select();
+        $select->from($this->tableGateway->getTable());
+        $select->where(['wxid'=>$wxid,'parentId'=>$parentId]);
+        $db=new DbSelect($select,$this->tableGateway->getAdapter());
+        return $db->count();
     }
-
-    //删除
-    public function deleteWechat($id)
-    {
-        return $this->tableGateway->delete(['id' => (int) $id]);
+    //类型转换
+    private function typename($type){
+        $type_arr=[
+            '1'=>'关键词回复菜单',
+            '2'=>'url链接菜单',
+            '3'=>'微信扩展菜单',
+            '4'=>'一键拨号菜单',
+            '5'=>'一键导航'
+        ];
+        return $type_arr[$type];
     }
-
-    //数据分页
-    private function fetchPaginatedResults($where=null)
-    {
-        // Create a new Select object for the table:
-        $select = new Select($this->tableGateway->getTable());
-        if($where){
-            $select->where($where);
-        }
-        $select->order("id desc");
-        // Create a new result set based on the Album entity:
-        $resultSetPrototype = new ResultSet();
-        $resultSetPrototype->setArrayObjectPrototype(new Wechat());
-
-        // Create a new pagination adapter object:
-        $paginatorAdapter = new DbSelect(
-        // our configured select object:
-            $select,
-            // the adapter to run it against:
-            $this->tableGateway->getAdapter(),
-            // the result set to hydrate:
-            $resultSetPrototype
-        );
-
-        $paginator = new Paginator($paginatorAdapter);
-        return $paginator;
-    }
-    private function typename($id){
-        return $id==1?'认证订阅号':'认证服务号';
+    //字段转换
+    public function field($type){
+        $field_arr=[
+            '1'=>'keyword',
+            '2'=>'url',
+            '3'=>'wxsys',
+            '4'=>'tel',
+            '5'=>'nav'
+        ];
+        return $field_arr[$type];
     }
 }
