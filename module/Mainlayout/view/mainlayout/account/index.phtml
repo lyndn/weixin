@@ -1,0 +1,71 @@
+<!-- MainForm -->
+<div id="MainForm">
+
+    <!-- btn_box -->
+    <div class="btn_box floatR ma_l20"><input name="" type="button" value="刷新" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
+    <!-- /btn_box -->
+    <!-- btn_box -->
+    <div class="btn_box floatR ma_l20 popup02"><input name="" type="button" value="添加账户" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
+    <!-- /btn_box -->
+
+
+    <div class="form_boxA">
+        <h2>年度预算列表</h2>
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>角色</th>
+                <th>创建时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+
+            <?php foreach ($this->resultSet as $row) :  //分页 ?>
+            <tr>
+                <td><?=  $this->escapeHtml($row->username); ?></td>
+                <td><?=  $this->escapeHtml($row->realname); ?></td>
+                <td><?=  $this->escapeHtml($this->roleResultSet[$row->role]); ?></td>
+                <td><?=  $this->escapeHtml($row->createdate); ?></td>
+                <td>
+                    <?php
+                    if($row->active == 1){
+                        echo $this->escapeHtml('停用');
+                    }else{
+                        echo $this->escapeHtml('启用');
+                    }
+                    ?></td>
+                <td>
+                    <a href="account/resetpasswd?id=<?= $this->escapeHtml($row->id); ?>">重置密码</a> |
+                    <a href="account/updateprofile?id=<?= $this->escapeHtml($row->id); ?>">修改</a>|
+                    <a href="account/deluser?id=<?= $this->escapeHtml($row->id); ?>">停用</a> </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <?= $this->paginationControl(
+        // The paginator object:
+            $this->resultSet,
+            // The scrolling style:
+            'sliding',
+            // The partial to use to render the control:
+            'partial/paginator',
+            // The route to link to when a user clicks a control link:
+            ['route' => 'account']
+        ) ?>
+
+    </div>
+</div>
+<!-- /MainForm -->
+
+
+
+<script type="text/javascript" src="/js/mainlayout/popwin.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".popup02 input").on('click' , function(){
+            popWin.showWin("500","350","添加账户","/account/adduser");
+        });
+    });
+</script>
+

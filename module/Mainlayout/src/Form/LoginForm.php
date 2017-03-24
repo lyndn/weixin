@@ -12,6 +12,7 @@
  
 
 namespace Mainlayout\Form;
+use Zend\Form\Element;
 use Zend\Form\Form;
 
 class LoginForm extends Form
@@ -34,13 +35,15 @@ class LoginForm extends Form
                 'class' => 'txt_input txt_input2',
             ],
         ]);
-        $this->add([
-            'name' => 'passwd',
-            'type' => 'text',
-            'attributes' => [
-                'class' => 'txt_input',
-            ],
+
+        //passwd
+        $password = new Element\Password('passwd');
+        $password->setAttributes([
+            'size'  => '30',
+            'class' => 'txt_input'
         ]);
+        $this->add($password);
+
         $this->add([
             'name' => 'isSavePwd',
             'type' => 'checkbox',

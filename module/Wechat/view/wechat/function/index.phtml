@@ -1,0 +1,86 @@
+<?= $this->headLink()->prependStylesheet($this->basePath('css/wechat/style.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/wechat/left-menu.css')) ?>
+<div class="contentmanage">
+    <div class="developer">
+        <div class="appTitle normalTitle2">
+            <div class="vipuser">
+                <div class="logo">
+                    <a href="/index.php?g=User&m=Function&a=welcome&token=znspul1489384614"><img src="./tpl/User/default/common/images/portrait.jpg" width="100" height="100" /></a>
+                </div>
+
+                <div id="nickname">
+                    <strong><a href="/index.php?g=User&m=Function&a=welcome&token=znspul1489384614">泉水叮咚微商城</a></strong><a href="#" target="_blank" class="vipimg vip-icon3" title=""></a></div>
+                <div id="weixinid">微信号:qsddw-mall</div>
+            </div>
+            <div class="clr"></div>
+        </div>
+        <div class="tableContent">
+            <!--左侧-->
+            <div  class="sideBar" id="sideBar">
+                <div class="catalogList">
+                    <ul id="menu">
+                        <a class="nav-header" style="border-top:none !important;"><b class="base"></b>基础设置</a>
+                        <ul class="ckit">
+                            <li class="subCatalogList"> <a href="#">功能管理</a></li>
+                            <li class="subCatalogList"> <a href="#">关注时回复与帮助</a></li>
+                            <li class="subCatalogList"> <a href="#">微信－文本回复</a></li>
+                            <li class="subCatalogList"> <a href="#">微信－图文回复</a></li>
+                            <li class="subCatalogList"> <a href="#">微信－图文编辑器</a><span class="new"></span></li>
+                            <li class="subCatalogList"> <a href="#">微信－多图文回复</a></li>
+                            <li class="subCatalogList"> <a href="#">微信－语音回复</a></li>
+                            <li class="subCatalogList"> <a href="#">微信－群发消息</a><span class="new"></span></li>
+                            <li class="subCatalogList"> <a href="#">微信－模板消息</a><span class="new"></span></li>
+                            <li class="subCatalogList"> <a href="#">LBS商家连锁</a></li>
+                            <li class="selected"> <a href="/function/menu">自定义菜单</a></li>
+                            <li class="subCatalogList"> <a href="#">自动获取粉丝信息</a><span class="new"></span></li>
+                            <li class="subCatalogList"> <a href="#">回答不上来的配置</a></li>
+                            <li class="subCatalogList"> <a href="#">邮箱配置</a></li>
+                            <li class="subCatalogList"> <a href="#">在线客服配置</a><span class="new"></span></li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <!--左侧end-->
+            <!--右侧-->
+            <div class="content">
+                <ul class="gzh">
+                    <li class="guanzhu">
+                        <a title="公众号">
+                            1                <p>公众号</p>
+                        </a>
+                    </li>
+                    <li class="huiyuanka">
+                        <a title="会员卡">
+                            0                <p>会员卡</p>
+                        </a>
+                    </li>
+                    <li class="liulan">
+                        <a title="图文消息">
+                            0                <p>图文消息</p>
+                        </a>
+                    </li>
+                    <li class="fangke">
+                        <a title="微活动">
+                            0                <p>微活动</p>
+                        </a>
+                    </li>
+                    <div class="clr"></div>
+                </ul>
+            </div>
+            <!--右侧end-->
+            <div style="clear: both"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $(".nav-header").mouseover(function(){
+            $(this).addClass('navHover');
+        }).mouseout(function(){
+            $(this).removeClass('navHover');
+        }).click(function(){
+            $(this).toggleClass('nav-header-current');
+            $(this).next('.ckit').slideToggle();
+        })
+    });
+</script>

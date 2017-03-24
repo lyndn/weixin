@@ -28,6 +28,8 @@ class Auth implements InputFilterAwareInterface
     public $realname;
     public $role;
     public $password_salt;
+    public $createdate;
+    public $active;
     private $inputFilter;
     
 
@@ -40,8 +42,10 @@ class Auth implements InputFilterAwareInterface
         $this->username = !empty($data['username']) ? $data['username'] : null;
         $this->passwd  = !empty($data['passwd']) ? $data['passwd'] : null;
         $this->realname  = !empty($data['realname']) ? $data['realname'] : null;
-        $this->password_salt = !empty($data['password_salt']) ? $data['realname'] : null;
+        $this->password_salt = !empty($data['password_salt']) ? $data['password_salt'] : null;
         $this->role = !empty($data['role']) ? $data['role'] : null;
+        $this->createdate = !empty($data['createdate']) ? $data['createdate'] : null;
+        $this->active = !empty($data['active']) ? $data['active'] : 0;
     }
 
     /**
@@ -58,6 +62,165 @@ class Auth implements InputFilterAwareInterface
     /**
      * @return InputFilter
      */
+    public function getInputResetPasswdFilter()
+    {
+        if ($this->inputFilter) {
+            return $this->inputFilter;
+        }
+
+        $inputFilter = new InputFilter();
+
+        $inputFilter->add([
+            'name' => 'password',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 6,
+                        'max' => 30,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->inputFilter = $inputFilter;
+        return $this->inputFilter;
+    }
+
+    /**
+     * @return InputFilter
+     */
+    public function getInputAddUserFilter()
+    {
+        if ($this->inputFilter) {
+            return $this->inputFilter;
+        }
+
+        $inputFilter = new InputFilter();
+
+        $inputFilter->add([
+            'name' => 'username',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 30,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'password',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 6,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'realname',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->inputFilter = $inputFilter;
+        return $this->inputFilter;
+    }
+
+    /**
+     * @return InputFilter
+     */
+    public function getInputUpdateFilter()
+    {
+        if ($this->inputFilter) {
+            return $this->inputFilter;
+        }
+
+        $inputFilter = new InputFilter();
+
+        $inputFilter->add([
+            'name' => 'username',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 30,
+                    ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'realname',
+            'required' => true,
+            'filters' => [
+                ['name' => StripTags::class],
+                ['name' => StringTrim::class],
+            ],
+            'validators' => [
+                [
+                    'name' => StringLength::class,
+                    'options' => [
+                        'encoding' => 'UTF-8',
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->inputFilter = $inputFilter;
+        return $this->inputFilter;
+    }
+
+    /**
+     * @return InputFilter
+     */
     public function getInputFilter()
     {
         if ($this->inputFilter) {
@@ -65,7 +228,7 @@ class Auth implements InputFilterAwareInterface
         }
 
         $inputFilter = new InputFilter();
-        
+
         $inputFilter->add([
             'name' => 'username',
             'required' => true,
@@ -97,8 +260,8 @@ class Auth implements InputFilterAwareInterface
                     'name' => StringLength::class,
                     'options' => [
                         'encoding' => 'UTF-8',
-                        'min' => 1,
-                        'max' => 100,
+                        'min' => 6,
+                        'max' => 30,
                     ],
                 ],
             ],
@@ -106,4 +269,5 @@ class Auth implements InputFilterAwareInterface
         $this->inputFilter = $inputFilter;
         return $this->inputFilter;
     }
+
 }

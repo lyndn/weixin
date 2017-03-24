@@ -34,9 +34,22 @@ return [
                     ],
                 ],
             ],
+            'function' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/function[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FunctionController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
-
     'view_manager' => [
         'template_path_stack' => [
             'wechat' => __DIR__ . '/../view',

@@ -1,8 +1,7 @@
 <!-- Popup -->
 <div id="Popup">
-
     <?php
-    $form->setAttribute('action', '/auth/role?do=addrole');
+    $form->setAttribute('action', '/account/resetpasswd?id='.$_GET['id']);
     $form->prepare();
     echo $this->form()->openTag($form);
     ?>
@@ -23,21 +22,14 @@
                     $("body").click(function(i){ !$(i.target).parents(".select").first().is(s) ? _hide():"";});})})
         </script>
         <div class="form_boxC">
+            <p>"<span class="f_cB">*</span>"号为必填项目</p>
             <table cellpadding="0" cellspacing="0">
+
                 <tr>
-                    <th>角色名 <span class="f_cB">*</span></th>
+                    <th>新密码 <span class="f_cB">*</span></th>
                     <td><div class="txtbox floatL">
-                        <?php echo $this->formRow($form->get('roletitle')); ?>
+                            <?php echo $this->formRow($form->get('password')); ?>
                         </div></td>
-                </tr>
-                </tr>
-
-                <tr>
-                    <th width="100">公众号<span class="f_cB">*</span></th>
-
-                    <td><!-- selectbox -->
-                        <?php echo $this->formRow($form->get('wechatid')); ?>
-                        <!-- /selectbox --></td>
                 </tr>
 
             </table>
@@ -46,18 +38,11 @@
     <!-- SubPopup -->
 
     <div id="BtmBtn">
-        <div class="btn_boxB floatR mag_l20">
-<!--     <?php //echo $this->formRow($form->get('cancel')); ?>       -->
-        </div>
-
-        <div class="btn_box floatR">
+        <div class="btn_box floatR" >
             <?php echo $this->formRow($form->get('submit')); ?>
         </div>
     </div>
-    </form>
 
+    </form>
 </div>
 <!-- /Popup -->
-
-
-

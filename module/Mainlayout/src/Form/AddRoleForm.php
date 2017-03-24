@@ -44,15 +44,15 @@ class AddRoleForm extends Form
             ]
         ]);
 
-        $this->add([
-            'name' => 'cancel',
-            'type' => 'submit',
-            'attributes' => [
-                'value' => '取消',
-                'onmousemove' => 'this.className=\'input_move\'',
-                'onmouseout' => 'this.className=\'input_out\'',
-            ],
-        ]);
+//        $this->add([
+//            'name' => 'cancel',
+//            'type' => 'submit',
+//            'attributes' => [
+//                'value' => '取消',
+//                'onmousemove' => 'this.className=\'input_move\'',
+//                'onmouseout' => 'this.className=\'input_out\'',
+//            ],
+//        ]);
 
         $this->add([
             'name' => 'submit',

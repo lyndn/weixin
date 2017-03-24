@@ -13,6 +13,10 @@ namespace Mainlayout\Model;
 
 use RuntimeException;
 use Zend\Db\TableGateway\TableGatewayInterface;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Select;
+use Zend\Paginator\Adapter\DbSelect;
+use Zend\Paginator\Paginator;
 
 class AuthTable
 {
@@ -30,10 +34,43 @@ class AuthTable
     /**
      * @return mixed
      */
-    public function fetchAll()
+    public function fetchAll($paginated = false)
     {
+        if ($paginated) {
+            return $this->fetchPaginatedResults();
+        }
+
         return $this->tableGateway->select();
     }
+
+
+    /**
+     * @return Paginator
+     */
+    private function fetchPaginatedResults()
+    {
+        // Create a new Select object for the table:
+        $select = new Select($this->tableGateway->getTable());
+
+        // Create a new result set based on the Album entity:
+        $resultSetPrototype = new ResultSet();
+        $resultSetPrototype->setArrayObjectPrototype(new Auth());
+
+        // Create a new pagination adapter object:
+        $paginatorAdapter = new DbSelect(
+        // our configured select object:
+            $select,
+            // the adapter to run it against:
+            $this->tableGateway->getAdapter(),
+            // the result set to hydrate:
+            $resultSetPrototype
+        );
+
+        $paginator = new Paginator($paginatorAdapter);
+        return $paginator;
+    }
+
+
 
     /**
      * @param $username
@@ -70,8 +107,14 @@ class AuthTable
     public function saveAuth(Auth $auth)
     {
         $data = [
+            'id' => $auth->id,
             'username' => $auth->username,
-            'passwd'  => $auth->passwd
+            'passwd'  => $auth->passwd,
+            'realname' => $auth->realname,
+            'password_salt' => $auth->password_salt,
+            'role' => $auth->role,
+            'createdate' => $auth->createdate,
+            'active' => $auth->active
         ];
 
         $id = (int) $auth->id;
@@ -81,14 +124,14 @@ class AuthTable
             return;
         }
 
-        if (! $this->getAlbum($id)) {
+        if (! $this->getAuthWhere(['id'=>$id])) {
             throw new RuntimeException(sprintf(
                 'Cannot update album with identifier %d; does not exist',
                 $id
             ));
         }
 
-        $this->tableGateway->update($data, ['id' => $id]);
+        $this->tableGateway->update(array_filter($data), ['id' => $id]);
     }
 
     /**

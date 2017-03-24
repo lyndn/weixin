@@ -22,8 +22,17 @@
                 <td><a href="/auth/setting?id=<?php echo $this->escapeHtml($v->roleid) ?>">设置权限</a> | <a href="/auth/delrole?id=<?php echo $this->escapeHtml($v->roleid) ?>">删除角色</a></td>
             </tr>
             <?php } ?>
-
         </table>
+        <?= $this->paginationControl(
+        // The paginator object:
+            $this->roleData,
+            // The scrolling style:
+            'sliding',
+            // The partial to use to render the control:
+            'partial/paginator',
+            // The route to link to when a user clicks a control link:
+            ['route' => 'auth']
+        ) ?>
     </div>
 </div>
 

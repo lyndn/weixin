@@ -9,7 +9,6 @@ namespace Wechat\Model;
 use DomainException;
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
@@ -32,6 +31,10 @@ class Wechat implements InputFilterAwareInterface
     public $AesEncodingKey;
     public $qrcode;
     public $addtime;
+    public $mch_id;
+    public $key;
+    public $cert_path;
+    public $key_path;
 
     // Add this property:
     private $inputFilter;
@@ -52,7 +55,11 @@ class Wechat implements InputFilterAwareInterface
         $this->EncodeType  = !empty($data['EncodeType']) ? $data['EncodeType'] : null;
         $this->AesEncodingKey  = !empty($data['AesEncodingKey']) ? $data['AesEncodingKey'] : null;
         $this->qrcode  = !empty($data['qrcode']) ? $data['qrcode'] : null;
-        $this->addtime  = !empty($data['addtime']) ? $data['addtime'] : null;;
+        $this->addtime  = !empty($data['addtime']) ? $data['addtime'] : null;
+        $this->mch_id  = !empty($data['mch_id']) ? $data['mch_id'] : null;
+        $this->key  = !empty($data['key']) ? $data['key'] : null;
+        $this->cert_path  = !empty($data['cert_path']) ? $data['cert_path'] : null;
+        $this->key_path  = !empty($data['key_path']) ? $data['key_path'] : null;
     }
 
     /* Add the following methods: */

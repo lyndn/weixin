@@ -177,10 +177,10 @@ address span{ color:#8c9bc1; padding-right:45px;}
 
 .info_boxA{ text-align:left !important; font-size:16px; font-weight:bold; padding-left:20px !important; border-right: none !important;}
 
-#PageNum{ text-align:center; padding-top:50px;}
-#PageNum li{ text-align:center; display:inline-block; padding:0px 5px;}
-#PageNum li a{ display:block; background-color:#FFF; height:30px; line-height:30px; vertical-align:middle; font-size:12px; padding:0px 10px;-moz-border-radius: 30px; -webkit-border-radius: 30px;border-radius:30px; text-decoration:none; color:#333;}
-#PageNum li a:hover{ background-color:#eb6d48; color:#FFF;}
+.pagination{ text-align:center; padding-top:50px;}
+.pagination li{ text-align:center; display:inline-block; padding:0px 5px;}
+.pagination li a{ display:block; background-color:#FFF; height:30px; line-height:30px; vertical-align:middle; font-size:12px; padding:0px 10px;-moz-border-radius: 30px; -webkit-border-radius: 30px;border-radius:30px; text-decoration:none; color:#333;}
+.pagination li a:hover{ background-color:#eb6d48; color:#FFF;text-decoration:none;}
 
 
 #Popup{}

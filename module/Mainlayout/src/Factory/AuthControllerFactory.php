@@ -39,8 +39,8 @@ class AuthControllerFactory implements FactoryInterface
         $myrole = $serviceManager->get(MyRole::class);
         $roleTable = $serviceManager->get(RoleTable::class);
         $moduleTable = $serviceManager->get(ModulesTable::class);
-        //$powergroupTable = $serviceManager->get();
         return new AuthController($auth,$authTable,$adapter,$container,$myrole,$roleTable,$moduleTable);
     }
+
 
 }

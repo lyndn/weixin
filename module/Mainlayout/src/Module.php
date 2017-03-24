@@ -89,6 +89,14 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\MyRole::class)
                     );
                 },
+                Controller\AccountController::class => function($container) {
+                    return new Controller\AccountController(
+                        $container->get(Model\MyRole::class),
+                        $container->get(Model\RoleTable::class),
+                        $container->get(Model\AuthTable::class),
+                        $container
+                    );
+                },
             ],
         ];
     }

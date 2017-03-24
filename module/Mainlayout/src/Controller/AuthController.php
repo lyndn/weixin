@@ -72,7 +72,7 @@ class AuthController extends AbstractActionController
             'users',
             'username',
             'passwd',
-            "MD5(CONCAT('staticSalt', ?, password_salt))"
+            "MD5(CONCAT('staticSalt', ?, password_salt)) AND active = '0'"
         );
         $authAdapter
             ->setIdentity($data['username'])
@@ -160,7 +160,15 @@ class AuthController extends AbstractActionController
                 ->get('inlineScript')->appendScript('alert("添加成功！");history.go(-1);');
         }
 
-        $roleData = $this->roleTable->fetchAll();
+        $roleData = $this->roleTable->fetchAll(true);
+
+        $page = (int) $this->params()->fromQuery('page', 1);
+        $page = ($page < 1) ? 1 : $page;
+        $roleData->setCurrentPageNumber($page);
+
+        // Set the number of items per page to 10:
+        $roleData->setItemCountPerPage(10);
+
         return new ViewModel(['roleData'=>$roleData]);
     }
 
@@ -236,7 +244,6 @@ class AuthController extends AbstractActionController
         $this->roleTable->deleteRole($roleid);
         return $this->serviceManager->get('ViewHelperManager')
             ->get('inlineScript')->appendScript('alert("删除成功！");history.go(-1);');
-
     }
 
     /**
@@ -251,5 +258,10 @@ class AuthController extends AbstractActionController
         return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
             'action' => 'index']);
     }
+
+
+
+
+
     
 }

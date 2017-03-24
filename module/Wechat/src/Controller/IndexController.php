@@ -28,7 +28,6 @@ class IndexController extends AbstractActionController
         $this->myrole = $myRole;
     }
 
-
     public function indexAction()
     {
         $obj = $this->myrole->isGranted('wechat.index.index');
@@ -52,6 +51,10 @@ class IndexController extends AbstractActionController
     //添加
     public function addAction()
     {
+        $obj = $this->myrole->isGranted('wechat.index.add');
+        if(is_object($obj)){
+            return $obj;
+        }
         $form = new WechatForm();
         $request = $this->getRequest();
         if (! $request->isPost()) {
@@ -82,6 +85,10 @@ class IndexController extends AbstractActionController
     }
     //编辑
     public function editAction(){
+        $obj = $this->myrole->isGranted('wechat.index.edit');
+        if(is_object($obj)){
+            return $obj;
+        }
         $request = $this->getRequest();
         if($request->isPost()){
             $id=$this->params()->fromPost('id');
@@ -118,6 +125,10 @@ class IndexController extends AbstractActionController
     }
     //删除
     public function deleteAction(){
+        $obj = $this->myrole->isGranted('wechat.index.delete');
+        if(is_object($obj)){
+            return $obj;
+        }
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('wechat');

@@ -21,11 +21,24 @@ class Module implements ConfigProviderInterface
                     $tableGateway = $container->get(Model\WechatTableGateway::class);
                     return new Model\WechatTable($tableGateway);
                 },
+                Model\WxmenuTable::class => function($container) {
+                    $tableGateway = $container->get(Model\WxmenuTableGateway::class);
+                    return new Model\WxmenuTable($tableGateway);
+                },
+
+
                 Model\WechatTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Wechat());
                     return new TableGateway('wxuser', $dbAdapter, null, $resultSetPrototype);
+                },
+
+                Model\WxmenuTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Wxmenu());
+                    return new TableGateway('wxmenu', $dbAdapter, null, $resultSetPrototype);
                 },
 
             ],
@@ -43,8 +56,17 @@ class Module implements ConfigProviderInterface
                         $container->get(\Mainlayout\Model\MyRole::class)
                     );
                 },
-                Controller\ServerController::class=>function(){
-                    return new Controller\ServerController();
+                Controller\ServerController::class=>function($container){
+                    return new Controller\ServerController(
+                        $container->get(Model\WechatTable::class)
+                    );
+                },
+                Controller\FunctionController::class=>function($container){
+                    return new Controller\FunctionController(
+                        $container->get(Model\WxmenuTable::class),
+                        $container->get(Model\WechatTable::class),
+                        $container->get(\Mainlayout\Model\MyRole::class)
+                    );
                 }
             ],
         ];
