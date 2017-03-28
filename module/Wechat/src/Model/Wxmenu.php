@@ -40,10 +40,10 @@ class Wxmenu implements InputFilterAwareInterface
     {
         $this->id     = !empty($data['id']) ? $data['id'] : null;
         $this->wxid  = !empty($data['wxid']) ? $data['wxid'] : null;
-        $this->parentId = !empty($data['parentId']) ? $data['parentId'] : null;
+        $this->parentId = !empty($data['parentId']) ? $data['parentId'] : 0;
         $this->title = !empty($data['title']) ? $data['title'] : null;
         $this->keyword = !empty($data['keyword']) ? $data['keyword'] : null;
-        $this->is_show = !empty($data['is_show']) ? $data['is_show'] : null;
+        $this->is_show = !empty($data['is_show']) ? $data['is_show'] : 0;
         $this->sort = !empty($data['sort']) ? $data['sort'] : 0;
         $this->url = !empty($data['url']) ? $data['url'] : null;
         $this->wxsys = !empty($data['wxsys']) ? $data['wxsys'] : null;

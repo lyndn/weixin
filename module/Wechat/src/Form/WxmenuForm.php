@@ -34,14 +34,25 @@ class WxmenuForm extends Form
             ],
         ]);
         $this->add([
+            'type' => Element\Radio::class,
+            'name' => 'is_show',
+            'attributes'=>[
+                'id'=>'is_show',
+                'required'=>true,
+            ],
+            'options' => [
+                'value_options' => [
+                    '1' => '是',
+                    '0' => '否',
+                ],
+            ],
+        ]);
+        $this->add([
             'name'=>'parentId',
         ]);
         $this->add([
             'name'=>'keyword',
             'type'=>'text',
-        ]);
-        $this->add([
-            'name'=>'is_show'
         ]);
         $this->add([
             'name'=>'sort',

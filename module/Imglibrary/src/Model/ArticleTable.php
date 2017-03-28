@@ -10,7 +10,7 @@
  * @link      yanchao563@yahoo.com
  */
 
-namespace Blog\Model;
+namespace Imglibrary\Model;
 
 use RuntimeException;
 use Zend\Db\TableGateway\TableGatewayInterface;

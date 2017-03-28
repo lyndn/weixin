@@ -34,13 +34,13 @@ class RoleTable
     /**
      * @return mixed
      */
-    public function fetchAll($paginated = false)
+    public function fetchAll($paginated = false,$where = null)
     {
         if ($paginated) {
             return $this->fetchPaginatedResults();
         }
 
-        return $this->tableGateway->select();
+        return $this->tableGateway->select($where);
     }
 
     /**

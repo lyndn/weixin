@@ -30,6 +30,7 @@ class Auth implements InputFilterAwareInterface
     public $password_salt;
     public $createdate;
     public $active;
+    public $pid;
     private $inputFilter;
     
 
@@ -46,6 +47,7 @@ class Auth implements InputFilterAwareInterface
         $this->role = !empty($data['role']) ? $data['role'] : null;
         $this->createdate = !empty($data['createdate']) ? $data['createdate'] : null;
         $this->active = !empty($data['active']) ? $data['active'] : 0;
+        $this->pid = !empty($data['pid']) ? $data['pid'] : 0;
     }
 
     /**

@@ -5,26 +5,31 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Blog\Controller;
+namespace Imglibrary\Controller;
 
-//use Blog\Model\ArticleModel;
+use Imglibrary\Model\ArticleTable;
+use Imglibrary\Status\Work;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class HomeController extends AbstractActionController
+class ArticleController extends AbstractActionController
 {
     // Add this property:
     private $table;
-
+    private $work;
     // Add this constructor:
-//    public function __construct(ArticleModel $table)
-//    {
-//        $this->table = $table;
-//    }
+    public function __construct(ArticleTable $table,Work $work)
+    {
+        $this->table = $table;
+        $this->work = $work;
+    }
 
     public function indexAction()
     {
-        echo 1;die;
+        //问候语
+        $this->work->hour = date("H");
+        $call=$this->work->WriteCode();
+        var_dump($call);die;
 //        return new ViewModel([
 //            'albums' => $this->table->fetchAll(),
 //        ]);

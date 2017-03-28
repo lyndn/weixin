@@ -2,27 +2,27 @@
 /**
  *
  * PHP Version ～7.1
- * @package   GoodNoon.php
+ * @package   GoodMorning.php
  * @author    yanchao <yanchao563@yahoo.com>
- * @time      2017/03/27 22:54
+ * @time      2017/03/27 22:52
  * @copyright 2017
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
  */
 
-namespace Blog\Status;
+namespace Imglibrary\Status;
 
 
-class GoodNoon implements IStatus
+class GoodMorning implements IStatus
 {
     public function WriteCode($w)
     {
         // TODO: Implement WriteCode() method.
-        if($w->hour<14)
+        if($w->hour<9)
         {
-            return Yii::t('yii','Good noon');
+            return Yii::t('yii','Good morning');
         }else{
-            $w->SetState(new GoodAfternoon());
+            $w->SetState(new GoodForenoon());
             return $w->WriteCode();
         }
     }

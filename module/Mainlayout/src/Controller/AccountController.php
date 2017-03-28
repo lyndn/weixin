@@ -30,13 +30,18 @@ class AccountController extends AbstractActionController
     private $roleTable;
     private $authTable;
     private $serviceManager;
-
+    private $user;
     public function __construct(MyRole $myRole,RoleTable $roleTable,AuthTable $authTable,ContainerInterface $serviceManager)
     {
         $this->myrole = $myRole;
         $this->roleTable = $roleTable;
         $this->authTable = $authTable;
         $this->serviceManager = $serviceManager;
+        $auth = new \Zend\Authentication\AuthenticationService();
+        if ($auth->hasIdentity())
+        {
+            $this->user = $auth->getIdentity();
+        }
     }
 
     /**
@@ -50,7 +55,7 @@ class AccountController extends AbstractActionController
             return $obj;
         }
 
-        $resutlSet = $this->authTable->fetchAll(true);
+        $resutlSet = $this->authTable->fetchAll(true,['pid'=>$this->user->userid]);
 
         // Set the current page to what has been passed in query string,
         // or to 1 if none is set, or the page is invalid:
@@ -88,6 +93,7 @@ class AccountController extends AbstractActionController
         {
             $result[] = $row;
         }
+
         $form = new AddUserForm($result);
         $request = $this->getRequest();
         if (! $request->isPost()) {
@@ -108,13 +114,15 @@ class AccountController extends AbstractActionController
         $salt = base64_encode(Rand::getBytes(32, true));
 
         $data['password'] = MD5('staticSalt'.$data['password'].$salt);
+
         $data = [
             'realname'=>$data['realname'],
             'username'=>$data['username'],
             'passwd'=>$data['password'],
             'password_salt'=>$salt,
             'createdate' => date('Y-m-d H:i:s'),
-            'role' => $data['role']
+            'role' => $data['role'],
+            'pid' => $this->user->userid
         ];
 
         $auth->exchangeArray($data);

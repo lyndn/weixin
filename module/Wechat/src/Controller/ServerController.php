@@ -20,7 +20,7 @@ class ServerController extends AbstractActionController
         $this->table=$table;
     }
     //配置微信
-    private function wxconfig($id,$debug=false,$level='debug',$log='log/easywechat.log'){
+    public function wxconfig($id,$debug=false,$level='debug',$log='log/easywechat.log'){
         $wxuser=$this->table->getWechat($id);
         $config= [
             /**

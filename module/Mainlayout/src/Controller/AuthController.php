@@ -40,6 +40,7 @@ class AuthController extends AbstractActionController
     public $wechatTable;
     public $roleTable;
     public $moduleTable;
+    private $user;
     public function __construct(AuthInterface $auth,AuthTable $authTable,Adapter $adapter,ContainerInterface $serviceManager,MyRole $myRole,RoleTable $roleTable,ModulesTable $modulesTable)
     {
         $this->auth = $auth;
@@ -50,6 +51,11 @@ class AuthController extends AbstractActionController
         $this->wechatTable = $serviceManager->get(\Wechat\Model\WechatTable::class);
         $this->roleTable = $roleTable;
         $this->moduleTable = $modulesTable;
+        $auth = new \Zend\Authentication\AuthenticationService();
+        if ($auth->hasIdentity())
+        {
+            $this->user = $auth->getIdentity();
+        }
     }
 
     public function indexAction()
@@ -106,7 +112,8 @@ class AuthController extends AbstractActionController
                 'userid' => $row->id,
                 'adminName' => $data['username'],
                 'password' => $data['passwd'],
-                'role' => $row->role
+                'role' => $row->role,
+                'pid' => $row->pid
             ));
             return $this->redirect()->toRoute('admin', ['controller' => 'MainlayoutController',
                 'action' => 'index']);
@@ -134,7 +141,7 @@ class AuthController extends AbstractActionController
                 return $obj;
             }
             $selectCnt =  [];
-            $resultSet = $this->wechatTable->fetchAll();
+            $resultSet = $this->wechatTable->fetchAll(false,['operId'=>$this->user->userid]);
             foreach ($resultSet as $row){
                 $selectCnt[$row->id] = $row->wxname;
             }
@@ -149,7 +156,7 @@ class AuthController extends AbstractActionController
             $form->setData($request->getPost());
             if (! $form->isValid()) {
                 $view = new ViewModel(['form' => $form]);
-                $view->setTemplate('Mainlayout/auth/addrole');
+                $view->setTemplate('mainlayout/auth/addrole');
                 return $view;
             }
 

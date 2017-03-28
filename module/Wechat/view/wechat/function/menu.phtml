@@ -61,7 +61,7 @@ $form->prepare();
                             <li class="subCatalogList"> <a href="#">微信－语音回复</a></li>
                             <li class="subCatalogList"> <a href="#">微信－群发消息</a><span class="new"></span></li>
                             <li class="subCatalogList"> <a href="#">微信－模板消息</a><span class="new"></span></li>
-                            <li class="selected"> <a href="/function/menu">自定义菜单</a></li>
+                            <li class="selected"> <a href="<?php echo $this->url('function',['action'=>'menu','id'=>$this->mywx->id])?>">自定义菜单</a></li>
                             <li class="subCatalogList"> <a href="#">自动获取粉丝信息</a><span class="new"></span></li>
                             <li class="subCatalogList"> <a href="#">在线客服配置</a><span class="new"></span></li>
                         </ul>
@@ -86,7 +86,7 @@ $form->prepare();
                         </td>
                         <td valign="top"><br/>
                             <div style="text-align:right;position: relative;width: 100%">
-                                <a class="btnGreen"  style="line-height:30px;"  href="">新增菜单</a>
+                                <a class="btnGreen"  style="line-height:30px;"  href="<?=$this->url('function',['action'=>'menu','id'=>$this->mywx->id])?>">新增菜单</a>
                             </div><br/>
                             <?php echo $this->form()->openTag($form);
                             echo $this->formHidden($form->get('id'));
@@ -98,7 +98,7 @@ $form->prepare();
                                         <select name="parentId" id="parentId">
                                             <option selected="selected" value="0">请选择根菜单：</option>
                                             <?php foreach($this->menuRows as $row):?>
-                                            <option value="<?php echo $row->id?>"><?php echo $row->title?></option>
+                                            <option value="<?php echo $row->id?>"<?=$row->id==$pid?' selected':''?>><?php echo $row->title?></option>
                                             <?php endforeach;?>
                                         </select>
                                         <span style="color:red">二级菜单需要选择父菜单</span>
@@ -107,10 +107,17 @@ $form->prepare();
                                         菜单名称：<?php echo $this->formRow($form->get('title'))?>
                                         <span style="color:red">一级菜单最多4个汉字</span>
                                     </div>
-                                    <div class="alert alert-info" style="line-height: 16px;padding-bottom:6px;">
-                                        显　　示：
-                                        <input type="radio" name="is_show" checked="checked" value="1">是　　
-                                        <input type="radio" name="is_show" value="0">否
+                                    <style>
+                                        .radio1 label {width:auto;float: left}
+                                        .radio1 label input {margin-right:4px;}
+                                        .radio1 label:last-of-type {margin-left:15px;}
+                                    </style>
+                                    <div class="alert alert-info radio1" style="line-height: 16px;padding-bottom:6px;">
+                                        <label>显　　示：</label>
+                                        <?php
+                                        echo $this->formRow($form->get('is_show'));
+                                        ?>
+                                        <br clear="all">
                                     </div>
                                     <div class="alert alert-info" style="line-height: 16px;padding-bottom:0px;">
                                         排　　序：<?php echo $this->formRow($form->get('sort'))?>
@@ -186,7 +193,6 @@ $form->prepare();
                         <th class="norightborder" style=" width:160px;">操作</th>
                     </tr>
                     </thead>
-                    <?php var_dump($this->menuRows);?>
                     <tbody>
                     <?php foreach($this->menuRows as $row):?>
                     <tr class="hover">
@@ -195,8 +201,8 @@ $form->prepare();
                         <td>顶级菜单-【<?=$row->type?>】</td>
                         <td><?=$row->val?></td>
                         <td>
-                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$row->id])?>" data-id="1" title="修改主菜单">修改</a>
-                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delete','id'=>$row->id])?>" onclick="retun confirm('确定删除吗');">删除</a>
+                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$row->wxid])?>?menuid=<?=$row->id?>" data-id="1" title="修改主菜单">修改</a>
+                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$row->wxid])?>?menuid=<?=$row->id?>" onclick="retun confirm('确定删除吗');">删除</a>
                         </td>
                     </tr>
                     <?php if($row->nav):
@@ -207,8 +213,8 @@ $form->prepare();
                     	<td><?=$rows->type?></td>
                     	<td><?=$rows->val?></td>
                     	<td>
-                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$rows->id])?>" data-id="1" title="修改菜单">修改</a>
-                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$rows->id])?>" onclick="retun confirm('确定删除吗');">删除</a>
+                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$rows->wxid])?>?menuid=<?=$rows->id?>" data-id="1" title="修改菜单">修改</a>
+                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$rows->wxid])?>?menuid=<?=$rows->id?>" onclick="retun confirm('确定删除吗');">删除</a>
                         </td>
                     </tr>
                     <?php

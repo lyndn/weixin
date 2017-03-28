@@ -34,10 +34,10 @@ class AuthTable
     /**
      * @return mixed
      */
-    public function fetchAll($paginated = false)
+    public function fetchAll($paginated = false,$where = null)
     {
         if ($paginated) {
-            return $this->fetchPaginatedResults();
+            return $this->fetchPaginatedResults($where);
         }
 
         return $this->tableGateway->select();
@@ -47,11 +47,14 @@ class AuthTable
     /**
      * @return Paginator
      */
-    private function fetchPaginatedResults()
+    private function fetchPaginatedResults($where = null)
     {
         // Create a new Select object for the table:
-        $select = new Select($this->tableGateway->getTable());
-
+        $select = new Select($this->tableGateway->getTable($where));
+        if($where){
+            $select->where($where);
+        }
+        $select->order("id desc");
         // Create a new result set based on the Album entity:
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new Auth());

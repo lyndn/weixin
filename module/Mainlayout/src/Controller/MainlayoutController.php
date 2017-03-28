@@ -29,7 +29,7 @@ class MainlayoutController extends AbstractActionController
     public function __construct(MyRole $myRole)
     {
         $this->user = $this->checkLoginGetUserInfo();
-        $this->_tplPath = 'Mainlayout/Mainlayout';
+        $this->_tplPath = 'mainlayout/mainlayout';
         $this->myrole = $myRole;
     }
 
@@ -72,7 +72,7 @@ class MainlayoutController extends AbstractActionController
         $view = new ViewModel();
 
         // this is not needed since it matches "module/controller/action"
-        $view->setTemplate('Mainlayout/index/index');
+        $view->setTemplate('mainlayout/index/index');
 
         $picBoxView = new ViewModel();
         $picBoxView->setTemplate($this->_tplPath . '/picBox');

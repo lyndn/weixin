@@ -10,7 +10,7 @@
  * @link      yanchao563@yahoo.com
  */
 
-namespace Blog\Status;
+namespace Imglibrary\Status;
 
 
 class Work

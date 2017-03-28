@@ -10,7 +10,7 @@
  * @link      yanchao563@yahoo.com
  */
 
-namespace Blog\Factory;
+namespace Imglibrary\Factory;
 
 
 interface IState
