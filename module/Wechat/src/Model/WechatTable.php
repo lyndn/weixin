@@ -41,7 +41,7 @@ class WechatTable
             'token'  => $form->token,
             'typename'=>$this->typename($form->typeid),
             'EncodeType'=>$form->EncodeType,
-            'AesEncodingKey'=>$form->AesEncodingKey
+            'AesEncodingKey'=>$form->AesEncodingKey,
         ];
 
         $id = (int) $form->id;
@@ -50,6 +50,7 @@ class WechatTable
             $serUrl='';
             $data['addtime']=$form->addtime;
             $data['uid']=$form->uid;
+            $data['operId']=$form->operId;
             return $this->tableGateway->insert($data);
         }
 

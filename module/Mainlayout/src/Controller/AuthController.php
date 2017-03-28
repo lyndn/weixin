@@ -161,13 +161,14 @@ class AuthController extends AbstractActionController
             }
 
             $data = $form->getData();
+            $data['rpid'] = $this->user->userid;
             $role->exchangeArray($data);
             $this->roleTable->saveRole($role);
             return $this->serviceManager->get('ViewHelperManager')
                 ->get('inlineScript')->appendScript('alert("添加成功！");history.go(-1);');
         }
-
-        $roleData = $this->roleTable->fetchAll(true);
+        $where = $this->user->userid == 1 ? null : ['rpid'=>$this->user->userid];
+        $roleData = $this->roleTable->fetchAll(true,$where);
 
         $page = (int) $this->params()->fromQuery('page', 1);
         $page = ($page < 1) ? 1 : $page;
@@ -184,7 +185,7 @@ class AuthController extends AbstractActionController
      */
     public function settingAction()
     {
-        $obj = $this->myrole->isGranted('mainlayout.auth.setting');
+        $obj = $this->myrole->isGranted('mainlayout.auth.setting','Mainlayout\Model\RoleTable','rpid','roleid',$this->getRequest()->getQuery('id'));
         if(is_object($obj)){
             return $obj;
         }
@@ -235,7 +236,7 @@ class AuthController extends AbstractActionController
 
     public function delroleAction()
     {
-        $obj = $this->myrole->isGranted('mainlayout.auth.delrole');
+        $obj = $this->myrole->isGranted('mainlayout.auth.delrole','Mainlayout\Model\RoleTable','rpid','roleid',$this->getRequest()->getQuery('id'));
         if(is_object($obj)){
             return $obj;
         }

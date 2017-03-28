@@ -46,7 +46,7 @@ class FunctionController extends AbstractActionController
         $id = (int) $this->params()->fromRoute('id', 0);
         $view=new ViewModel(['id'=>$id]);
         $view->setTerminal(true);
-        $view->setTemplate("Wechat/function/index");
+        $view->setTemplate("wechat/function/index");
         return $view;
     }
     //菜单
@@ -63,8 +63,8 @@ class FunctionController extends AbstractActionController
             $menuRows=$this->table->getMenuRows($id);
             $temp=['mywx'=>$mywx,'menuRows'=>$menuRows,'form'=>$form];
             $view=new ViewModel($temp);
-            $view->setTerminal(true);
-            $view->setTemplate('Wechat/function/menu');
+           // $view->setTerminal(true);
+            //$view->setTemplate('wechat/function/menu');
             return $view;
         }else{
            return $this->redirect()->toRoute('wechat');
@@ -74,6 +74,13 @@ class FunctionController extends AbstractActionController
     public function savemenuAction()
     {
         $id=$this->params()->fromPost('id');
+        if($id){
+            $obj = $this->myrole->isGranted('wechat.function.editmenu');
+        }else{
+            $obj = $this->myrole->isGranted('wechat.function.savemenu');
+        }
+        if(is_object($obj)){ return $obj;}
+        //以上为权限判断
         $request = $this->getRequest();
         $form=new WxmenuForm();
         $wxmenu=new Wxmenu();
@@ -149,6 +156,10 @@ class FunctionController extends AbstractActionController
 
     //编辑菜单
     public function editmenuAction(){
+        $obj = $this->myrole->isGranted('wechat.function.editmenu');
+        if(is_object($obj)){
+            return $obj;
+        }
         $wxid = (int) $this->params()->fromRoute('id', 0);
         $menuid=(int)$_GET['menuid'];
         if($wxid && $menuid){
@@ -160,8 +171,8 @@ class FunctionController extends AbstractActionController
             $menuRows=$this->table->getMenuRows($wxid);
             $temp=['mywx'=>$mywx,'menuRows'=>$menuRows,'form'=>$form,'pid'=>$data->parentId];
             $view=new ViewModel($temp);
-            $view->setTerminal(true);
-            $view->setTemplate('Wechat/function/menu');
+            //$view->setTerminal(true);
+            $view->setTemplate('wechat/function/menu');
             return $view;
         }else{
             return $this->serviceManager->get('ViewHelperManager')->get('inlineScript')->appendScript('alert("参数出错");history.go(-1);');
@@ -204,22 +215,28 @@ class FunctionController extends AbstractActionController
     //上传到微信
     public function createAction(){
         $id = (int) $this->params()->fromRoute('id', 0);
-        $wxuser=$this->wxuser->getWechat($id);
-        $config= [
-            'debug'  => true,
-            'app_id'  => $wxuser->appid,          // AppID
-            'secret'  => $wxuser->appsecret,      // AppSecret
-            'token'   => $wxuser->token,          // Token
-            'aes_key' => $wxuser->AesEncodingKey, // EncodingAESKey，安全模式下请一定要填写！！！
-            'log' => [
-                'level'      => 'debug',
-                'permission' => 0777,
-                'file'       => 'log/easywechat.log',
-            ]
-        ];
-        $app=new Application($config);
         $button=$this->table->craeteMenu($id);
-        $menu=$app->menu;
-        var_dump($menu->add($button));
+        if(count($button)) {
+            $wxuser = $this->wxuser->getWechat($id);
+            $config = [
+                'debug' => true,
+                'app_id' => $wxuser->appid,          // AppID
+                'secret' => $wxuser->appsecret,      // AppSecret
+                'token' => $wxuser->token,          // Token
+                'aes_key' => $wxuser->AesEncodingKey, // EncodingAESKey，安全模式下请一定要填写！！！
+                'log' => [
+                    'level' => 'debug',
+                    'permission' => 0777,
+                    'file' => 'log/easywechat.log',
+                ]
+            ];
+            $app = new Application($config);
+            $menu = $app->menu;
+            $res = $menu->add($button);
+            echo json_encode(array('s' => $res->errcode, 'r' => $res->errmsg));
+        }else{
+            echo json_encode(array('s' => 1001, 'r' => '对不起，请您先添加菜单'));
+        }
+        exit;
     }
 }

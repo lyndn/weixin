@@ -26,6 +26,10 @@ class WechatForm extends Form
             'type'=>'text'
         ]);
         $this->add([
+            'name'=>'operId',
+            'type'=>'hidden'
+        ]);
+        $this->add([
             'name' => 'wxname',
             'type' => 'text',
             /*选项

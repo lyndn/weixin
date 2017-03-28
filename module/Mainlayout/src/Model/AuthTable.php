@@ -40,7 +40,7 @@ class AuthTable
             return $this->fetchPaginatedResults($where);
         }
 
-        return $this->tableGateway->select();
+        return $this->tableGateway->select($where);
     }
 
 
@@ -117,7 +117,8 @@ class AuthTable
             'password_salt' => $auth->password_salt,
             'role' => $auth->role,
             'createdate' => $auth->createdate,
-            'active' => $auth->active
+            'active' => $auth->active,
+            'pid' => $auth->pid
         ];
 
         $id = (int) $auth->id;

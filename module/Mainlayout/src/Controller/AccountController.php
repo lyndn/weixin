@@ -54,8 +54,10 @@ class AccountController extends AbstractActionController
         if(is_object($obj)){
             return $obj;
         }
+        $where = $this->user->userid == 1 ? null : ['pid'=>$this->user->userid];
+        $resutlSet = $this->authTable->fetchAll(true,$where);
 
-        $resutlSet = $this->authTable->fetchAll(true,['pid'=>$this->user->userid]);
+        $resultForMe = $this->authTable->fetchAll(false,['id'=>$this->user->userid]);
 
         // Set the current page to what has been passed in query string,
         // or to 1 if none is set, or the page is invalid:
@@ -72,7 +74,7 @@ class AccountController extends AbstractActionController
         {
             $role[$row->roleid] = $row->roletitle;
         }
-        $view = new ViewModel(['resultSet'=>$resutlSet,'roleResultSet'=>$role]);
+        $view = new ViewModel(['resultSet'=>$resutlSet,'roleResultSet'=>$role,'resultForMe'=>$resultForMe]);
         return $view;
     }
 
@@ -91,7 +93,9 @@ class AccountController extends AbstractActionController
         $result = [];
         foreach ($resultSet as $row)
         {
-            $result[] = $row;
+            if($row->roleid != 1){
+                $result[] = $row;
+            }
         }
 
         $form = new AddUserForm($result);
@@ -138,7 +142,7 @@ class AccountController extends AbstractActionController
      */
     public function resetpasswdAction()
     {
-        $obj = $this->myrole->isGranted('mainlayout.account.resetpasswd');
+        $obj = $this->myrole->isGranted('mainlayout.account.resetpasswd','Mainlayout\Model\AuthTable','pid','id',$this->getRequest()->getQuery('id'));
         if(is_object($obj)){
             return $obj;
         }
@@ -179,21 +183,23 @@ class AccountController extends AbstractActionController
 
     }
 
+
     /**
      * 修改信息
      */
 
     public function updateprofileAction()
     {
-        $obj = $this->myrole->isGranted('mainlayout.account.updateprofile');
+        $obj = $this->myrole->isGranted('mainlayout.account.updateprofile','Mainlayout\Model\AuthTable','pid','id',$this->getRequest()->getQuery('id'));
         if(is_object($obj)){
             return $obj;
         }
 
-        $resultSet = $this->roleTable->fetchAll();
+        $resultSet = $this->roleTable->fetchAll(true);
         $result = [];
         foreach ($resultSet as $row)
         {
+            if($row->rpid == $this->user->userid || $row->roleid == $this->user->userid)
             $result[] = $row;
         }
 
@@ -229,11 +235,11 @@ class AccountController extends AbstractActionController
     }
 
     /**
-     * 删除用户
+     * 停用用户
      */
     public function deluserAction()
     {
-        $obj = $this->myrole->isGranted('mainlayout.account.deluser');
+        $obj = $this->myrole->isGranted('mainlayout.account.deluser','Mainlayout\Model\AuthTable','pid','id',$this->getRequest()->getQuery('id'));
         if(is_object($obj)){
             return $obj;
         }

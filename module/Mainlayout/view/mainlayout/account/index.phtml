@@ -20,6 +20,26 @@
                 <th>状态</th>
                 <th>操作</th>
             </tr>
+            <?php foreach ($this->resultForMe as $row) : ?>
+                <tr>
+                    <td><?=  $this->escapeHtml($row->username); ?></td>
+                    <td><?=  $this->escapeHtml($row->realname); ?></td>
+                    <td><?=  $this->escapeHtml($this->roleResultSet[$row->role]); ?></td>
+                    <td><?=  $this->escapeHtml($row->createdate); ?></td>
+                    <td>
+                        <?php
+                        if($row->active == 1){
+                            echo $this->escapeHtml('停用');
+                        }else{
+                            echo $this->escapeHtml('启用');
+                        }
+                        ?></td>
+                    <td>
+                        <a href="account/resetpasswd?id=<?= $this->escapeHtml($row->id); ?>">重置密码</a> |
+                        <a href="account/updateprofile?id=<?= $this->escapeHtml($row->id); ?>">修改</a>|
+                        <a href="account/deluser?id=<?= $this->escapeHtml($row->id); ?>">停用</a> </td>
+                </tr>
+            <?php endforeach; ?>
 
             <?php foreach ($this->resultSet as $row) :  //分页 ?>
             <tr>

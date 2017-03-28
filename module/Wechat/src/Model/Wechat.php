@@ -35,16 +35,18 @@ class Wechat implements InputFilterAwareInterface
     public $key;
     public $cert_path;
     public $key_path;
+    public $operId;
 
     // Add this property:
     private $inputFilter;
 
     public function exchangeArray(array $data)
     {
-        $this->id     = !empty($data['id']) ? $data['id'] : null;
-        $this->uid  = !empty($data['uid']) ? $data['uid'] : null;
+        $this->id     = !empty($data['id']) ? $data['id'] : 0;
+        $this->uid  = !empty($data['uid']) ? $data['uid'] : 0;
+        $this->operId  = !empty($data['operId']) ? $data['operId'] : 0;
         $this->wxname  = !empty($data['wxname']) ? $data['wxname'] : null;
-        $this->wxid  = !empty($data['wxid']) ? $data['wxid'] : null;
+        $this->wxid  = !empty($data['wxid']) ? $data['wxid'] : 0;
         $this->weixin  = !empty($data['weixin']) ? $data['weixin'] : null;
         $this->headerpic  = !empty($data['headerpic']) ? $data['headerpic'] : null;
         $this->token  = !empty($data['token']) ? $data['token'] : null;

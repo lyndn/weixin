@@ -1,27 +1,4 @@
-<?= $this->doctype() ?>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <?= $this->headTitle('自定义菜单')->setSeparator(' - ')->setAutoEscape(false) ?>
-    <?= $this->headMeta()
-        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-    ?>
-    <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/mainlayout/common/favicon.ico'])
-        ->prependStylesheet($this->basePath('css/wechat/left-menu.css'))
-        ->prependStylesheet($this->basePath('css/wechat/style.css'))
-        ->prependStylesheet($this->basePath('css/wechat/cymain.css'))
-    ?>
-    <!-- Scripts -->
-    <?= $this->headScript()
-        ->prependFile($this->basePath('js/mainlayout/jquery-1.10.1.min.js'))
-    ?>
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-    <![endif]-->
-</head>
-<body>
+<?php $this->headLink()->prependStylesheet($this->basePath('css/wechat/style.css'))->prependStylesheet($this->basePath('css/wechat/left-menu.css'))->prependStylesheet($this->basePath('css/wechat/cymain.css')) ?>
 <?php
 $form->setAttribute('action', $this->url('function', ['action' => 'savemenu']));
 $form->prepare();
@@ -46,29 +23,6 @@ $form->prepare();
             <div class="clr"></div>
         </div>
         <div class="tableContent">
-            <!--左侧-->
-            <div  class="sideBar" id="sideBar">
-                <div class="catalogList">
-                    <ul id="menu">
-                        <a class="nav-header" style="border-top:none !important;"><b class="base"></b>基础设置</a>
-                        <ul class="ckit">
-                            <li class="subCatalogList"> <a href="#">功能管理</a></li>
-                            <li class="subCatalogList"> <a href="#">关注时回复与帮助</a></li>
-                            <li class="subCatalogList"> <a href="#">微信－文本回复</a></li>
-                            <li class="subCatalogList"> <a href="#">微信－图文回复</a></li>
-                            <li class="subCatalogList"> <a href="#">微信－图文编辑器</a><span class="new"></span></li>
-                            <li class="subCatalogList"> <a href="#">微信－多图文回复</a></li>
-                            <li class="subCatalogList"> <a href="#">微信－语音回复</a></li>
-                            <li class="subCatalogList"> <a href="#">微信－群发消息</a><span class="new"></span></li>
-                            <li class="subCatalogList"> <a href="#">微信－模板消息</a><span class="new"></span></li>
-                            <li class="selected"> <a href="<?php echo $this->url('function',['action'=>'menu','id'=>$this->mywx->id])?>">自定义菜单</a></li>
-                            <li class="subCatalogList"> <a href="#">自动获取粉丝信息</a><span class="new"></span></li>
-                            <li class="subCatalogList"> <a href="#">在线客服配置</a><span class="new"></span></li>
-                        </ul>
-                    </ul>
-                </div>
-            </div>
-            <!--左侧end-->
             <!--右侧-->
             <div class="content">
                 <div class="cLineB">
@@ -79,12 +33,53 @@ $form->prepare();
                     1.使用本模块生成微信端，必须在微信公众平台<strong>申请</strong>自定义菜单使用的<strong>AppId和AppSecret</strong>，然后在【<a href="<?php echo $this->url('wechat',['action'=>'edit','id'=>$this->mywx->id])?>" >授权设置</a>】中设置。<br/>
                     2.微信端最多创建<span class="red bold">3 个一级菜单</span>，每个一级菜单下最多可以创建 <span class="red bold">5 个二级菜单</span>，菜单<span class="red bold">最多支持两层</span>。（多出部分会生成前3个一级菜单）<br />
                 </div>
-                <table>
+                <table style="width: 100%;">
                     <tr>
-                        <td>
-                            <div class="bgdpng"></div>
+                        <td valign="top" style="padding-right: 10px;">
+                            <!-- 列表 -->
+                            <table width="100%" style="border:1px solid #ababab" cellspacing="0" cellpadding="0" border="0" class="ListProduct">
+                                <thead>
+                                <tr>
+                                    <th style=" width:60px;">显示顺序</th>
+                                    <th style=" width:220px;">主菜单名称</th>
+                                    <th style=" width:170px;">菜单类型</th>
+                                    <th>类型数值</th>
+                                    <th class="norightborder" style=" width:160px;">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($this->menuRows as $row):?>
+                                    <tr class="hover">
+                                        <td class="td25"><?=$row->sort?></td>
+                                        <td><?=$row->title?></td>
+                                        <td>顶级菜单-【<?=$row->type?>】</td>
+                                        <td><?=$row->val?></td>
+                                        <td>
+                                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$row->wxid])?>?menuid=<?=$row->id?>" data-id="1" title="修改主菜单">修改</a>
+                                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$row->wxid])?>?menuid=<?=$row->id?>" onclick="retun confirm('确定删除吗');">删除</a>
+                                        </td>
+                                    </tr>
+                                    <?php if($row->nav):
+                                        foreach($row->nav as $rows):?>
+                                            <tr>
+                                                <td><?=$rows->sort?></td>
+                                                <td><div class="board"><span><?=$rows->title?></span></div></td>
+                                                <td><?=$rows->type?></td>
+                                                <td><?=$rows->val?></td>
+                                                <td>
+                                                    <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$rows->wxid])?>?menuid=<?=$rows->id?>" data-id="1" title="修改菜单">修改</a>
+                                                    <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$rows->wxid])?>?menuid=<?=$rows->id?>" onclick="retun confirm('确定删除吗');">删除</a>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        endforeach;
+                                    endif;
+                                endforeach;
+                                ?>
+                                </tbody>
+                            </table>
                         </td>
-                        <td valign="top"><br/>
+                        <td valign="top">
                             <div style="text-align:right;position: relative;width: 100%">
                                 <a class="btnGreen"  style="line-height:30px;"  href="<?=$this->url('function',['action'=>'menu','id'=>$this->mywx->id])?>">新增菜单</a>
                             </div><br/>
@@ -182,57 +177,13 @@ $form->prepare();
 2.一级菜单最多4个汉字，二级菜单最多7个汉字">生成微信端自定义菜单</a>&nbsp;&nbsp;&nbsp;&nbsp;
 
                 </p>
-                <!-- 列表 -->
-                <table width="100%" cellspacing="0" cellpadding="0" border="0" class="ListProduct">
-                    <thead>
-                    <tr>
-                        <th style=" width:60px;">显示顺序</th>
-                        <th style=" width:220px;">主菜单名称</th>
-                        <th style=" width:170px;">菜单类型</th>
-                        <th>类型数值</th>
-                        <th class="norightborder" style=" width:160px;">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach($this->menuRows as $row):?>
-                    <tr class="hover">
-                        <td class="td25"><?=$row->sort?></td>
-                        <td><?=$row->title?></td>
-                        <td>顶级菜单-【<?=$row->type?>】</td>
-                        <td><?=$row->val?></td>
-                        <td>
-                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$row->wxid])?>?menuid=<?=$row->id?>" data-id="1" title="修改主菜单">修改</a>
-                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$row->wxid])?>?menuid=<?=$row->id?>" onclick="retun confirm('确定删除吗');">删除</a>
-                        </td>
-                    </tr>
-                    <?php if($row->nav):
-						foreach($row->nav as $rows):?>
-                    <tr>
-                    	<td><?=$rows->sort?></td>
-                    	<td><div class="board"><span><?=$rows->title?></span></div></td>
-                    	<td><?=$rows->type?></td>
-                    	<td><?=$rows->val?></td>
-                    	<td>
-                            <a class="ajax btnGreen  cboxElement edit-menu" href="<?=$this->url('function',['action'=>'editmenu','id'=>$rows->wxid])?>?menuid=<?=$rows->id?>" data-id="1" title="修改菜单">修改</a>
-                            <a class=" btnGreen " href="<?=$this->url('function',['action'=>'delmenu','id'=>$rows->wxid])?>?menuid=<?=$rows->id?>" onclick="retun confirm('确定删除吗');">删除</a>
-                        </td>
-                    </tr>
-                    <?php
-						endforeach;
-						endif;
-						endforeach;
-					?>
-                    </tbody>
-                </table>
+
             </div>
             <!--右侧end-->
             <div style="clear: both"></div>
         </div>
     </div>
 </div>
-</body>
-</html>
-
 <script>
     $(document).ready(function(){
         $(".nav-header").mouseover(function(){
@@ -244,4 +195,17 @@ $form->prepare();
             $(this).next('.ckit').slideToggle();
         })
     });
+function drop_confirm(str){
+    layer.alert(str,function(){
+        var index=layer.msg('系统正在向微信服务端上传，请稍候...', {icon: 16,shade: [0.6, '#000000'],time:0});
+        $.getJSON("<?php echo $this->url('function',['action'=>'create','id'=>$this->mywx->id])?>",{},function(data){
+            layer.close(index);
+            if(data.s==0){
+                layer.msg(data.r,{icon:1})
+            }else{
+                layer.msg(data.r,{icon:5})
+            }
+        })
+    });
+}
 </script>

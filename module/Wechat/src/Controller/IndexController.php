@@ -16,6 +16,7 @@ class IndexController extends AbstractActionController
     // Add this property:
     private $table;
     private $myrole;
+    private $user;
     // Add this constructor:
     public function __construct(WechatTable $table,MyRole $myRole)
     {
@@ -34,8 +35,11 @@ class IndexController extends AbstractActionController
         if(is_object($obj)){
             return $obj;
         }
-
-        $where="uid=".$this->uid;
+        if($this->user->pid){
+            $where="uid=".$this->user->pid." and operId=".$this->uid;
+        }else{
+            $where="uid=".$this->uid;
+        }
         $pageset=true;
         $paginator = $this->table->fetchAll($pageset,$where);
 
@@ -61,7 +65,6 @@ class IndexController extends AbstractActionController
         if (! $request->isPost()) {
             return ['form' => $form,'uid'=>$this->uid];
         }
-
         $wechat = new Wechat();
         $form->setInputFilter($wechat->getInputFilter());
         $form->setData($request->getPost());
@@ -70,7 +73,12 @@ class IndexController extends AbstractActionController
         }
         $data=$form->getData();
         $data['addtime']=time();
-        $data['uid']=$this->uid;
+        if($this->user->pid){
+            $data['uid']=$this->user->pid;
+        }else{
+            $data['uid']=$this->uid;
+        }
+        $data['operId']=$this->uid;
         if(empty($data['AesEncodingKey'])){
             $data['AesEncodingKey']=$wechat->create_noncestr(43);
         }
@@ -78,7 +86,6 @@ class IndexController extends AbstractActionController
             $data['token']=$wechat->create_noncestr(12);
         }
         //serverurl
-
         $wechat->exchangeArray($data);
         $this->table->saveWechat($wechat);
 
@@ -86,7 +93,7 @@ class IndexController extends AbstractActionController
     }
     //编辑
     public function editAction(){
-        $obj = $this->myrole->isGranted('wechat.index.edit');
+        $obj = $this->myrole->isGranted('wechat.index.edit','Wechat\Model\WechatTable','operId','id',$this->params()->fromRoute('id',0));
         if(is_object($obj)){
             return $obj;
         }

@@ -25,6 +25,7 @@ class Role implements InputFilterAwareInterface
     public $roleid;
     public $roletitle;
     public $wechatid;
+    public $rpid;
     
 
     /**
@@ -35,6 +36,7 @@ class Role implements InputFilterAwareInterface
         $this->roleid     = !empty($data['roleid']) ? $data['roleid'] : null;
         $this->roletitle = !empty($data['roletitle']) ? $data['roletitle'] : null;
         $this->wechatid  = !empty($data['wechatid']) ? $data['wechatid'] : null;
+        $this->rpid  = !empty($data['rpid']) ? $data['rpid'] : 0;
     }
 
     /**

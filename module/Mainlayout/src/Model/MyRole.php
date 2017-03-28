@@ -26,6 +26,9 @@ class MyRole extends AbstractRole
     private $group;
     private $tableGateway;
     public $serviceManager;
+    private $user;
+    private $service;
+    private $obj;
 
     /**
      * MyRole constructor.
@@ -42,6 +45,13 @@ class MyRole extends AbstractRole
             $this->role = new Role($this->group);
         }
         $this->setRole();
+
+        $auth = new \Zend\Authentication\AuthenticationService();
+        if ($auth->hasIdentity())
+        {
+            $this->user = $auth->getIdentity();
+        }
+        $this->service = $serviceManager;
     }
     public function getGroup()
     {
@@ -71,6 +81,7 @@ class MyRole extends AbstractRole
     {
         $sqlSelect = $this->tableGateway->getSql()->select();
         $sqlSelect->join('power', 'power.powerid = powergroup.powerid',['powercode'], 'left');
+        $sqlSelect->where(['powergroup.groupid'=>$this->group]);
         $resultSet = $this->tableGateway->selectWith($sqlSelect);
         foreach ($resultSet as $row) {
             $this->role->addPermission($row->powercode);
@@ -95,19 +106,73 @@ class MyRole extends AbstractRole
      * check permission
      * @param null $s
      */
-    public function isGranted($code = null)
+    public function isGranted($code = null,$obj=false,$pField=null,$idField=null,$getId=null)
     {
+        if ($obj && $pField && $idField && $getId && !$this->check($obj,$pField,$idField,$getId)){
+            return $this->serviceManager->get('ViewHelperManager')
+                ->get('inlineScript')->appendScript('alert("您没有这个权限！");history.go(-1);');
+        }
+
         if($this->role && !$this->rbac->isGranted($this->role,$code))
         {
             return $this->serviceManager->get('ViewHelperManager')
                 ->get('inlineScript')->appendScript('alert("您没有这个权限！");history.go(-1);');
         }else if(!$this->role){
             return $this->serviceManager->get('ViewHelperManager')
-                ->get('inlineScript')->appendScript('alert("请登录！");history.go(-1);');
+                ->get('inlineScript')->appendScript('alert("请登录！");location.href="/auth"');
         }else{
             return true;
         }
     }
+
+    /**
+     * 是否为超级管理员
+     * @return bool
+     */
+    private function checkRoot()
+    {
+        return $this->user->userid == 1 ? TRUE : FALSE;
+    }
+
+    /**
+     * 对象转换
+     * @param $objName
+     * @return null
+     */
+    private function overSetObject($objName)
+    {
+        //$serviceManager->get(\Mainlayout\Model\RoleTable::class);
+        $this->obj = $this->service->get($objName);
+        return null;
+    }
+
+
+    /**
+     * 检查多级权限
+     * @param $pField
+     * @param $id
+     * @param $getId
+     * @return bool
+     */
+    private function check($obj,$pField,$idField,$getId)
+    {
+        $this->overSetObject($obj);
+        if($pField && !$this->checkRoot()){
+            $obj = $this->obj->fetchAll(false);
+            $obj2 = $this->obj->fetchAll(false);
+            $arr = [];
+            foreach ($obj as $row)
+            {
+                if($row->$pField == $this->user->userid || $row->$idField == $this->user->userid)
+                {
+                    $arr[] = $row->$idField;
+                }
+            }
+            return in_array($getId,$arr) ? TRUE : FALSE;
+        }
+        return true;
+    }
+
 
 
     /**

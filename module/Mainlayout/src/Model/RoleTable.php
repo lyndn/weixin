@@ -37,7 +37,7 @@ class RoleTable
     public function fetchAll($paginated = false,$where = null)
     {
         if ($paginated) {
-            return $this->fetchPaginatedResults();
+            return $this->fetchPaginatedResults($where);
         }
 
         return $this->tableGateway->select($where);
@@ -46,11 +46,14 @@ class RoleTable
     /**
      * @return Paginator
      */
-    private function fetchPaginatedResults()
+    private function fetchPaginatedResults($where=null)
     {
         // Create a new Select object for the table:
         $select = new Select($this->tableGateway->getTable());
-
+        if($where)
+        {
+            $select->where($where);
+        }
         // Create a new result set based on the Album entity:
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new Role());
@@ -95,7 +98,8 @@ class RoleTable
     {
         $data = [
             'roletitle' => $role->roletitle,
-            'wechatid'  => $role->wechatid
+            'wechatid'  => $role->wechatid,
+            'rpid' => $role->rpid
         ];
 
         $id = (int) $role->roleid;

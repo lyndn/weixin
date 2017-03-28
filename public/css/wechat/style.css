@@ -107,12 +107,12 @@ textarea {
 }
 .contentmanage{
     margin: 0 auto;
+    margin-right:10px;
     text-align: left;
-    width: 1210px;
 }
 
 .article, .intro, .download, .document, .developer {
-    margin: 40px 0px;
+    margin: 5px;
     border: 1px solid #BBC2CC;
     /*border-radius: 8px;*/
     background: #FFFFFF;

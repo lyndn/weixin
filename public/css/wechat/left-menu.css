@@ -10,7 +10,7 @@
     padding: 0;
 }
 .tableContent .content {
-    border-left: 1px solid #D7DDE6 !important;
+    /*border-left: 1px solid #D7DDE6 !important;*/
 }
 ul#menu, ul#menu ul {
     list-style-type:none;
@@ -67,7 +67,7 @@ ul#menu li.selected a{
 .code li { background: #ddd; border: 1px solid #ccc; margin: 0 0 2px 2.2em; }
 .indent1 { padding-left: 1em; }
 .indent2 { padding-left: 2em; }
-.tableContent .content{min-height: 1328px;width:990px;float:right}
+.tableContent .content{/*min-height: 1328px;width:990px;float:right*/}
 
 a.nav-header{background:url(../../images/wechat/arrow_click.png) center right no-repeat;cursor:pointer}
 a.nav-header-current{background:url(../../images/wechat/arrow_unclick.png) center right no-repeat;}
