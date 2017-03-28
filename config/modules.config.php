@@ -16,6 +16,5 @@ return [
     'Zend\Db',
     'Zend\Validator',
     'Mainlayout',
-    'Userpower',
     'Wechat'
 ];

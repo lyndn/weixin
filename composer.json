@@ -92,7 +92,6 @@
     "autoload": {
         "psr-4": {
             "Mainlayout\\": "module/Mainlayout/src/",
-            "Userpower\\": "module/Userpower/src/",
             "Wechat\\":"module/Wechat/src"
         }
     }
