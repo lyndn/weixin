@@ -26,6 +26,7 @@ class AuthRepository implements AuthInterface
     {
         // TODO: Implement viewAddRoleForm() method.
         $view = new ViewModel(['form' => $form]);
+        $view->setTerminal(true);
         $view->setTemplate('mainlayout/auth/addrole');
         return $view;
     }

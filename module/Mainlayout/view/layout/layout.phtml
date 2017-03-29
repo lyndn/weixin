@@ -27,7 +27,154 @@
     <![endif]-->
 </head>
 <body>
-<?= $this->content ?>
-<?= $this->inlineScript() ?>
+<!-- wrap_left -->
+<div class="wrap_left" id="frmTitle" name="fmTitle">
+    <!-- Logo -->
+    <div id="Logo"><span>Beta 1.0</span>
+        <h1 title="人单合一">人单合一</h1></div>
+    <!-- /Logo -->
+
+    <!-- menu_list -->
+    <script>
+        $(function () {
+            $(".menu_list dd");
+            $(".menu_list dt").click(function () {
+                $(this).toggleClass("open").next().slideToggle("fast");
+            });
+
+
+            $(".menu_list dt").toggleClass("open").next().slideToggle("fast");
+        });
+    </script>
+
+    <div class="menu_list">
+        <dl>
+            <dt><span>一级分类名称</span></dt>
+            <dd>
+                <a href="/auth/role" title="二级分类" class="active">角色管理</a>
+                <a href="/wechat" title="二级分类" >公众号管理</a>
+                <a href="/account" title="二级分类">账户管理</a>
+                <a href="" title="二级分类">二级分类</a>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt><span>素材库</span></dt>
+            <dd>
+                <a href="/material/index/weichatmsg" title="二级分类">系统图文管理</a>
+                <a href="" title="二级分类">二级分类</a>
+                <a href="" title="二级分类">二级分类</a>
+                <a href="" title="二级分类">二级分类</a>
+            </dd>
+        </dl>
+
+
+
+    </div>
+    <!-- /menu_list -->
+</div>
+<!-- /wrap_left -->
+
+
+<!-- picBox -->
+<div class="picBox" onclick="switchSysBar()" id="switchPoint"></div>
+<!-- /picBox -->
+
+
+<!-- wrap_right -->
+<div class="wrap_right">
+    <header>
+        <!-- Header -->
+        <div id="Header">
+            <div class="user">
+                <div>
+                    <?php
+                    $auth = new \Zend\Authentication\AuthenticationService();
+                    if ($auth->hasIdentity())    //判断是否登陆，是，则记录登陆信息
+                    {
+                        $user = $auth->getIdentity();
+                    }
+                    ?>
+                    <p>欢迎登录，<?= mb_substr($user->adminName,0,8) ?></p>
+                    <a href="#"><span>8</span><img src="<?= $this->basePath('images/mainlayout/common/ico02.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico03.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico04.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico05.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico06.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="auth/logout"><img src="<?= $this->basePath('images/mainlayout/common/ico07.gif') ?>" width="20" height="20" alt=""></a>
+                </div>
+                <div class="search_box"><input name="" type="image" src="<?= $this->basePath('images/mainlayout/common/btn_search.gif') ?>"><input name="" type="text" class="box" placeholder="Search..."></div>
+            </div>
+
+            <nav>
+                <div id="Navi">
+                    <div class="btn_menu"><img src="<?= $this->basePath('images/mainlayout/common/btn_menu.gif') ?>" width="45" height="30" alt="主页管理"></div>
+                    <li class="nav01"><a href="" title="主页管理">主页管理</a></li>
+                    <li class="nav02"><a href="" title="系统管理">系统管理</a></li>
+                    <li class="active nav03"><a href="" title="合同信息">合同信息</a></li>
+                    <li class="nav04"><a href="" title="基础数据">基础数据</a></li>
+                    <li class="nav05"><a href="" title="预算管理">预算管理</a></li>
+                    <li class="nav06"><a href="" title="项目管理">项目管理</a></li>
+                    <li class="nav07"><a href="" title="资金支付-发票">资金支付-发票</a></li>
+                    <li class="nav08"><a href="" title="产品管理信息">产品管理信息</a></li>
+                </div>
+            </nav>
+        </div>
+        <!-- /Header -->
+    </header>
+
+    <!-- Contents -->
+    <div id="Contents">
+        <script type="text/javascript">
+            $(function () {
+                $(".select").each(function () {
+                    var s = $(this);
+                    var z = parseInt(s.css("z-index"));
+                    var dt = $(this).children("dt");
+                    var dd = $(this).children("dd");
+                    var _show = function () {
+                        dd.slideDown(200);
+                        dt.addClass("cur");
+                        s.css("z-index", z + 1);
+                    };
+                    var _hide = function () {
+                        dd.slideUp(200);
+                        dt.removeClass("cur");
+                        s.css("z-index", z);
+                    };
+                    dt.click(function () {
+                        dd.is(":hidden") ? _show() : _hide();
+                    });
+                    dd.find("a").click(function () {
+                        dt.html($(this).html());
+                        _hide();
+                    });
+                    $("body").click(function (i) {
+                        !$(i.target).parents(".select").first().is(s) ? _hide() : "";
+                    });
+                })
+            })
+        </script>
+
+        <!-- Content -->
+        <?= $this->content ?>
+        <?= $this->inlineScript() ?>
+        <!-- /Content -->
+
+
+
+    </div>
+    <!-- /Contents -->
+
+    <!-- /footer -->
+    <footer>
+        <address><span>深圳前海大众金融有限公司版权所有</span> Copyright&copy;2017 Haiersoft Corporation,All Rights</address>
+    </footer>
+    <!-- /footer -->
+
+</div>
+<!-- /wrap_right -->
+
+
 </body>
 </html>

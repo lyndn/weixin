@@ -14,6 +14,7 @@ namespace Imglibrary\Controller;
 use Imglibrary\Status\WorkAdd;
 use Imglibrary\Status\WorkList;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Json\Json;
 use Zend\View\Model\ViewModel;
 
 class MaterialController extends AbstractActionController
@@ -30,23 +31,31 @@ class MaterialController extends AbstractActionController
     }
 
 
+    /**
+     * return json
+     */
     public function indexAction()
     {
         $params = (string) $this->params()->fromRoute('do', 1);
         $this->workList->type = $params;
         $call=$this->workList->WriteCode();
-        var_dump($call);die;
+        $json = Json::encode($call);
+        $view = new ViewModel(['json' => $json]);
+        return $view;
     }
 
 
+    /**
+     * return json
+     */
     public function addAction()
     {
         $params = (string) $this->params()->fromRoute('do', 1);
         $this->workAdd->type = $params;
         $call=$this->workAdd->WriteCode();
-        var_dump($call);die;
+        $json = Json::encode($call);
+        echo $json;
+        exit();
     }
-
-
 
 }

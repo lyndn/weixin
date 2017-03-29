@@ -1,3 +1,32 @@
+<?= $this->doctype() ?>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <?= $this->headTitle('首页')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+    <?= $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/mainlayout/common/favicon.ico'])
+        ->prependStylesheet($this->basePath('css/mainlayout/haiersoft.css'))
+        ->prependStylesheet($this->basePath('css/mainlayout/print.css'))
+    ?>
+
+    <!-- Scripts -->
+    <?= $this->headScript()
+        ->prependFile($this->basePath('js/mainlayout/side.js'))
+        ->prependFile($this->basePath('js/mainlayout/jquery-1.10.1.min.js'))
+        ->prependFile($this->basePath('js/layer/layer.js'))
+    ?>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+<body>
 <!-- Popup -->
 <div id="Popup">
     <?php
@@ -69,3 +98,6 @@
     </form>
 </div>
 <!-- /Popup -->
+
+</body>
+</html>

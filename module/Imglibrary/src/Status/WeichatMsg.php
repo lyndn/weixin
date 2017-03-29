@@ -20,7 +20,7 @@ class WeichatMsg implements IStatus
         // TODO: Implement WriteCode() method.
         if($w->type == 'weichatmsg')
         {
-            return 'weichatmsg';
+            return ['weichatmsg'=>'1234'];
         }else{
             $w->SetState(new WeimobMsg());
             return $w->WriteCode();

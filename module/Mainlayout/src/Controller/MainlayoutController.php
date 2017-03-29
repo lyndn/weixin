@@ -65,50 +65,14 @@ class MainlayoutController extends AbstractActionController
      * @param bool $contentFileName
      * @return ViewModel
      */
-    private function _init($contentTemplatePath = false, $loginName = false, $contentFileName = false)
+    private function _init()
     {
-        list($this->contentTemplatePath, $this->loginName, $this->contentFileName) = [$contentTemplatePath, $loginName, $contentFileName];
 
         $view = new ViewModel();
 
         // this is not needed since it matches "module/controller/action"
         $view->setTemplate('mainlayout/index/index');
 
-        $picBoxView = new ViewModel();
-        $picBoxView->setTemplate($this->_tplPath . '/picBox');
-
-        $wrap_left = new ViewModel();
-        $wrap_left->setTemplate($this->_tplPath . '/wrap_left');
-
-        $wrap_right = new ViewModel();
-        $wrap_right->setTemplate($this->_tplPath . '/wrap_right');
-
-        $menu_list = new ViewModel();
-        $menu_list->setTemplate($this->_tplPath . '/menu_list');
-        $wrap_left->addChild($menu_list, 'menu_list');
-
-        $navi = new ViewModel();
-        $navi->setTemplate($this->_tplPath . '/navi');
-
-        $sysLoginUsername = new ViewModel(['loginName' => $this->loginName ? $this->loginName : $this->user->adminName]);
-        $sysLoginUsername->setTemplate($this->_tplPath . '/sysLoginUsername');
-
-        $this->content = new ViewModel();
-        $tplPath = $this->contentTemplatePath ? $this->contentTemplatePath : $this->_tplPath;
-        $filePath = !empty($this->contentFileName) ? '/' . $this->contentFileName : '/cnt';
-        $this->content->setTemplate($tplPath . $filePath);
-
-        $foooter = new ViewModel();
-        $foooter->setTemplate($this->_tplPath . '/footer');
-
-        $wrap_right->addChild($navi, 'Navi')
-            ->addChild($sysLoginUsername, 'sysLoginUsername')
-            ->addChild($this->content, 'cnt')
-            ->addChild($foooter, 'footer');
-
-        $view->addChild($picBoxView, 'picBox')
-            ->addChild($wrap_left, 'wrap_left')
-            ->addChild($wrap_right, 'wrap_right');
         return $view;
     }
 

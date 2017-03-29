@@ -102,6 +102,7 @@ class AccountController extends AbstractActionController
         $request = $this->getRequest();
         if (! $request->isPost()) {
             $view = new ViewModel(['form' => $form]);
+            $view->setTerminal(true);
             return $view;
         }
 
