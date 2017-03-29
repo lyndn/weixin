@@ -16,5 +16,6 @@ return [
     'Zend\Db',
     'Zend\Validator',
     'Mainlayout',
-    'Wechat'
+    'Wechat',
+    'Imglibrary'
 ];

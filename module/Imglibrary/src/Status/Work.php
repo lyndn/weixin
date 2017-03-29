@@ -16,11 +16,11 @@ namespace Imglibrary\Status;
 class Work
 {
     private $current;
-    public $hour;
+    public $type;
 
     public function __construct()
     {
-        $this->current = new EarlyMorning();
+        $this->current = new WeichatMsg();
     }
     //设置状态
     public function SetState($s)

@@ -2,9 +2,9 @@
 /**
  *
  * PHP Version ～7.1
- * @package   GoodAfternoon.php
+ * @package   EarlyMorning.php
  * @author    yanchao <yanchao563@yahoo.com>
- * @time      2017/03/27 22:54
+ * @time      2017/03/27 22:50
  * @copyright 2017
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
@@ -13,16 +13,16 @@
 namespace Imglibrary\Status;
 
 
-class GoodAfternoon implements IStatus
+class WeichatMsg implements IStatus
 {
     public function WriteCode($w)
     {
         // TODO: Implement WriteCode() method.
-        if($w->hour<17)
+        if($w->type == 'weichatmsg')
         {
-            return Yii::t('yii','Good afternoon');
+            return 'weichatmsg';
         }else{
-            $w->SetState(new GoodDusk());
+            $w->SetState(new GoodMorning());
             return $w->WriteCode();
         }
     }

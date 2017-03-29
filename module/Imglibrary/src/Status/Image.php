@@ -2,9 +2,9 @@
 /**
  *
  * PHP Version ～7.1
- * @package   GoodDusk.php
+ * @package   Image.php
  * @author    yanchao <yanchao563@yahoo.com>
- * @time      2017/03/27 22:55
+ * @time      2017/03/29 11:26
  * @copyright 2017
  * @license   www.guanlunsm.com license
  * @link      yanchao563@yahoo.com
@@ -13,16 +13,16 @@
 namespace Imglibrary\Status;
 
 
-class GoodDusk implements IStatus
+class Image implements IStatus
 {
     public function WriteCode($w)
     {
         // TODO: Implement WriteCode() method.
-        if($w->hour<19)
+        if($w->type == 'image')
         {
-            return Yii::t('yii','Good dusk');
+            return 'image';
         }else{
-            $w->SetState(new GoodNight());
+            $w->SetState(new Audio());
             return $w->WriteCode();
         }
     }
