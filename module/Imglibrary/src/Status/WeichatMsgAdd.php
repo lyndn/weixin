@@ -13,16 +13,16 @@
 namespace Imglibrary\Status;
 
 
-class WeichatMsg implements IStatus
+class WeichatMsgAdd implements IStatus
 {
     public function WriteCode($w)
     {
         // TODO: Implement WriteCode() method.
         if($w->type == 'weichatmsg')
         {
-            return 'weichatmsg';
+            return 'weichatmsgadd';
         }else{
-            $w->SetState(new WeimobMsg());
+            $w->SetState(new WeimobMsgAdd());
             return $w->WriteCode();
         }
     }

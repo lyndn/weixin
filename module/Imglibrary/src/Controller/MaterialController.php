@@ -11,27 +11,42 @@
  */
 namespace Imglibrary\Controller;
 
-use Imglibrary\Status\Work;
+use Imglibrary\Status\WorkAdd;
+use Imglibrary\Status\WorkList;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class MaterialController extends AbstractActionController
 {
     // Add this property:
-    private $work;
+    private $workList;
+    private $workAdd;
 
     // Add this constructor:
-    public function __construct(Work $work)
+    public function __construct(WorkList $workList,WorkAdd $workAdd)
     {
-        $this->work = $work;
+        $this->workList = $workList;
+        $this->workAdd = $workAdd;
     }
+
 
     public function indexAction()
     {
         $params = (string) $this->params()->fromRoute('do', 1);
-        $this->work->type = $params;
-        $call=$this->work->WriteCode();
+        $this->workList->type = $params;
+        $call=$this->workList->WriteCode();
         var_dump($call);die;
     }
+
+
+    public function addAction()
+    {
+        $params = (string) $this->params()->fromRoute('do', 1);
+        $this->workAdd->type = $params;
+        $call=$this->workAdd->WriteCode();
+        var_dump($call);die;
+    }
+
+
 
 }

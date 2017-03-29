@@ -26,7 +26,8 @@ class Module
     {
         return [
             'factories' => [
-                Status\Work::class => InvokableFactory::class,
+                Status\WorkList::class => InvokableFactory::class,
+                Status\WorkAdd::class => InvokableFactory::class,
             ],
         ];
     }

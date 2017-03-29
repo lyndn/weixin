@@ -11,7 +11,8 @@
  * @link      yanchao563@yahoo.com
  */
 namespace Imglibrary\Factory;
-use Imglibrary\Status\Work;
+use Imglibrary\Status\WorkAdd;
+use Imglibrary\Status\WorkList;
 use Imglibrary\Controller\MaterialController;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -24,7 +25,8 @@ class MaterialFactory implements FactoryInterface
         // TODO: Implement __invoke() method.
         $controllerPluginManager = $container;
         $serviceManager = $controllerPluginManager->get('ServiceManager');
-        $work = $serviceManager->get(Work::class);
-        return new MaterialController($work);
+        $workList = $serviceManager->get(WorkList::class);
+        $workAdd = $serviceManager->get(WorkAdd::class);
+        return new MaterialController($workList,$workAdd);
     }
 }
