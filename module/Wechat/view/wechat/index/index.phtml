@@ -29,6 +29,7 @@
                     <a href="<?=$this->url('wechat',['action'=>'delete','id'=>$rows->id])?>" onclick="return confirm('确定删除吗？');">删除</a>
                     <a href="#" target="_blank" class="btnGreens">功能管理</a>
                     <a href="<?php echo $this->url('function',['action'=>'menu','id'=>$rows->id])?>">自定义菜单</a>
+                    <a href="<?php echo $this->url('fans',['action'=>'index','id'=>$rows->id])?>">粉丝管理</a>
                 </td>
             </tr>
             <?php endforeach;?>

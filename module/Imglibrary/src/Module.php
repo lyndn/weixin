@@ -28,6 +28,16 @@ class Module
             'factories' => [
                 Status\WorkList::class => InvokableFactory::class,
                 Status\WorkAdd::class => InvokableFactory::class,
+                Model\MaterialTable::class => function($container) {
+                    $tableGateway = $container->get(Model\MaterialTableGateway::class);
+                    return new Model\MaterialTable($tableGateway);
+                },
+                Model\MaterialTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Material());
+                    return new TableGateway('material', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }

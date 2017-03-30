@@ -77,6 +77,7 @@ class WxmenuTable
         if($id){
            return $this->tableGateway->update($data,['id'=>$id]);
         }else{
+            $data['operId']=$form->operId;
            return $this->tableGateway->insert($data);
         }
     }

@@ -27,6 +27,6 @@ class MaterialFactory implements FactoryInterface
         $serviceManager = $controllerPluginManager->get('ServiceManager');
         $workList = $serviceManager->get(WorkList::class);
         $workAdd = $serviceManager->get(WorkAdd::class);
-        return new MaterialController($workList,$workAdd);
+        return new MaterialController($container,$workList,$workAdd);
     }
 }

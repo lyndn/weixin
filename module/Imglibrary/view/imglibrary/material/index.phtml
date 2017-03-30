@@ -1,6 +1,174 @@
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/bootstrap/css/bootstrap.min.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/font-awesome/css/font-awesome.min.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/modal.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/public/css/public.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/public/css/index.css')) ?>
+
+
 <?php
 //http://www.weixinbianjiqi.com/sou.php
-echo $this->json;
+
+//$this->json;
+
 ?>
 
+<a href="#" id="backToTop" class="sidebarTop right_icon_bg"><span></span></a>
+
+<div id="overall">
+    <!--header start-->
+    <script>
+        var isnews = 0;
+    </script>
+
+    <!--header end-->
+
+
+    <!--search start-->
+    <?= $this->searchBar ?>
+   <!--search end-->
+
+    <!--main start-->
+    <div id="main">
+
+        <!-- btn_box -->
+        <br/>
+        <div class="btn_box floatL ma_l20 popup02"><input name="" type="button" value="新增图文消息" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
+        <br/><br/>
+        <!-- /btn_box -->
+
+        <div class="pic-content" id="wList">
+            <?php foreach ($this->materialData as $row) : ?>
+            <div class='designItem'>
+                <div class="designImgBox">
+                    <div class="imgbox-wrap" style="position:relative;overflow:hidden;margin:19px; "><a
+                            href="javascript:void(0)"><img class="lazy" data-tid=<?= $this->escapeHtml($row->id) ?> src="/css/imglibrary/public/images/none.png"
+                                                           data-original=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                                                           alt=<?= $this->escapeHtml($row->title) ?>/></a>
+                        <div class="imgbox-title"><?= $this->escapeHtml($row->title) ?></div>
+                    </div>
+                </div>
+                <div class="water_option">
+                    <a href="javascript:void(0)" class="mbbianji" data-tid=<?= $this->escapeHtml($row->id) ?>
+                       data-fpic=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                       data-title=<?= $this->escapeHtml($row->title) ?>><i class='fa fa-edit'
+                                                               style='font-size:20px'></i></a>
+
+                    <a
+                        href="javascript:void(0)" data-tid=<?= $this->escapeHtml($row->id) ?>
+                        data-fpic=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                        data-title=<?= $this->escapeHtml($row->title) ?> class="add-material"><i class='fa fa-space-shuttle'
+                                                                                     style='font-size:20px'></i></a>
+
+                    <a
+                        href="javascript:void(0)" data-tid=<?= $this->escapeHtml($row->id) ?>
+                        data-fpic=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                        data-title=<?= $this->escapeHtml($row->title) ?> class="add-material"><i class='fa fa-trash-o'
+                                                                                     style='font-size:20px'></i></a>
+
+                    <div class='clear'></div>
+                </div>
+            </div>
+            <?php endforeach;?>
+        </div>
+        <!--hot-->
+
+
+        <div class="material-sythesizer-wrap">
+            <div class="material-synthesizer pull-right"><span class="material-synthesizer-btn">素材合成器 <i id="end"
+                                                                                                         otop=0>0</i></span>
+                <div class="material-synthesizer-pop " id="material-synthesizer-pop" style="display: none;">
+                    <div class="material-synthesizer-pop-header">
+                        <div class="header-left pull-left"> 素材合成器<span><b id=nus>0</b>条图文</span></div>
+                        <div class="header-right pull-right"> 收起</div>
+                    </div>
+                    <div class="ul-box js-ul-box">
+                        <div class="ul-header">
+                            2017年03月30日
+                        </div>
+                        <ul id="ul-box-list">
+                        </ul>
+                    </div>
+                    <div class="material-synthesizer-pop-footer">
+                        <div class="btn btn-primary"> 合成为图文</div>
+                        <div class="btn btn-default"> 清空合成器</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toast-container" class="toast-top-right" style="display:none">
+            <div class="toast toast-success">
+                <button class="toast-close-button">×</button>
+                <div class="toast-title" style="display:none"></div>
+                <div class="toast-message"></div>
+            </div>
+        </div>
+
+        <script src="/css/imglibrary/plugins/jquery-1.10.2.min.js"></script>
+        <script src="/css/imglibrary/public/js/jquery.lazyload.js"></script>
+        <script src="/css/imglibrary/public/js/Masonry.js"></script>
+        <script src="/css/imglibrary/public/js/jquery.fly.min.js"></script>
+        <script src="/css/imglibrary/plugins/localstorage.js"></script>
+        <script src="/css/imglibrary/public/js/weite.js"></script>
+
+        <script>
+            $(function(){
+
+                $('.inputone input').val('热搜词:阅兵、笑话、微商、养生、女人、视频');
+                $('.inputone input').css('font', '14px 宋体,微软雅黑;').css('color', '#A0A0A0');
+                $('.inputone input').focus(function() {
+                    $(this).val('');
+                });
+
+                $('.inputone input').blur(function() {
+                    if ($(this).val() == '') {
+                        $(this).val('热搜词:阅兵、笑话、微商、养生、女人、视频');
+                        $(this).css('font', '14px 宋体,微软雅黑;').css('color', '#A0A0A0');
+                    }
+                });
+
+                $('.searchbutton').click(function() {
+                    var $keyword = $('#keyword');
+
+                    if ($keyword.val()=='热搜词:阅兵、笑话、微商、养生、女人、视频') {
+                        $("#toast-container").show();
+                        $(".toast").removeClass("toast-success");
+                        $(".toast").addClass("toast-error");
+                        $("#toast-container .toast-title").html("错误:");
+                        $("#toast-container .toast-message").html("请输入关键字");
+                        setTimeout(function(){$("#toast-container").hide();},3000);
+                        $('#keyword').focus();
+                        return false;
+                    }
+                    if (!$keyword.val()) {
+                        $("#toast-container").show();
+                        $(".toast").removeClass("toast-success");
+                        $(".toast").addClass("toast-error");
+                        $("#toast-container .toast-title").html("错误:");
+                        $("#toast-container .toast-message").html("请输入关键字");
+                        setTimeout(function(){$("#toast-container").hide();},3000);
+                        $('#keyword').focus();
+                        return false;
+                    }
+                    top.location.href='search.php?keyword_py='+$keyword.val();
+
+                }) ;
+            })
+        </script>
+
+    </div>
+</div>
+
+<div style="text-align: center">
+    <?= $this->paginationControl(
+        // The paginator object:
+        $this->materialData,
+        // The scrolling style:
+        'sliding',
+        // The partial to use to render the control:
+        'partial/paginator',
+        // The route to link to when a user clicks a control link:
+        ['route' => 'material','act'=>['action'=>'index','do'=>'weichatmsg']]
+    ) ?>
+</div>
 

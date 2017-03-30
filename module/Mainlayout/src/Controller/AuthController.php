@@ -121,7 +121,7 @@ class AuthController extends AbstractActionController
     }
 
     /**
-     * 角色管理
+     * 角色管理-099 -
      * @return bool
      */
     public function roleAction()

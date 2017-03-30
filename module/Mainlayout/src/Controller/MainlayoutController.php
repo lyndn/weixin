@@ -108,6 +108,43 @@ class MainlayoutController extends AbstractActionController
     }
 
     /**
+     * 刷新用户
+     * @param $key
+     * @param $value
+     */
+    private function refreshSession($value,$key='wechatID')
+    {
+        $wechat = new \Zend\Authentication\AuthenticationService();
+        if ($wechat->hasIdentity()) {
+            $user = $wechat->getIdentity();
+            $s = [];
+            foreach ($user as $k => $row) {
+                $s[$k] = $row;
+            }
+            $s[$key] = $value;
+            $wechat->getStorage()->write((object)$s);
+        }
+    }
+
+    /**
+     * 功能管理
+     */
+    public function addmenuAction()
+    {
+        $wechatid = (int) $this->params()->fromRoute('id', 0);
+        if(!$wechatid)
+        {
+            exit("缺少参数:wechatid:$wechatid");
+        }
+        $this->refreshSession($wechatid);
+
+        //....
+
+        return $this->indexAction();
+
+    }
+
+    /**
      * home page
      */
     public function homeAction()
@@ -115,4 +152,5 @@ class MainlayoutController extends AbstractActionController
         echo 'home';
         exit;
     }
+
 }

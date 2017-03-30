@@ -117,9 +117,6 @@ class MyRole extends AbstractRole
         {
             return $this->serviceManager->get('ViewHelperManager')
                 ->get('inlineScript')->appendScript('alert("您没有这个权限！");history.go(-1);');
-        }else if(!$this->role){
-            return $this->serviceManager->get('ViewHelperManager')
-                ->get('inlineScript')->appendScript('alert("请登录！");location.href="/auth"');
         }else{
             return true;
         }

@@ -1,0 +1,113 @@
+<?php $this->headLink()->prependStylesheet($this->basePath('css/wechat/style.css')) ?>
+<div class="content">
+    <div style="margin:10px 0">
+        <div style="float:right;width:25%;text-align:right">
+            <form method="post" action="/fans/index/15">
+                <input type="text" id="msgSearchInput" class="px" placeholder="输入昵称搜索" name="keyword" value="">
+                <input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+            </form>
+        </div>
+        <form method="post" action="#" id="info">
+            <div style="width:70%;float:left">将选中粉丝转移到分组中
+                <select name="wechatgroupid">
+                    <option value="0">未分组</option>
+                    <option value="1">黑名单</option>
+                    <option value="2">星标组</option>
+                </select>
+                <input type="submit" value="转移" id="msgSearchBtn" href="" class="btnGrayS" title="转移">&nbsp;&nbsp;
+                按分组查看粉丝：
+                <select id="wechatgroupid" onchange="location.href='?g=User&amp;m=Wechat_group&amp;a=index&amp;token=znspul1489384614&amp;wechatgroupid='+this.value">
+                    <option value="0">未分组</option>
+                    <option value="1">黑名单</option>
+                    <option value="2">星标组</option>
+                </select>
+            </div>
+            <div style="clear:both"></div>
+        </form>
+    </div>
+    <div class="msgWrap" style="border-top:1px solid #ccc;padding-top:10px;margin-top:10px;">
+        <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+            <thead>
+            <tr>
+                <th class="select"><input type="checkbox" value="" id="check_box" onclick="selectall('id[]');"></th>
+                <th class="select">编号</th>
+                <th>粉丝昵称</th>
+                <th>性别 </th>
+                <th>分组名</th>
+                <th>省(直辖市) </th>
+                <th>城市 </th>
+                <th>头像</th>
+                <th>关注时间</th>
+                <th class="norightborder">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if($this->paginator):
+                foreach($this->paginator as $rows):?>
+            <tr>
+                <td align="center"><input type="checkbox" value="<?=$rows->uid?>"></td>
+                <td align="center"><?=$rows->uid?></td>
+                <td align="center"><?=$rows->nickname?></td>
+                <td align="center"><?=$rows->sex?$rows->sex==1?'男':'女':'保密'?></td>
+                <td align="center"><?=$rows->groupid?></td>
+                <td align="center"><?=$rows->province?></td>
+                <td align="center"><?=$rows->city?></td>
+                <td align="center"><img src="<?=$rows->headimgurl?>" width="60"> </td>
+                <td align="center"><?=date("Y-m-d H:i:s",$rows->subscribe_time)?></td>
+                <td align="center"><a href="javascript:void(0)" onclick="remark(<?=$rows->uid?>)">修改备注</a></td>
+            </tr>
+            <?php endforeach;
+            else:?>
+            <tr>
+                <td colspan="11">暂无任何数据</td>
+            </tr>
+            <?php endif;?>
+            </tbody>
+        </table>
+        <div class="cLine">
+            <div class="pageNavigator right">
+                <div class="pages">
+                    <?= $this->paginationControl(
+                    // The paginator object:
+                        $this->paginator,
+                        // The scrolling style:
+                        'sliding',
+                        // The partial to use to render the control:
+                        'partial/paginator',
+                        // The route to link to when a user clicks a control link:
+                        ['route' => 'fans','act'=>['action'=>'index','id'=>$this->id],'query'=>['keyword'=>$keyword]]
+                    ) ?>
+                </div>
+            </div>
+            <div class="clr"></div>
+        </div>
+    </div>
+</div>
+<script>
+    function remark(uid){
+        var index=layer.msg('正在加载中，请稍候...', {icon: 16,shade: [0.6, '#000000'],time:0});
+        $.getJSON("/fans/get/"+uid,{},function(data){
+            layer.close(index)
+            if(data.s==0){
+                layer.msg('加载失败')
+            }else{
+                layer.prompt({
+                        title: '修改备注',
+                        value: data.r.remark,
+                        formType: 0, //
+                    },
+                    function(val,index){
+                    $.post("/fans/update/"+uid,{"remark":val},function(msg){
+                        layer.closeAll();
+                        //console.log(msg.r)
+                        if(msg.s==0){
+                            layer.msg(msg.r,{icon:5})
+                        }else{
+                            layer.msg(msg.r,{icon:1})
+                        }
+                    },"json")
+                });
+            }
+        })
+    }
+</script>

@@ -29,6 +29,9 @@ class Material
     public $synchronization;
     public $has_file;
     public $active;
+    public $wechatid;
+    public $userid;
+    public $filename;
 
     public function exchangeArray(array $data)
     {
@@ -47,6 +50,9 @@ class Material
         $this->synchronization     = !empty($data['synchronization']) ? $data['synchronization'] : null;
         $this->has_file  = !empty($data['has_file']) ? $data['has_file'] : null;
         $this->active     = !empty($data['active']) ? $data['active'] : null;
+        $this->wechatid  = !empty($data['wechatid']) ? $data['wechatid'] : null;
+        $this->userid     = !empty($data['userid']) ? $data['userid'] : null;
+        $this->filename     = !empty($data['filename']) ? $data['filename'] : null;
     }
 
 

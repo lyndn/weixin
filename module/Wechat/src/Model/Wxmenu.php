@@ -32,6 +32,7 @@ class Wxmenu implements InputFilterAwareInterface
     public $nav;
     public $tel;
     public $val;
+    public $operId;
 
     // Add this property:
     private $inputFilter;
@@ -54,6 +55,7 @@ class Wxmenu implements InputFilterAwareInterface
         $this->longitude = !empty($data['longitude']) ? $data['longitude'] : null;
         $this->latitude = !empty($data['latitude']) ? $data['latitude'] : null;
         $this->val = !empty($data['val']) ? $data['val'] : null;
+        $this->operId = !empty($data['operId']) ? $data['operId'] : 0;
     }
 
     /* Add the following methods: */

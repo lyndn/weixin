@@ -17,6 +17,9 @@ class WorkList
 {
     private $current;
     public $type;
+    public $container;
+    public $page;
+    public $pageNum;
 
     public function __construct()
     {

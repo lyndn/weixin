@@ -51,6 +51,9 @@ class WxmenuForm extends Form
             'name'=>'parentId',
         ]);
         $this->add([
+            'name'=>'operId',
+        ]);
+        $this->add([
             'name'=>'keyword',
             'type'=>'text',
         ]);

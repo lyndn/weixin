@@ -10,6 +10,7 @@
  *
  * This should be an array of module namespaces used in the application.
  */
+header("Content-type: text/html; charset=utf-8");
 return [
     'Zend\Form',
     'Zend\Router',
@@ -17,5 +18,6 @@ return [
     'Zend\Validator',
     'Mainlayout',
     'Wechat',
+    'Fans',
     'Imglibrary'
 ];

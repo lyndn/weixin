@@ -11,7 +11,7 @@
  */
 
 namespace Imglibrary\Status;
-
+use Imglibrary\Model\MaterialTable;
 
 class WeichatMsg implements IStatus
 {
@@ -20,7 +20,16 @@ class WeichatMsg implements IStatus
         // TODO: Implement WriteCode() method.
         if($w->type == 'weichatmsg')
         {
-            return ['weichatmsg'=>'1234'];
+            $user = new \Zend\Authentication\AuthenticationService();
+            if ($user->hasIdentity())
+            {
+                $user = $user->getIdentity();
+            }
+            $material = $w->container->get(MaterialTable::class);
+            $materialData = $material->fetchAll(true,['wechatid'=>$user->wechatID,'userid'=>$user->userid]);
+            $materialData->setCurrentPageNumber($w->page);
+            $materialData->setItemCountPerPage($w->pageNum);
+            return ['materialData'=>$materialData];
         }else{
             $w->SetState(new WeimobMsg());
             return $w->WriteCode();

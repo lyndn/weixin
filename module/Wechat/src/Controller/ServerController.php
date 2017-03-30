@@ -19,71 +19,6 @@ class ServerController extends AbstractActionController
     {
         $this->table=$table;
     }
-    //配置微信
-    public function wxconfig($id,$debug=false,$level='debug',$log='log/easywechat.log'){
-        $wxuser=$this->table->getWechat($id);
-        $config= [
-            /**
-             * Debug 模式，bool 值：true/false
-             *
-             * 当值为 false 时，所有的日志都不会记录
-             */
-            'debug'  => $debug,
-            /**
-             * 账号基本信息，请从微信公众平台/开放平台获取
-             */
-            'app_id'  => $wxuser->appid,          // AppID
-            'secret'  => $wxuser->appsecret,      // AppSecret
-            'token'   => $wxuser->token,          // Token
-            'aes_key' => $wxuser->AesEncodingKey, // EncodingAESKey，安全模式下请一定要填写！！！
-            /**
-             * 日志配置
-             *
-             * level: 日志级别, 可选为：
-             *         debug/info/notice/warning/error/critical/alert/emergency
-             * permission：日志文件权限(可选)，默认为null（若为null值,monolog会取0644）
-             * file：日志文件位置(绝对路径!!!)，要求可写权限
-             */
-            'log' => [
-                'level'      => $level,
-                'permission' => 0777,
-                'file'       => $log,
-            ],
-            /**
-             * OAuth 配置
-             *
-             * scopes：公众平台（snsapi_userinfo / snsapi_base），开放平台：snsapi_login
-             * callback：OAuth授权完成后的回调页地址
-             */
-            'oauth' => [
-                'scopes'   => ['snsapi_userinfo'],
-                'callback' => '/examples/oauth_callback.php',
-            ],
-            /**
-             * 微信支付
-             */
-            'payment' => [
-                'merchant_id'        => $wxuser->mch_id,
-                'key'                => $wxuser->key,
-                'cert_path'          => $wxuser->cert_path, // XXX: 绝对路径！！！！
-                'key_path'           => $wxuser->key_path,      // XXX: 绝对路径！！！！
-                // 'device_info'     => '013467007045764',
-                // 'sub_app_id'      => '',
-                // 'sub_merchant_id' => '',
-                // ...
-            ],
-            /**
-             * Guzzle 全局设置
-             *
-             * 更多请参考： http://docs.guzzlephp.org/en/latest/request-options.html
-             */
-            'guzzle' => [
-                'timeout' => 3.0, // 超时时间（秒）
-                //'verify' => false, // 关掉 SSL 认证（强烈不建议！！！）
-            ],
-        ];
-        return $config;
-    }
     //消息类型分离
     private function message($message)
     {
@@ -92,7 +27,7 @@ class ServerController extends AbstractActionController
                 return '收到事件消息';
                 break;
             case 'text':
-                return '收到文字消息'.$message->FromUserName;
+                return '收到文字消息--'.$message->ToUserName;
                 break;
             case 'image':
                 return '收到图片消息';
@@ -119,7 +54,7 @@ class ServerController extends AbstractActionController
     {
         $id=(int) $this->params()->fromRoute('id',0);
         if($id){
-            $config=$this->wxconfig($id);
+            $config=$this->table->wxconfig($id);
             $app = new Application($config);
             $server=$app->server;
             $server->setMessageHandler(function($message){

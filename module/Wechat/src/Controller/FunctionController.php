@@ -45,7 +45,7 @@ class FunctionController extends AbstractActionController
         }
         $id = (int) $this->params()->fromRoute('id', 0);
         $view=new ViewModel(['id'=>$id]);
-        $view->setTerminal(true);
+        //$view->setTerminal(true);
         $view->setTemplate("wechat/function/index");
         return $view;
     }
@@ -156,7 +156,7 @@ class FunctionController extends AbstractActionController
 
     //编辑菜单
     public function editmenuAction(){
-        $obj = $this->myrole->isGranted('wechat.function.editmenu');
+        $obj = $this->myrole->isGranted('wechat.function.editmenu','Wechat\Model\WxmenuTable','operId','id',$this->params()->fromRoute('id',0));
         if(is_object($obj)){
             return $obj;
         }
@@ -217,20 +217,7 @@ class FunctionController extends AbstractActionController
         $id = (int) $this->params()->fromRoute('id', 0);
         $button=$this->table->craeteMenu($id);
         if(count($button)) {
-            $wxuser = $this->wxuser->getWechat($id);
-            $config = [
-                'debug' => true,
-                'app_id' => $wxuser->appid,          // AppID
-                'secret' => $wxuser->appsecret,      // AppSecret
-                'token' => $wxuser->token,          // Token
-                'aes_key' => $wxuser->AesEncodingKey, // EncodingAESKey，安全模式下请一定要填写！！！
-                'log' => [
-                    'level' => 'debug',
-                    'permission' => 0777,
-                    'file' => 'log/easywechat.log',
-                ]
-            ];
-            $app = new Application($config);
+            $app = new Application($this->wxuser->wxconfig($id));
             $menu = $app->menu;
             $res = $menu->add($button);
             echo json_encode(array('s' => $res->errcode, 'r' => $res->errmsg));

@@ -8,18 +8,15 @@
         ->appendName('viewport', 'width=device-width, initial-scale=1.0')
         ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
     ?>
-
     <!-- Le styles -->
     <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/mainlayout/common/favicon.ico'])
         ->prependStylesheet($this->basePath('css/mainlayout/haiersoft.css'))
         ->prependStylesheet($this->basePath('css/mainlayout/print.css'))
     ?>
-
     <!-- Scripts -->
-    <?= $this->headScript()
+    <?= $this->headScript()->prependFile($this->basePath('js/layer/layer.js'))
         ->prependFile($this->basePath('js/mainlayout/side.js'))
         ->prependFile($this->basePath('js/mainlayout/jquery-1.10.1.min.js'))
-        ->prependFile($this->basePath('js/layer/layer.js'))
     ?>
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,6 +24,12 @@
     <![endif]-->
 </head>
 <body>
+
+
+
+
+
+<?php if ($_SERVER["REQUEST_URI"] != '/auth') { ?>
 <!-- wrap_left -->
 <div class="wrap_left" id="frmTitle" name="fmTitle">
     <!-- Logo -->
@@ -80,7 +83,6 @@
 <div class="picBox" onclick="switchSysBar()" id="switchPoint"></div>
 <!-- /picBox -->
 
-
 <!-- wrap_right -->
 <div class="wrap_right">
     <header>
@@ -97,13 +99,11 @@
                     ?>
                     <p>欢迎登录，<?= mb_substr($user->adminName,0,8) ?></p>
                     <a href="#"><span>8</span><img src="<?= $this->basePath('images/mainlayout/common/ico02.gif') ?>" width="20" height="20" alt=""></a>
-                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico03.gif') ?>" width="20" height="20" alt=""></a>
-                    <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico04.gif') ?>" width="20" height="20" alt=""></a>
+
                     <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico05.gif') ?>" width="20" height="20" alt=""></a>
                     <a href="#"><img src="<?= $this->basePath('images/mainlayout/common/ico06.gif') ?>" width="20" height="20" alt=""></a>
-                    <a href="auth/logout"><img src="<?= $this->basePath('images/mainlayout/common/ico07.gif') ?>" width="20" height="20" alt=""></a>
+                    <a href="/auth/logout"><img src="<?= $this->basePath('images/mainlayout/common/ico07.gif') ?>" width="20" height="20" alt=""></a>
                 </div>
-                <div class="search_box"><input name="" type="image" src="<?= $this->basePath('images/mainlayout/common/btn_search.gif') ?>"><input name="" type="text" class="box" placeholder="Search..."></div>
             </div>
 
             <nav>
@@ -155,13 +155,14 @@
                 })
             })
         </script>
-
+<?php } ?>
         <!-- Content -->
         <?= $this->content ?>
         <?= $this->inlineScript() ?>
         <!-- /Content -->
 
 
+<?php if ($_SERVER["REQUEST_URI"] != '/auth') { ?>
 
     </div>
     <!-- /Contents -->
@@ -175,6 +176,7 @@
 </div>
 <!-- /wrap_right -->
 
+<?php } ?>
 
 </body>
 </html>
