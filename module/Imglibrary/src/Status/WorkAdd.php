@@ -17,6 +17,10 @@ class WorkAdd
 {
     private $current;
     public $type;
+    public $ac;
+    public $request;
+    public $user;
+    public $view;
 
     public function __construct()
     {

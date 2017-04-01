@@ -1,0 +1,313 @@
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/public/css/minfo.css?v=1.1.0')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/wechat-preview.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/editor.min.css?v=1.1.0')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/farbtastic/farbtastic.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/style.css?v=1.1.0')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/style-metronic.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/bootstrap/css/bootstrap.min.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/font-awesome/css/font-awesome.min.css')) ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/public/css/public.css')) ?>
+
+
+<a href="#" id="backToTop" class="sidebarTop right_icon_bg"><span></span></a>
+
+<!--[if IE 8]>
+<script type="text/javascript" src="/css/imglibrary/plugins/respond.min.js"></script>
+<![endif]-->
+<script>
+    var SITE_PUBLIC='http://www.weixinbianjiqi.com/';
+    var SITE_UPLOAD='http://www.weixinbianjiqi.com/';
+</script>
+<!--header start-->
+<!--header start-->
+<script>
+    var isnews=0;
+</script>
+
+
+<div class="page-container">
+
+    <div class="editor-wrap" id="editorWrap"></div>
+    <div class="modal-wrap" id="modalWrap"></div>
+    <div id=show style="display:none"></div>
+
+    <script type="text/javascript" src="/css/imglibrary/plugins/jquery-1.10.2.min.js"></script>
+    <script src="/css/imglibrary/plugins/localstorage.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("body").on("mouseenter" ,"#memberInfo" ,function(){
+                $(this).find('.login_info').addClass('login_info_select');
+            });
+
+            $("body").on("mouseleave" ,"#memberInfo" ,function(){
+                $(this).find('.login_info').removeClass('login_info_select');
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        var wxbEditor={
+            mainUE:null,
+            store:null,
+            fetchUrl:'http://www.weixinbianjiqi.com/api/fetchurl.php',
+            saveUrl:'http://www.weixinbianjiqi.com/api/mdata.php',
+            coverUploadPath:"/material/add/weichatmsg/coverupload",
+            contentUploadPath:"http://www.weixinbianjiqi.com/api/contentupload.php",
+            nickName:"",
+            userId:"0",
+            authorizerId:"0",
+            newsId:"0",
+            materialData:[],
+            config:[],
+            materialId:"0",
+            hasSaved:false
+        };
+    </script>
+    <style>
+        .facelist{ display:block}
+        .facelist li{ float:left; width:60px; margin:0px 5px 10px 0;  padding:0px; position:relative ;background: #47C68C; color:#FFFFFF}
+        .facelist li span{ display:block; height:20px; line-height:20px; clear:both; font-size:12px;  overflow:hidden; text-align:center}
+        .facelist li  img{ width:60px; height:58px; display:block}
+
+
+        #loginForm{ max-height:350px; overflow: scroll; padding-left:5px}
+        .mengban{ position:absolute; left:0; top:0; background:#47C68C  url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADsSURBVEhLY2AYBfQMgf///3P8+/evAIgvA/FsIF+BavYDDWMBGroaSMMBiE8VC7AZDrIFaMFnii3AZTjUgsUUWUDA8OdAH6iQbQEhw4HyGsPEcKBXBIC4ARhex4G4BsjmweU1soIFaGg/WtoFZRIZdEvIMhxkCCjXIVsATV6gFGACs4Rsw0EGgIIH3QJYJgHSARQZDrWAB+jawzgs+Q2UO49D7jnRSRGoEFRILcdmEMWGI0cm0JJ2QpYA1RDvcmzJEWhABhD/pqrL0S0CWuABKgnRki9lLseS7g2AlqwHWQSKH4oKLrILpRGhEQCw2LiRUIa4lwAAAABJRU5ErkJggg==") 50% 40% no-repeat ; z-index:999999; width:60px; height:62px; display: none;opacity:0.7; }
+        .li_on{ background: #FF9900}
+        .li_on .mengban{ display:block}
+
+    </style>
+    <script type="text/template" id="loginTemp">
+        <form id="loginForm" method="post">
+            <input name="appid" id=appid type="hidden" value="0">
+            <ul class='facelist'>
+
+            </ul>
+        </form>
+    </script>
+
+
+
+    <script type="text/template" id="previewTemp">
+        <div class="rich_media">
+            <div class="rich_media_inner">
+                <div class="rich_media_area_primary">
+                    <h2 class="rich_media_title"> <%= title %></h2>
+                    <div class="rich_media_meta_list">
+                        <em id="post-date" class="rich_media_meta rich_media_meta_text"><%= date %></em>
+                        <a class="rich_media_meta rich_media_meta_link rich_media_meta_nickname" href="javascript:void(0);" id="post-user">公众号名称</a>
+                    </div>
+                    <div class="rich_media_content">
+                        <% if(show_cover_pic==1){ %>
+                        <p><br></p>
+                        <p style="text-align: center;"><img src="<%= fileid %>" style="width: auto !important; visibility: visible !important; height: auto !important;"></p>
+                        <p><br></p>
+                        <% } %>
+                        <%= content %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+</div>
+<script type="text/javascript" src="/css/imglibrary/plugins/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/underscore-min.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/back-to-top.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/win.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/app.js"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/third-party/zeroclipboard/ZeroClipboard.min.js?v=1.2.5"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/farbtastic/farbtastic.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/jquery-file-upload/jquery.ui.widget.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/ueditor.config.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/ueditor.all.min.js?v=1.0.0?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/lang/zh-cn/zh-cn.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/plus/upload.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/plus/section.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/ueditor/plus/onlineCustom.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/jquery-ui.js?v=1.1.0"></script>
+<script type="text/javascript" src="/css/imglibrary/plugins/editor-tools.js?v=1.1.0"></script>
+<script src="/css/imglibrary/plugins/editor.build.min.js?v=1.1.0"></script>
+<script type="text/javascript">
+    var isIE = (function() {
+        var browser = navigator.appName;
+        var b_version = navigator.appVersion;
+        var version = b_version.split(";");
+        version[1]=version[1]||"";
+        var trim_Version = version[1].replace(/[ ]/g, "");
+        var version;
+        if (browser == "Microsoft Internet Explorer" && trim_Version == "MSIE6.0") {
+            version = "IE6";
+        } else if (browser == "Microsoft Internet Explorer" && trim_Version == "MSIE7.0") {
+            version = "IE7";
+        } else if (browser == "Microsoft Internet Explorer" && trim_Version == "MSIE8.0") {
+            version = "IE8";
+        } else if (browser == "Microsoft Internet Explorer" && trim_Version == "MSIE9.0") {
+            version = "IE9";
+        }
+        return {
+            version: version
+        }
+    })();
+    if(isIE.version=='IE7'||isIE.version=='IE8'||isIE.version=="IE6"){
+        $(function(){
+            $('body').html('<p style="background:#fff;font-size:18px;line-height:94px;height:94px;text-align:center;">温馨提示：系统检测到您当前浏览器版本过低，建议使用 360 (极速模式)，Chrome 版本的浏览器 ,以获得更好的体验</p>');
+
+        })
+    }
+    else
+    {
+
+
+        window.onbeforeunload = function() {
+            if(!wxbEditor.hasSaved){
+                return '还未保存素材，是否保存？';
+            }
+        }
+
+        $(".user-invite-copy-full").on("click", function(){
+            wxbEditor.mainUE.setContentSilent('')
+        });
+
+
+
+        $(window).resize(function () {
+            var wrapWidth=$('.form-content-wrap').width();
+            $('#editor>div').width(wrapWidth);
+        });
+        function checkLogin() {
+            if (wxbEditor.userId == 0) {
+                wxbEditor.store.showLogin();
+                return false;
+            }
+            return true
+        }
+    }
+</script>
+<script type="text/javascript" src="/css/imglibrary/plugins/editor_styles.js"></script>
+<script type="text/javascript">
+
+
+    jQuery(document).ready(function() {
+        App.init();
+
+
+
+        $(".tran").on("click", function(){
+            $(".login,#BJ").show();
+            var url="login.php?a="+$(this).attr("rel");
+            $(".login_con_iframe").attr("src",url);
+            $("#BJ").css({
+                height: $(document).height()
+            });
+            $(".login").css({
+                left: ($(window).width() - 537) / 2 + "px",
+                top: ($(window).height() - 370) / 2 + "px"
+            });
+            return false;
+        });
+        $(".qqclose").on("click", function(){
+            $("#BJ").hide();
+            $(".login").hide();
+            return false;
+        });
+        $(".my_out").on("click", function(){
+            var data = {};
+            data.action = "loginout";
+            jQuery.ajax({
+                type:"POST",
+                url: "api/members_inc.php",
+                data:data,
+                dataType: "html",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                beforeSend: function(XMLHttpRequest){
+                }, success:function(data) {
+
+                    localData.remove("mdataId");
+                    localData.remove("materialData");
+                    localData.remove("material_pop");
+                    top.location.href='index.php';
+
+                }, error:function(){
+                }
+            });
+
+            return false;
+        });
+
+
+
+        var client = new ZeroClipboard($(".user-invite-copy-link"));
+        ZeroClipboard.config({
+            swfPath: SITE_PUBLIC + "plugins/ueditor/third-party/zeroclipboard/ZeroClipboard.swf"
+        });
+        client.on('ready', function(event) {
+            client.on('copy', function(event) {
+                var html = UE.getEditor('editor').getContent();
+                event.clipboardData.setData('text/html', html);
+                event.clipboardData.setData('text/plain', html);
+            });
+            client.on('aftercopy', function(event) {
+                toastr.success('正文内容已经复制到剪切板，可粘贴(ctrl+v)到微信公众平台编辑器中使用！', "提示");
+                //ZeroClipboard.destroy();
+            });
+        });
+
+    });
+</script>
+
+<div id="BJ"  style="display:none;" ></div>
+<div class="login" style="display:none">
+    <div class="login_tit"><span class="login_tit_span">登录</span><span class="qqclose"></span></div>
+    <div class="login_con">
+        <iframe class="login_con_iframe" scrolling="no" frameborder="0"></iframe>
+    </div>
+</div>
+
+</div>
+
+<script>
+    $(window).load(function () {
+        var wrapWidth2=$('.tool-pane').width();
+
+    });
+
+    function showqq(tid){
+        var tempStr=window.location.href;
+        $("#BJ").hide();
+        $(".login").hide();
+        var data = {};
+        data.action = "userinfo";
+        jQuery.ajax({
+            type:"POST",
+            url: "ajax_minfo.php",
+            data:data,
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            beforeSend: function(XMLHttpRequest){
+            }, success:function(data) {
+
+                var bool = tempStr.indexOf("editor.php");
+                if(bool>0){
+                    wxbEditor.userId =parseInt(tid);
+                    //$("#editorWrap").reload()
+                    ////同时刷新公众号内容
+                    $.get("api/getweixin.php",function(data){
+                            $(".facelist").html(data)
+                        }//返回的data是字符串类型
+                    );
+                    //
+
+
+                }
+
+                $("#memberInfo").html(data)
+            }, error:function(){
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

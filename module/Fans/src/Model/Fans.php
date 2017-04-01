@@ -34,6 +34,8 @@ class Fans implements InputFilterAwareInterface
     public $remark;
     public $groupid;
     public $tagid_list;
+    public $app_id;
+    public $groupname;
     // Add this property:
     private $inputFilter;
 
@@ -54,8 +56,10 @@ class Fans implements InputFilterAwareInterface
         $this->subscribe_time = !empty($data['subscribe_time'])?$data['subscribe_time']:null;
         $this->unionid = !empty($data['unionid'])?$data['unionid']:null;
         $this->remark = !empty($data['remark'])?$data['remark']:null;
-        $this->groupid = !empty($data['groupid'])?$data['groupid']:null;
+        $this->groupid = !empty($data['groupid'])?$data['groupid']:0;
         $this->tagid_list = !empty($data['tagid_list'])?$data['tagid_list']:null;
+        $this->app_id = !empty($data['app_id'])?$data['app_id']:null;
+        $this->groupname = !empty($data['groupname'])?$data['groupname']:null;
     }
 
     /* Add the following methods: */
@@ -75,24 +79,6 @@ class Fans implements InputFilterAwareInterface
         }
 
         $inputFilter = new InputFilter();
-        $inputFilter->add([
-            'name' => 'wxname',
-            'required' => false,
-            'filters' => [
-                ['name' => StripTags::class],
-                ['name' => StringTrim::class],
-            ],
-            'validators' => [
-                [
-                    'name' => StringLength::class,
-                    'options' => [
-                        'encoding' => 'UTF-8',
-                        'min' => 1,
-                        'max' => 100,
-                    ],
-                ],
-            ],
-        ]);
         $this->inputFilter = $inputFilter;
         return $this->inputFilter;
     }

@@ -45,6 +45,7 @@
     margin-top: 0;
     top: 50%;
     overflow: visible; /* allow content to popup out (i.e tooltips) */
+    margin-left: 500px !important;
 }
 
 .modal.fade {
@@ -79,6 +80,7 @@
     background: #fff;
     border-radius: 6px;
 }
+
 
 .modal-backdrop.modal-absolute{
     position: absolute;

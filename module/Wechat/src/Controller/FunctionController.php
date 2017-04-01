@@ -43,7 +43,7 @@ class FunctionController extends AbstractActionController
         if(is_object($obj)){
             return $obj;
         }
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $id=$this->user->wechatID;
         $view=new ViewModel(['id'=>$id]);
         //$view->setTerminal(true);
         $view->setTemplate("wechat/function/index");
@@ -56,7 +56,7 @@ class FunctionController extends AbstractActionController
         if(is_object($obj)){
             return $obj;
         }
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $id=$this->user->wechatID;
         if($id){
             $form=new WxmenuForm();
             $mywx=$this->wxuser->getWechat($id);
@@ -214,7 +214,7 @@ class FunctionController extends AbstractActionController
 
     //上传到微信
     public function createAction(){
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $id=$this->user->wechatID;
         $button=$this->table->craeteMenu($id);
         if(count($button)) {
             $app = new Application($this->wxuser->wxconfig($id));

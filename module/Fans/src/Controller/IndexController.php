@@ -36,29 +36,26 @@ class IndexController extends AbstractActionController{
 
     public function indexAction()
     {
-        $id=(int) $this->params()->fromRoute('id',0);
-        if($id){
-            $wx=$this->wechat->getWechat($id);
-            $where="1=1";
-            $where.=" and app_id='$wx->appid'";
+        $wechatId=$this->user->wechatID;
+        if($wechatId){
+            $wx=$this->wechat->getWechat($wechatId);
+            $where=['b.app_id'=>$wx->appid];
             $keyword=$_REQUEST['keyword'];
-            if(!empty($keyword)){
-                $where.=" and nickname like '%".$keyword."%'";
-            }
             $pageset=true;
-            $paginator = $this->table->listFans($pageset,$where);
+            $paginator = $this->table->listFans($pageset,$where,$like);
 
             if($pageset){
                 $page = (int) $this->params()->fromQuery('page', 1);
                 $page = ($page < 1) ? 1 : $page;
                 $paginator->setCurrentPageNumber($page);
                 //设置每页多少条
-                $paginator->setItemCountPerPage(1);
+                $paginator->setItemCountPerPage(20);
             }
             //模板渲染
-            return new ViewModel(['paginator' => $paginator,'keyword'=>$keyword,'id'=>$id]);
+            return new ViewModel(['paginator' => $paginator,'keyword'=>$keyword,'id'=>$wechatId]);
         }else{
             echo '参数错误';
+            exit;
         }
     }
 
@@ -118,10 +115,11 @@ class IndexController extends AbstractActionController{
     //同步相关数据
     public function keepAction()
     {
-        $id=(int) $this->params()->fromRoute('id',0);
-        if($id) {
+       // $wechatId=$this->user->wechatID;
+        $wechatId=(int)$this->params()->fromRoute("id",0);
+        if($wechatId) {
             $act=$this->getRequest()->getQuery('act');
-            $config=$this->wechat->wxconfig($id);
+            $config=$this->wechat->wxconfig($wechatId);
             switch ($act){
                 case 'fans':
                     $result=$this->userKeep($config);
@@ -130,8 +128,6 @@ class IndexController extends AbstractActionController{
                     $result = $this->groupKeep($config);
                     break;
             }
-            var_dump($result);
-           // echo json_encode(array('s'=>$result));
         }else{
             echo '参数错误';
         }
@@ -184,7 +180,14 @@ class IndexController extends AbstractActionController{
         $app=new Application($config);
         $group=$app->user_group;
         $list=$group->lists();
-        return $list;
+        foreach($list['groups'] as $val){
+            $data=[
+                'app_id'=>$config['app_id'],
+                'groupId'=>$val['id'],
+                'groupname'=>$val['name'],
+                'count'=>$val['count']
+            ];
+            $this->table->saveGroup($data);
+        }
     }
-
 }

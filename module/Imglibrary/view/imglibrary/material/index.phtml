@@ -32,7 +32,7 @@
 
         <!-- btn_box -->
         <br/>
-        <div class="btn_box floatL ma_l20 popup02"><input name="" type="button" value="新增图文消息" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
+        <div class="btn_box floatL ma_l20 popup02"><input id="gxAdd" name="" type="button" value="新增图文消息" onmousemove="this.className='input_move'" onmouseout="this.className='input_out'"></div>
         <br/><br/>
         <!-- /btn_box -->
 
@@ -154,6 +154,11 @@
 
                 }) ;
             })
+
+            $("#gxAdd").click(function(){
+               location.href="/material/add/weichatmsg";
+               return;
+            });
         </script>
 
     </div>

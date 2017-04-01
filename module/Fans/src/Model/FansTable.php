@@ -104,23 +104,48 @@ class FansTable
         }
     }
     //获取粉丝列表
-    public function listFans($paginated=false,$where=null){
+    public function listFans($paginated=false,$where=array(),$like=array()){
         if ($paginated) {
-            return $this->fetchPaginatedResults($where);
+            return $this->fetchPaginatedResults($where,$like);
         }
         return $this->tableGateway->select($where);
     }
 
+    //粉丝分组创建
+    public function saveGroup($data){
+        $Adapter=$this->tableGateway->Adapter;
+        $db=new TableGateway('fans_group',$Adapter);
+        $res=$db->select(['groupname'=>$data['groupname']]);
+        if($res->count()){
+            return $db->update($data,['groupId'=>$data['groupid'],'app_id'=>$data['app_id']]);
+        }else{
+            $db->insert($data);
+            return $db->getLastInsertValue();
+        }
+    }
+
+    //获取分组信息
+    public function getGroup($params)
+    {
+        $Adapter=$this->tableGateway->Adapter;
+        $db=new TableGateway('fans_group',$Adapter);
+        $query=$db->select($params);
+        return $query->current();
+    }
+
+
     //数据分页
-    private function fetchPaginatedResults($where=null)
+    private function fetchPaginatedResults($where=array(),$like)
     {
         // Create a new Select object for the table:
-        $select = new Select($this->tableGateway->getTable());
-        if($where){
-            $select->where($where);
-        }
+        $table=$this->tableGateway->getTable();
+        $select = new Select($table);
+        $select->join(array('b'=>'fans_group'),"$table.groupid=b.groupId and $table.app_id=b.app_id",array('groupname'=>'groupname'));
+        if(count($where)){$select->where($where); }
+        $select->where($like);
         $select->order("subscribe_time desc");
-
+        echo $select->getSqlString();
+        exit;
         // Create a new result set based on the Album entity:
         $resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new Fans());

@@ -111,7 +111,7 @@ class AuthController extends AbstractActionController
             $auth->getStorage()->write((object)array(
                 'userid' => $row->id,
                 'adminName' => $data['username'],
-                'password' => $data['passwd'],
+                //'password' => $data['passwd'],
                 'role' => $row->role,
                 'pid' => $row->pid
             ));

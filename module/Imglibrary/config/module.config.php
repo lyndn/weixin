@@ -19,7 +19,7 @@ return [
             'material' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/material[/:action[/:id][/:do]]',
+                    'route' => '/material[/:action[/:id][/:do][/:ac]]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',

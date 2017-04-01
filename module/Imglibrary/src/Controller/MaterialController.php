@@ -25,6 +25,7 @@ class MaterialController extends AbstractActionController
     private $workAdd;
     private $searchView;
     private $container;
+    private $user;
     // Add this constructor:
     public function __construct(ContainerInterface $container,WorkList $workList,WorkAdd $workAdd)
     {
@@ -33,6 +34,11 @@ class MaterialController extends AbstractActionController
         $this->searchView = new ViewModel();
         $this->searchView->setTemplate('imglibrary/material/search');
         $this->container = $container;
+        $user = new \Zend\Authentication\AuthenticationService();
+        if ($user->hasIdentity())
+        {
+            $this->user = $user->getIdentity();
+        }
     }
 
 
@@ -63,11 +69,17 @@ class MaterialController extends AbstractActionController
     public function addAction()
     {
         $params = (string) $this->params()->fromRoute('do', 1);
+        $params_ac = (string) $this->params()->fromRoute('ac',2);
+        $request = $this->getRequest();
         $this->workAdd->type = $params;
+        $this->workAdd->ac = $params_ac;
+        $this->workAdd->request = $request;
+        $this->workAdd->user = $this->user;
+        $this->workAdd->view = new ViewModel();
         $call=$this->workAdd->WriteCode();
-        $json = Json::encode($call);
-        echo $json;
-        exit();
+        return $this->workAdd->view;
     }
+
+
 
 }
