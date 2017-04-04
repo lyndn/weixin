@@ -1,4 +1,4 @@
-var SITE_PUBLIC = 'http://www.wechat.com/';
+var SITE_PUBLIC = SITE_PUBLIC || 'http://m.iweite.com/';
 var EditorCustom=window.EditorCustom||{};
 
 EditorCustom.ueMyStyle=null;

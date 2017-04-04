@@ -6,6 +6,7 @@
  */
 
 (function () {
+    var SITE_PUBLIC='http://www.wechat.com/';
 
     var remoteImage,
         uploadImage,
@@ -346,15 +347,15 @@
                 })(),
             // WebUploader实例
                 uploader,
-                actionUrl = editor.getActionUrl(editor.getOpt('imageActionName')),
-                acceptExtensions = (editor.getOpt('imageAllowFiles') || []).join('').replace(/\./g, ',').replace(/^[,]/, ''),
-                imageMaxSize = editor.getOpt('imageMaxSize'),
-                imageCompressBorder = editor.getOpt('imageCompressBorder');
+                actionUrl = 'uploadimage',
+                acceptExtensions = ([".png", ".jpg", ".jpeg", ".gif", ".bmp"] || []).join('').replace(/\./g, ',').replace(/^[,]/, ''),
+                imageMaxSize = 2048000,
+                imageCompressBorder = 1600;
 
             if (!WebUploader.Uploader.support()) {
                 $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
                 return;
-            } else if (!editor.getOpt('imageActionName')) {
+            } else if (!actionUrl) {
                 $('#filePickerReady').after($('<div>').html(lang.errorLoadConfig)).hide();
                 return;
             }
@@ -371,10 +372,10 @@
                 },
                 swf: '../../third-party/webuploader/Uploader.swf',
                 server: actionUrl,
-                fileVal: editor.getOpt('imageFieldName'),
+                fileVal: 'upfile',
                 duplicate: true,
                 fileSingleSizeLimit: imageMaxSize,    // 默认 2 M
-                compress: editor.getOpt('imageCompressEnable') ? {
+                compress: true? {
                     width: imageCompressBorder,
                     height: imageCompressBorder,
                     // 图片质量，只有type为`image/jpeg`的时候才有效。
@@ -688,7 +689,9 @@
                     case 'startUpload':
                         /* 添加额外的GET参数 */
                         var params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + 'encode=utf-8&' + params);
+                            url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '&':'&') + 'encode=utf-8&' + params);
+                        url = SITE_PUBLIC + '/css/imglibrary/plugins/ueditor/php/controller.php?action=' + url;
+
                         uploader.option('server', url);
                         setState('uploading', files);
                         break;
@@ -767,6 +770,7 @@
             this.$wrap.remove();
         },
         getInsertList: function () {
+            alert
             var i, data, list = [],
                 align = getAlign(),
                 prefix = editor.getOpt('imageUrlPrefix');
@@ -857,6 +861,8 @@
                 this.isLoadingData = true;
                 var url = editor.getActionUrl(editor.getOpt('imageManagerActionName')),
                     isJsonp = utils.isCrossDomainUrl(url);
+                url = url + 'listimage';
+
                 ajax.request(url, {
                     'timeout': 100000,
                     'dataType': isJsonp ? 'jsonp':'',
@@ -896,6 +902,7 @@
         pushData: function (list) {
             var i, item, img, icon, _this = this,
                 urlPrefix = editor.getOpt('imageManagerUrlPrefix');
+                urlPrefix = '../../../../../../';
             for (i = 0; i < list.length; i++) {
                 if(list[i] && list[i].url) {
                     item = document.createElement('li');
@@ -914,6 +921,23 @@
 
                     item.appendChild(img);
                     item.appendChild(icon);
+                    /* 添加删除功能 */
+                    item.appendChild($("<span class='delbtn' url='" + list[i].url + "'>✖</span>").click(function() {
+                        var del = $(this);
+                        try{
+                            window.event.cancelBubble = true; //停止冒泡
+                            window.event.returnValue = false; //阻止事件的默认行为
+                            window.event.preventDefault();    //取消事件的默认行为
+                            window.event.stopPropagation();   //阻止事件的传播
+                        } finally {
+                            if(!confirm("确定要删除吗？")) return;
+
+                            $.post(SITE_PUBLIC + '/css/imglibrary/plugins/ueditor/php/controller.php' + "?action=deleteimage", { "path": del.attr("url") }, function(result) {
+                                if (result == "ok") del.parent().remove();
+                                else alert(result);
+                            });
+                        }
+                    })[0]);
                     this.list.insertBefore(item, this.clearFloat);
                 }
             }
@@ -1085,7 +1109,6 @@
         setList: function (list) {
             var i, item, p, img, link, _this = this,
                 listUl = $G('searchListUl');
-
             listUl.innerHTML = '';
             if(list.length) {
                 for (i = 0; i < list.length; i++) {

@@ -6812,6 +6812,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             utils.extend(this.options, obj, true);
         },
         getOpt:function(key){
+            alert(key);
             return this.options[key]
         },
         /**

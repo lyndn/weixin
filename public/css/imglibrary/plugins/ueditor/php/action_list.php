@@ -58,7 +58,6 @@ $result = json_encode(array(
     "start" => $start,
     "total" => count($files)
 ));
-
 return $result;
 
 

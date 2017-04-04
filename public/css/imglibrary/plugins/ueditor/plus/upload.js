@@ -9,6 +9,7 @@
 
 UE.plugin.register('autoupload', function (){
     var domUtils = baidu.editor.dom.domUtils;
+
     function sendAndInsertFile(file, editor) {
         //增加 登录判断
         if(window.top.checkLogin){
@@ -124,65 +125,65 @@ UE.plugin.register('autoupload', function (){
         return  e.dataTransfer && e.dataTransfer.files ? e.dataTransfer.files:null;
     }
 
-    return {
-        outputRule: function(root){
-            UE.utils.each(root.getNodesByTagName('img'),function(n){
-                if (/\b(loaderrorclass)|(bloaderrorclass)\b/.test(n.getAttr('class'))) {
-                    n.parentNode.removeChild(n);
-                }
-            });
-            UE.utils.each(root.getNodesByTagName('p'),function(n){
-                if (/\bloadpara\b/.test(n.getAttr('class'))) {
-                    n.parentNode.removeChild(n);
-                }
-            });
-        },
-        bindEvents:{
-            //插入粘贴板的图片，拖放插入图片
-            'ready':function(e){
-                var me = this;
-                if(window.FormData && window.FileReader) {
-                    domUtils.on(me.body, 'paste drop', function(e){
-                        var hasImg = false,
-                            items;
-                        //获取粘贴板文件列表或者拖放文件列表
-                        items = e.type == 'paste' ? getPasteImage(e):getDropImage(e);
-                        if(items){
-                            var len = items.length,
-                                file;
-                            while (len--){
-                                file = items[len];
-                                if(file.getAsFile) file = file.getAsFile();
-                                if(file && file.size > 0) {
-                                    sendAndInsertFile(file, me);
-                                    hasImg = true;
-                                }
-                            }
-                            hasImg && e.preventDefault();
-                        }
-
-                    });
-                    //取消拖放图片时出现的文字光标位置提示
-                    domUtils.on(me.body, 'dragover', function (e) {
-                        if(e.dataTransfer.types[0] == 'Files') {
-                            e.preventDefault();
-                        }
-                    });
-
-                    //设置loading的样式
-                    UE.utils.cssRule('loading',
-                        '.loadingclass{display:inline-block;cursor:default;background: url(\''
-                        + this.options.themePath
-                        + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-left:1px;height: 22px;width: 22px;}\n' +
-                        '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
-                        + this.options.themePath
-                        + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
-                        '}',
-                        this.document);
-                }
-            }
-        }
-    }
+    // return {
+    //     outputRule: function(root){
+    //         UE.utils.each(root.getNodesByTagName('img'),function(n){
+    //             if (/\b(loaderrorclass)|(bloaderrorclass)\b/.test(n.getAttr('class'))) {
+    //                 n.parentNode.removeChild(n);
+    //             }
+    //         });
+    //         UE.utils.each(root.getNodesByTagName('p'),function(n){
+    //             if (/\bloadpara\b/.test(n.getAttr('class'))) {
+    //                 n.parentNode.removeChild(n);
+    //             }
+    //         });
+    //     },
+    //     bindEvents:{
+    //         //插入粘贴板的图片，拖放插入图片
+    //         'ready':function(e){
+    //             var me = this;
+    //             if(window.FormData && window.FileReader) {
+    //                 domUtils.on(me.body, 'paste drop', function(e){
+    //                     var hasImg = false,
+    //                         items;
+    //                     //获取粘贴板文件列表或者拖放文件列表
+    //                     items = e.type == 'paste' ? getPasteImage(e):getDropImage(e);
+    //                     if(items){
+    //                         var len = items.length,
+    //                             file;
+    //                         while (len--){
+    //                             file = items[len];
+    //                             if(file.getAsFile) file = file.getAsFile();
+    //                             if(file && file.size > 0) {
+    //                                 sendAndInsertFile(file, me);
+    //                                 hasImg = true;
+    //                             }
+    //                         }
+    //                         hasImg && e.preventDefault();
+    //                     }
+    //
+    //                 });
+    //                 //取消拖放图片时出现的文字光标位置提示
+    //                 domUtils.on(me.body, 'dragover', function (e) {
+    //                     if(e.dataTransfer.types[0] == 'Files') {
+    //                         e.preventDefault();
+    //                     }
+    //                 });
+    //
+    //                 //设置loading的样式
+    //                 UE.utils.cssRule('loading',
+    //                     '.loadingclass{display:inline-block;cursor:default;background: url(\''
+    //                     + this.options.themePath
+    //                     + this.options.theme +'/images/loading.gif\') no-repeat center center transparent;border:1px solid #cccccc;margin-left:1px;height: 22px;width: 22px;}\n' +
+    //                     '.loaderrorclass{display:inline-block;cursor:default;background: url(\''
+    //                     + this.options.themePath
+    //                     + this.options.theme +'/images/loaderror.png\') no-repeat center center transparent;border:1px solid #cccccc;margin-right:1px;height: 22px;width: 22px;' +
+    //                     '}',
+    //                     this.document);
+    //             }
+    //         }
+    //     }
+    // }
 });
 
 

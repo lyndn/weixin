@@ -484,8 +484,8 @@ div.edui-box {
 .edui-default .edui-toolbar .edui-button .edui-icon,
 .edui-default .edui-toolbar .edui-menubutton .edui-icon,
 .edui-default .edui-toolbar .edui-splitbutton .edui-icon {
-    height: 20px !important;
-    width: 20px !important;
+    height: 20px;
+    width: 20px;
     background-image: url(../images/icons.png);
     background-image: url(../images/icons.gif) \9;
 }
