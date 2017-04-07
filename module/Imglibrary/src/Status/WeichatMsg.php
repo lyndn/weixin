@@ -20,15 +20,25 @@ class WeichatMsg implements IStatus
         // TODO: Implement WriteCode() method.
         if($w->type == 'weichatmsg')
         {
+            $materialData = null;
             $user = new \Zend\Authentication\AuthenticationService();
             if ($user->hasIdentity())
             {
                 $user = $user->getIdentity();
             }
-            $material = $w->container->get(MaterialTable::class);
-            $materialData = $material->fetchAll(true,['wechatid'=>$user->wechatID,'userid'=>$user->userid]);
-            $materialData->setCurrentPageNumber($w->page);
-            $materialData->setItemCountPerPage($w->pageNum);
+            if($w->ac == 'search'){
+                $word = (!empty($w->keyword_py)) ? trim($w->keyword_py) : $w->keyword_py;
+                $material = $w->container->get(MaterialTable::class);
+                $materialData = $material->fetchAll(true,['wechatid'=>$user->wechatID,'userid'=>$user->userid,'active'=>1,'title like "%'.$word.'%" OR content like "%'.$word.'%" ']);
+                $materialData->setCurrentPageNumber($w->page);
+                $materialData->setItemCountPerPage($w->pageNum);
+
+            }else{
+                $material = $w->container->get(MaterialTable::class);
+                $materialData = $material->fetchAll(true,['wechatid'=>$user->wechatID,'userid'=>$user->userid,'active'=>1]);
+                $materialData->setCurrentPageNumber($w->page);
+                $materialData->setItemCountPerPage($w->pageNum);
+            }
             return ['materialData'=>$materialData];
         }else{
             $w->SetState(new WeimobMsg());

@@ -770,10 +770,10 @@
             this.$wrap.remove();
         },
         getInsertList: function () {
-            alert
             var i, data, list = [],
                 align = getAlign(),
                 prefix = editor.getOpt('imageUrlPrefix');
+                prefix = "";
             for (i = 0; i < this.imageList.length; i++) {
                 data = this.imageList[i];
                 list.push({

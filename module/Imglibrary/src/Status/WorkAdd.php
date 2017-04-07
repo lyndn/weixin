@@ -19,6 +19,7 @@ class WorkAdd
     public $type;
     public $ac;
     public $request;
+    public $container;
     public $user;
     public $view;
 

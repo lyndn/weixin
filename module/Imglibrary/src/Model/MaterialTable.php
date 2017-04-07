@@ -18,6 +18,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
+use Zend\Db\Sql\Expression;
 
 class MaterialTable
 {
@@ -38,6 +39,65 @@ class MaterialTable
         }
 
         return $this->tableGateway->select($where);
+    }
+
+
+    public function fetchAllThread($where,$order)
+    {
+        $sqlSelect = $this->tableGateway->getSql()->select();
+        $sqlSelect->where($where);
+        $sqlSelect->order($order);
+        $resultSet = $this->tableGateway->selectWith($sqlSelect);
+        return $resultSet;
+    }
+
+
+    /**
+     * ajax获取素材
+     * @param $pageSize
+     * @param $pageIndex
+     * @param $materialStatus
+     * @param $beginTime
+     * @param $endTime
+     * @return null
+     */
+    public function getMaterialList($uid,$pageSize, $pageIndex, $materialStatus, $beginTime, $endTime)
+    {
+        $sqlSelect = $this->tableGateway->getSql()->select();
+        $sqlCntSelect = $this->tableGateway->getSql()->select();
+        $sqlCntSelect->columns(['id'=> new Expression('COUNT(1)')]);
+        if (trim($materialStatus) != "") {
+            $sqlSelect->where(['synchronization'=>$materialStatus]);
+            $sqlCntSelect->where(['synchronization'=>$materialStatus]);
+        }
+        if (trim($beginTime) != "") {
+            $sqlSelect->where('updatetime >="'.$beginTime.'"');
+            $sqlCntSelect->where('updatetime >="'.$beginTime.'"');
+        }
+        if (trim($endTime) != "") {
+            $sqlSelect->where('updatetime <="'.$endTime.'"');
+            $sqlCntSelect->where('updatetime <="'.$endTime.'"');
+        }
+        $sqlSelect->where(['userid'=>$uid]);
+        $sqlCntSelect->where(['userid'=>$uid]);
+        if ($pageSize > 0 && $pageIndex > 0) {
+            $begin = ($pageIndex - 1) * $pageSize;
+            $sqlSelect->order('first DESC');
+            $sqlSelect->limit($pageSize);
+            $sqlSelect->offset($begin);
+            $resultSet = $this->tableGateway->selectWith($sqlSelect);
+            $rowCount = $this->tableGateway->selectWith($sqlCntSelect);
+            $row = $rowCount->current();
+            $rows = [];
+            foreach ($resultSet as $v)
+            {
+                $v->content = htmlspecialchars_decode($v->content);
+                $rows[] = $v;
+            }
+            $resp = array('rowCount' => $row->id, 'rows' => $rows);
+            return $resp;
+        }
+        return null;
     }
 
     /**
@@ -84,25 +144,49 @@ class MaterialTable
                 $id
             ));
         }
-
         return $row;
     }
+
+
+    public function getMaterialWhere($where)
+    {
+        $rowset = $this->tableGateway->select($where);
+        $row = $rowset->current();
+        return $row;
+    }
+
+
 
     /**
      * @param Material $material
      */
-    public function saveAlbum(Material $material)
+    public function saveMaterial(Material $material)
     {
         $data = [
-            'artist' => $material->artist,
             'title'  => $material->title,
+            'author' => $material->author,
+            'abstract' => $material->digest,
+            'content' => $material->content,
+            'cover' => $material->cover,
+            'cntlink' => $material->cntlink,
+            'current_url' => $material->fileid,
+            'filetype' => $material->filetype,
+            'filesize' => $material->filesize,
+            'updatetime' => $material->updatetime,
+            'current_dir_path' => $material->current_dir_path,
+            'synchronization' => $material->synchronization,
+            'active' => $material->active,
+            'wechatid' => $material->wechatid,
+            'userid' => $material->userid,
+            'filename' => $material->filename,
+            'first' => $material->first,
+            'sourcelink' => $material->sourceurl,
+            'tid' => $material->tid
         ];
 
         $id = (int) $material->id;
-
         if ($id === 0) {
-            $this->tableGateway->insert($data);
-            return;
+            return $this->tableGateway->insert($data);
         }
 
         if (! $this->getMaterial($id)) {
@@ -113,14 +197,13 @@ class MaterialTable
         }
 
         $this->tableGateway->update($data, ['id' => $id]);
+        return null;
     }
 
 
-    /**
-     * @param $id
-     */
-    public function deleteAlbum($id)
+
+    public function deleteMaterial($where)
     {
-        $this->tableGateway->delete(['id' => (int) $id]);
+        $this->tableGateway->delete($where);
     }
 }

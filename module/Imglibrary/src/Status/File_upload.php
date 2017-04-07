@@ -6,7 +6,7 @@
 namespace Imglibrary\Status;
 
 //图片默认上传根目录
-define('TARGETFOLDER', '/Users/ashu/wwwroot/weixin/public/static/image/');
+define('TARGETFOLDER', '/Users/yan/wwwroot/PHP/weixin/public/static/image/');
 //默认图片根目录对应站点路径
 define('IMG_DOMAIN', 'http://'.$_SERVER['HTTP_HOST'].'/static/image');
 //默认图片上传大小限制

@@ -32,11 +32,24 @@ class Module
                     $tableGateway = $container->get(Model\MaterialTableGateway::class);
                     return new Model\MaterialTable($tableGateway);
                 },
+
+                Model\MthreadTable::class => function($container) {
+                    $tableGateway = $container->get(Model\MthreadTableGateway::class);
+                    return new Model\MthreadTable($tableGateway);
+                },
+
                 Model\MaterialTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Material());
                     return new TableGateway('material', $dbAdapter, null, $resultSetPrototype);
+                },
+
+                Model\MthreadTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Mthread());
+                    return new TableGateway('mthread', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];

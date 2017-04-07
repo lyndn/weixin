@@ -42,26 +42,26 @@
                 <div class="designImgBox">
                     <div class="imgbox-wrap" style="position:relative;overflow:hidden;margin:19px; "><a
                             href="javascript:void(0)"><img class="lazy" data-tid=<?= $this->escapeHtml($row->id) ?> src="/css/imglibrary/public/images/none.png"
-                                                           data-original=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                                                           data-original=<?= $this->escapeHtml($row->fileid) ?>
                                                            alt=<?= $this->escapeHtml($row->title) ?>/></a>
                         <div class="imgbox-title"><?= $this->escapeHtml($row->title) ?></div>
                     </div>
                 </div>
                 <div class="water_option">
                     <a href="javascript:void(0)" class="mbbianji" data-tid=<?= $this->escapeHtml($row->id) ?>
-                       data-fpic=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                       data-fpic=<?= $this->escapeHtml($row->fileid) ?>
                        data-title=<?= $this->escapeHtml($row->title) ?>><i class='fa fa-edit'
                                                                style='font-size:20px'></i></a>
 
                     <a
                         href="javascript:void(0)" data-tid=<?= $this->escapeHtml($row->id) ?>
-                        data-fpic=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                        data-fpic=<?= $this->escapeHtml($row->fileid) ?>
                         data-title=<?= $this->escapeHtml($row->title) ?> class="add-material"><i class='fa fa-space-shuttle'
                                                                                      style='font-size:20px'></i></a>
 
                     <a
-                        href="javascript:void(0)" data-tid=<?= $this->escapeHtml($row->id) ?>
-                        data-fpic=<?= $this->escapeHtml($row->current_url . $row->filename) ?>
+                        href="javascript:void(0)" class="mbtrash" data-tid=<?= $this->escapeHtml($row->id) ?>
+                        data-fpic=<?= $this->escapeHtml($row->fileid) ?>
                         data-title=<?= $this->escapeHtml($row->title) ?> class="add-material"><i class='fa fa-trash-o'
                                                                                      style='font-size:20px'></i></a>
 
@@ -83,7 +83,7 @@
                     </div>
                     <div class="ul-box js-ul-box">
                         <div class="ul-header">
-                            2017年03月30日
+                            注意：相同标题不能合成！
                         </div>
                         <ul id="ul-box-list">
                         </ul>
@@ -129,7 +129,6 @@
 
                 $('.searchbutton').click(function() {
                     var $keyword = $('#keyword');
-
                     if ($keyword.val()=='热搜词:阅兵、笑话、微商、养生、女人、视频') {
                         $("#toast-container").show();
                         $(".toast").removeClass("toast-success");
@@ -150,13 +149,12 @@
                         $('#keyword').focus();
                         return false;
                     }
-                    top.location.href='search.php?keyword_py='+$keyword.val();
-
+                    top.location.href='/material/index/weichatmsg/search?keyword_py='+$keyword.val();
                 }) ;
             })
 
             $("#gxAdd").click(function(){
-               location.href="/material/add/weichatmsg";
+                location.href="/material/add/weichatmsg?m=add";
                return;
             });
         </script>

@@ -17,9 +17,15 @@ class WorkList
 {
     private $current;
     public $type;
+    public $ac;
+    public $keyword_py;
     public $container;
     public $page;
     public $pageNum;
+    public $beginTime;
+    public $endTime;
+    public $materialStatus;
+    public $user;
 
     public function __construct()
     {

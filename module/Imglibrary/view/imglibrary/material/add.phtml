@@ -1,3 +1,15 @@
+<script type="text/javascript">
+    <?php
+    if($_GET['m'] == 'add'){
+        echo "var MACTION = 'add'";
+    }elseif($_GET['m'] == 'edit'){
+        echo "var MACTION = 'edit'";
+    }else{
+        echo "var MACTION = ''";
+    }
+    ?>
+</script>
+
 <?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/public/css/minfo.css?v=1.1.0')) ?>
 <?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/wechat-preview.css')) ?>
 <?= $this->headLink()->prependStylesheet($this->basePath('css/imglibrary/plugins/css/editor.min.css?v=1.1.0')) ?>
@@ -50,7 +62,7 @@
             mainUE:null,
             store:null,
             fetchUrl:'http://www.weixinbianjiqi.com/api/fetchurl.php',
-            saveUrl:'http://www.weixinbianjiqi.com/api/mdata.php',
+            saveUrl:'/material/add/weichatmsg/saveToLocal',
             coverUploadPath:"/material/add/weichatmsg/coverupload",
             contentUploadPath:"http://www.weixinbianjiqi.com/api/contentupload.php",
             nickName:"",
@@ -98,11 +110,6 @@
                         <a class="rich_media_meta rich_media_meta_link rich_media_meta_nickname" href="javascript:void(0);" id="post-user">公众号名称</a>
                     </div>
                     <div class="rich_media_content">
-                        <% if(show_cover_pic==1){ %>
-                        <p><br></p>
-                        <p style="text-align: center;"><img src="<%= fileid %>" style="width: auto !important; visibility: visible !important; height: auto !important;"></p>
-                        <p><br></p>
-                        <% } %>
                         <%= content %>
                     </div>
                 </div>

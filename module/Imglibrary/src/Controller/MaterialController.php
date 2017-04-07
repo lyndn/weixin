@@ -47,16 +47,30 @@ class MaterialController extends AbstractActionController
      */
     public function indexAction()
     {
+        if(empty($this->user->adminName)){
+            return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
+                'action' => 'index']);
+        }
         $params = (string) $this->params()->fromRoute('do', 1);
+        $params_ac = (string) $this->params()->fromRoute('ac',2);
         $page = (int) $this->params()->fromQuery('page', 1);
+        $pageNum = (int) $this->params()->fromQuery('pageNum', 12);
         $page = ($page < 1) ? 1 : $page;
+        $keyword_py = (string) $this->params()->fromQuery('keyword_py');
+        $beginTime = (string) $this->params()->fromQuery('beginTime');
+        $endTime = (string) $this->params()->fromQuery('endTime');
+        $materialStatus = (string) $this->params()->fromQuery('materialStatus');
         $this->workList->type = $params;
+        $this->workList->ac = $params_ac;
+        $this->workList->keyword_py = $keyword_py;
         $this->workList->container = $this->container;
         $this->workList->page = $page;
-        $this->workList->pageNum = 12;
+        $this->workList->pageNum = $pageNum;
+        $this->workList->beginTime = $beginTime;
+        $this->workList->endTime = $endTime;
+        $this->workList->materialStatus = $materialStatus;
+        $this->workList->user = $this->user;
         $call=$this->workList->WriteCode();
-//        $json = Json::encode($call);
-//        $view = new ViewModel(['json' => $json]);
         $view = new ViewModel($call);
         $view->addChild($this->searchView,'searchBar');
         return $view;
@@ -68,6 +82,10 @@ class MaterialController extends AbstractActionController
      */
     public function addAction()
     {
+        if(empty($this->user->adminName)){
+            return $this->redirect()->toRoute('auth',['controller' => 'AuthController',
+                'action' => 'index']);
+        }
         $params = (string) $this->params()->fromRoute('do', 1);
         $params_ac = (string) $this->params()->fromRoute('ac',2);
         $request = $this->getRequest();
@@ -75,6 +93,7 @@ class MaterialController extends AbstractActionController
         $this->workAdd->ac = $params_ac;
         $this->workAdd->request = $request;
         $this->workAdd->user = $this->user;
+        $this->workAdd->container = $this->container;
         $this->workAdd->view = new ViewModel();
         $call=$this->workAdd->WriteCode();
         return $this->workAdd->view;

@@ -118,6 +118,29 @@ $(".material-synthesizer-btn").unbind('click').on("click", function(event){
 	});
 
 
+//删除文章
+$(".mbtrash").on("click", function () {
+    var tid = $(this).attr("data-tid");
+    var data = {};
+    data.ids =tid;
+    data.action = "del";
+    jQuery.ajax({
+        type:"POST",
+        url: "/material/add/weichatmsg/fetchedtor",
+        data:data,
+        dataType: "html",
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        beforeSend: function(XMLHttpRequest){
+        }, success:function(data) {
+            var t = JSON.parse(data);
+            alert(t.message);
+            top.location.href='/material/index/weichatmsg';
+        }, error:function(){
+        }
+    });
+	return false;
+})
+
 //编辑文章
 $(".mbbianji").on("click", function(){
 	var tid = $(this).attr("data-tid");
@@ -130,20 +153,55 @@ $(".mbbianji").on("click", function(){
 				data.action = "add";
 				jQuery.ajax({ 
 					type:"POST", 
-					url: "api/fetchedtor.php", 
+					url: "/material/add/weichatmsg/fetchedtor",
 					data:data, 
 					dataType: "html", 
 					contentType: "application/x-www-form-urlencoded; charset=utf-8", 
 					beforeSend: function(XMLHttpRequest){ 
 					}, success:function(data) {
-						localData.remove("mdataId");
-						localData.set("materialData",data);
-						top.location.href='editor.php';
+                        var t = JSON.parse(data)[0].tid;
+                        localData.remove("materialData");
+                        localData.remove("mdataId");
+                        localData.set("mdataId",t);
+                        localData.set("materialData",data,'html');
+                        $("#toast-container").show();
+                        $(".toast").removeClass("toast-error");
+                        $(".toast").addClass("toast-success");
+                        $("#toast-container .toast-title").html("SUCESS");
+                        $("#toast-container .toast-message").html("素材合并中请等待....");
+                        setTimeout(function(){$("#toast-container").hide();},1500);
+                        setTimeout("top.location.href='/material/add/weichatmsg'",1500);
 					}, error:function(){ 
 					} 
 				});
+
 	return false;
 });
+
+    $(".js-edit").click(function() {
+        var tid = $(this).attr("data-tid");
+
+
+        $.get("api/my_media.php?action=list",{"tid":tid,randstr: Date.parse(new Date())},function(data){
+
+            localData.remove("materialData");
+            localData.set("materialData",data);
+        },'html')
+
+
+        localData.remove("mdataId");
+        localData.set("mdataId", tid);
+        $("#toast-container").show();
+        $(".toast").removeClass("toast-error");
+        $(".toast").addClass("toast-success");
+        $("#toast-container .toast-title").html("SUCESS");
+        $("#toast-container .toast-message").html("素材合并中请等待....");
+        setTimeout(function(){$("#toast-container").hide();},1500);
+        setTimeout("top.location.href='editor.php'",1500);
+
+
+    });
+
 
 
 
@@ -217,61 +275,72 @@ $(".btn-default").on("click", function(){
 });
 
 //合成为图文
-$(".btn-primary").on("click", function(){
+    $(".btn-primary").on("click", function () {
 
-				var oldData = localData.get("material_pop");
-				data = JSON.parse(oldData);
-				if (data instanceof Array == false) {
-					data = [];
-				}
-				
+        var oldData = localData.get("material_pop");
+        data = JSON.parse(oldData);
+        if (data instanceof Array == false) {
+            data = [];
+        }
 
-				if (data.length<=0) {
-				
-					$("#toast-container").show();
-					$(".toast").removeClass("toast-success");
-					$(".toast").addClass("toast-error");
-					$("#toast-container .toast-title").html("错误:");
-					$("#toast-container .toast-message").html("至少选择一个图文素材吧");
-					setTimeout(function(){$("#toast-container").hide();},3000);
-					
-					
-					return false;
-				}
-				var result='';
-				$.each(data,function(index, value) {
-					result +=value.res_article_id+","
-				});
-				
-				
-				var lastIndex = result.lastIndexOf(',');
-				if (lastIndex > -1) {
-				new_result = result.substring(0, lastIndex) + result.substring(lastIndex + 1, result.length);
-				}else{
-				new_result =result;
-				}
-				
-				
-				var data = {}; 
-				data.ids = new_result;
-				data.action = "add";
-				jQuery.ajax({ 
-					type:"POST", 
-					url: "api/fetchedtor.php", 
-					data:data, 
-					dataType: "html", 
-					contentType: "application/x-www-form-urlencoded; charset=utf-8", 
-					beforeSend: function(XMLHttpRequest){ 
-					}, success:function(data) {
-						localData.remove("mdataId");
-						localData.set("materialData",data);
-						top.location.href='editor.php';
-					}, error:function(){ 
-					} 
-				});
-	
-	return false;
-});
+
+        if (data.length <= 0) {
+
+            $("#toast-container").show();
+            $(".toast").removeClass("toast-success");
+            $(".toast").addClass("toast-error");
+            $("#toast-container .toast-title").html("错误:");
+            $("#toast-container .toast-message").html("至少选择一个图文素材吧");
+            setTimeout(function () {
+                $("#toast-container").hide();
+            }, 3000);
+
+
+            return false;
+        }
+        var result = '';
+        $.each(data, function (index, value) {
+            result += value.res_article_id + ","
+        });
+
+
+        var lastIndex = result.lastIndexOf(',');
+        if (lastIndex > -1) {
+            new_result = result.substring(0, lastIndex) + result.substring(lastIndex + 1, result.length);
+        } else {
+            new_result = result;
+        }
+
+
+        var data = {};
+        data.ids = new_result;
+        data.action = "compound";
+        jQuery.ajax({
+            type: "POST",
+            url: "/material/add/weichatmsg/fetchedtor",
+            data: data,
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            beforeSend: function (XMLHttpRequest) {
+            }, success: function (data) {
+                var t = JSON.parse(data)[0].tid;
+                localData.remove("materialData");
+                localData.remove("mdataId");
+                localData.set("materialData", data, 'html');
+                $("#toast-container").show();
+                $(".toast").removeClass("toast-error");
+                $(".toast").addClass("toast-success");
+                $("#toast-container .toast-title").html("SUCESS");
+                $("#toast-container .toast-message").html("素材合并中请等待....");
+                setTimeout(function () {
+                    $("#toast-container").hide();
+                }, 1500);
+                setTimeout("top.location.href='/material/add/weichatmsg'", 1500);
+            }, error: function () {
+            }
+        });
+        return false;
+    });
 
 
 $(".del").on("click", function(){
@@ -360,9 +429,9 @@ $(".fa-heart-o").unbind('click').on("click", function(event){
 $(".add-material").unbind('click').on("click", function(event){
 	var addcar = $(this);
 	var tid = $(this).attr("data-tid");
+	alert(tid);
 	var title = $(this).attr("data-title");
 	var fpic = $(this).attr("data-fpic");
-
 	var ndata = '{"res_article_id":"' + tid + '","res_article_title":"' + title + '","res_thumb_image":"' + fpic + '"}'
 	var oldData = localData.get("material_pop");
 	data = JSON.parse(oldData);
