@@ -12,6 +12,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
+
 class Module implements ConfigProviderInterface
 {
     const VERSION = '3.0.3-dev';
@@ -100,5 +101,6 @@ class Module implements ConfigProviderInterface
             ],
         ];
     }
+
 
 }

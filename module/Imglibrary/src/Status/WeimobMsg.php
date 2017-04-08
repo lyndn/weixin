@@ -79,6 +79,7 @@ class WeimobMsg implements IStatus
                         $resp[] = $z;
                     }
                 }
+                $resp['rowCount'] = (int) $cnt;
                 $json = Json::encode($resp,true,['silenceCyclicalExceptions' => true]);
                 echo $json;
                 exit();
